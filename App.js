@@ -15,59 +15,46 @@ import {useStateValue} from './src/Services/State/State';
 import AppActivityIndicator from './src/Components/ActivityIndicator';
 import AppAlert from './src/Components/AppAlert';
 import VersionCheck from 'react-native-version-check';
+import {getUserInfo} from './src/Services/DataManager';
 
 const RootNavigator = () => {
   useEffect(() => {
-    dispatch({
-      type: actions.SET_ALERT_SETTINGS,
-      alertSettings: {
-        show: true,
-        type: 'info',
-        title: 'An Update Available',
-        message:
-          'A new version of Pick Eat Admin is available. Would you like to update?',
-        showConfirmButton: true,
-        confirmText: 'Update',
-        showCancelButton: true,
-        cancelText: 'Later',
-        onConfirmPressed: async () => {
-          try {
-            // eslint-disable-next-line no-empty
-          } catch (error) {}
-        },
-      },
-    });
-    dispatch({
-      type: actions.SET_PROGRESS_SETTINGS,
-      show: true,
-    });
-    setTimeout(() => {
-      dispatch({
-        type: actions.SET_PROGRESS_SETTINGS,
-        show: false,
-      });
-    }, 1000);
-    checkStatus();
+    checkAuth();
     isUpdateAvailable();
   }, []);
 
   const [loading, setLoading] = useState(false);
-  const [{user, progressSettings, alertSettings}, dispatch] = useStateValue();
+  const [
+    {userInfo, progressSettings, alertSettings},
+    dispatch,
+  ] = useStateValue();
   const {show = false} = progressSettings || {};
   const {settings} = alertSettings || {};
 
-  const checkStatus = async () => {
+  const checkAuth = async () => {
     try {
       setLoading(true);
+      const userInfo = await getUserInfo();
+      if (userInfo && userInfo.username) {
+        dispatch({
+          type: actions.SET_USER_INFO,
+          userInfo: userInfo,
+        });
+      }
+    } catch (err) {
       dispatch({
-        type: actions.SET_USER,
-        user: {
-          ...user,
-          isLoggedIn: true,
+        type: actions.SET_ALERT_SETTINGS,
+        alertSettings: {
+          show: true,
+          type: 'error',
+          title: 'Error Occured',
+          message:
+            'This Operation Could Not Be Completed. Please Try Again Later.',
+          showConfirmButton: true,
+          confirmText: 'Ok',
         },
       });
-      setLoading(false);
-    } catch (err) {
+    } finally {
       setLoading(false);
     }
   };
@@ -143,8 +130,7 @@ const RootNavigator = () => {
       <AppAlert {...getAlertSettings()} />
       <AppActivityIndicator visible={show} />
       <CreateRootNavigator
-        // isLoggedIn={user && user.isLoggedIn ? true : false}
-        isLoggedIn={true}
+        isLoggedIn={userInfo && userInfo.username ? true : false}
       />
     </SafeAreaView>
   );

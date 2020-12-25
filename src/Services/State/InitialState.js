@@ -1,5 +1,5 @@
 export const initialState = {
-  user: {
+  userInfo: {
     email: 'sam1@pickgo.la',
     name: 'Jon Sam Kok',
   },
