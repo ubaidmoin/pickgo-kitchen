@@ -1,9 +1,8 @@
 import React from 'react';
-import {Text, View, StyleSheet, ActivityIndicator} from 'react-native';
-import Modal from 'react-native-modal';
+import {Text, View, StyleSheet, ActivityIndicator, Modal} from 'react-native';
 
 const CustomActivityIndicator = ({visible}) => (
-  <Modal animationType="fade" transparent={true} isVisible={visible}>
+  <Modal animationType="fade" transparent={true} visible={visible}>
     <View style={styles.centeredView}>
       <View style={styles.modalView}>
         <ActivityIndicator size="large" color="green" />
@@ -18,6 +17,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(52,52,52,0.5)',
   },
   modalView: {
     padding: 20,

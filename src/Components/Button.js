@@ -1,34 +1,62 @@
 import React from 'react';
-import {Text, ActivityIndicator} from 'react-native';
+import {Text, ActivityIndicator, View} from 'react-native';
 import Ripple from './Ripple';
 
 const Button = (props) => {
-  const {title = '', onPress = () => {}, loading = false} = props || {};
+  const {
+    title = '',
+    onPress = () => {},
+    loading = false,
+    color = '#2bae6a',
+    textColor = '#fff',
+    icon = null,
+    height = null,
+  } = props || {};
+
   return (
     <Ripple
       style={{
-        elevation: 3,
+        elevation: 5,
         shadowRadius: 2,
         shadowOpacity: 0.3,
         shadowOffset: {
           width: 0,
           height: 2,
         },
+        height: height,
         width: '100%',
-        backgroundColor: '#2bae6a',
+        backgroundColor: color,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
         paddingVertical: 10,
         paddingHorizontal: 10,
         marginVertical: 5,
-        height: 45,
       }}
       onPress={onPress}>
       {loading ? (
         <ActivityIndicator color="#fff" />
       ) : (
-        <Text style={{color: '#fff', fontSize: 20}}>{title}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 10,
+              bottom: 0,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            {icon}
+          </View>
+          <Text style={{color: textColor, fontSize: 13}}>{title}</Text>
+        </View>
       )}
     </Ripple>
   );

@@ -1,6 +1,7 @@
 export const actions = {
-  SET_USER: 'set_user',
-  SET_ORDERS: 'set_orders',
+  SET_USER: 'SET_USER',
+  SET_ALERT_SETTINGS: 'SET_ALERT_SETTINGS',
+  SET_PROGRESS_SETTINGS: 'SET_PROGRESS_SETTINGS',
 };
 
 export const reducer = (state, action) => {
@@ -8,12 +9,18 @@ export const reducer = (state, action) => {
     case actions.SET_USER:
       return {
         ...state,
-        user: action.payload,
+        user: action.user,
       };
-    case actions.SET_ORDERS:
+    case actions.SET_PROGRESS_SETTINGS: {
       return {
         ...state,
-        allOrders: action.payload,
+        progressSettings: {show: action.show, promise: null},
+      };
+    }
+    case actions.SET_ALERT_SETTINGS:
+      return {
+        ...state,
+        alertSettings: {settings: action.alertSettings, promise: null},
       };
     default:
       return state;

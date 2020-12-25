@@ -1,8 +1,8 @@
 export const initialState = {
   user: {
-    id: 1,
-    name: 'Demo User',
-    designation: 'Clinical Scientist (Employee)',
+    email: 'sam1@pickgo.la',
+    name: 'Jon Sam Kok',
   },
-  allOrders: null,
+  progressSettings: {show: false, promise: null},
+  alertSettings: {settings: {}, promise: null},
 };
