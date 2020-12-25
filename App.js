@@ -25,7 +25,7 @@ const RootNavigator = () => {
         type: 'info',
         title: 'An Update Available',
         message:
-          'A new version of Pick Ear Admin is available. Would you like to update?',
+          'A new version of Pick Eat Admin is available. Would you like to update?',
         showConfirmButton: true,
         confirmText: 'Update',
         showCancelButton: true,
