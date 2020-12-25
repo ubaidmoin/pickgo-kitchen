@@ -44,6 +44,22 @@
 		00E356EE1AD99517003FC87E /* PickEatAdminTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PickEatAdminTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* PickEatAdminTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PickEatAdminTests.m; sourceTree = "<group>"; };
+		046318BF25961E1E00AC430B /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
+		046318C025961E1E00AC430B /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
+		046318C125961E1E00AC430B /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
+		046318C225961E1E00AC430B /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
+		046318C325961E1E00AC430B /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
+		046318C425961E1E00AC430B /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
+		046318C525961E1E00AC430B /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
+		046318C625961E1E00AC430B /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Foundation.ttf; sourceTree = "<group>"; };
+		046318C725961E1E00AC430B /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
+		046318C825961E1E00AC430B /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
+		046318C925961E1E00AC430B /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
+		046318CA25961E1E00AC430B /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
+		046318CB25961E1E00AC430B /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
+		046318CC25961E1E00AC430B /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
+		046318CD25961E1E00AC430B /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
+		046318CE25961E1E00AC430B /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* PickEatAdmin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PickEatAdmin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = PickEatAdmin/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = PickEatAdmin/AppDelegate.m; sourceTree = "<group>"; };
@@ -122,9 +138,34 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		046318BE25961E1E00AC430B /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				046318BF25961E1E00AC430B /* Fontisto.ttf */,
+				046318C025961E1E00AC430B /* Octicons.ttf */,
+				046318C125961E1E00AC430B /* Feather.ttf */,
+				046318C225961E1E00AC430B /* Entypo.ttf */,
+				046318C325961E1E00AC430B /* FontAwesome5_Brands.ttf */,
+				046318C425961E1E00AC430B /* MaterialCommunityIcons.ttf */,
+				046318C525961E1E00AC430B /* AntDesign.ttf */,
+				046318C625961E1E00AC430B /* Foundation.ttf */,
+				046318C725961E1E00AC430B /* Ionicons.ttf */,
+				046318C825961E1E00AC430B /* FontAwesome5_Solid.ttf */,
+				046318C925961E1E00AC430B /* FontAwesome5_Regular.ttf */,
+				046318CA25961E1E00AC430B /* FontAwesome.ttf */,
+				046318CB25961E1E00AC430B /* Zocial.ttf */,
+				046318CC25961E1E00AC430B /* EvilIcons.ttf */,
+				046318CD25961E1E00AC430B /* SimpleLineIcons.ttf */,
+				046318CE25961E1E00AC430B /* MaterialIcons.ttf */,
+			);
+			name = Fonts;
+			path = "../node_modules/react-native-vector-icons/Fonts";
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* PickEatAdmin */ = {
 			isa = PBXGroup;
 			children = (
+				046318BE25961E1E00AC430B /* Fonts */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -148,7 +189,6 @@
 				E27CC9BF98FBBC7D46A36CFF /* Pods-PickEatAdmin-tvOSTests.debug.xcconfig */,
 				BE49FC9C1FBB9A138B5E0212 /* Pods-PickEatAdmin-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -294,6 +334,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = UKJ6K8S5B8;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -720,6 +761,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UKJ6K8S5B8;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = PickEatAdmin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -743,6 +785,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UKJ6K8S5B8;
 				INFOPLIST_FILE = PickEatAdmin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
