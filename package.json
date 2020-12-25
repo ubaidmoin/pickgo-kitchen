@@ -25,6 +25,7 @@
     "react-native-redash": "14.2.3",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.16.1",
+    "react-native-simple-radio-button": "^2.7.4",
     "react-native-vector-icons": "^7.1.0",
     "react-native-version-check": "^3.4.2"
   },

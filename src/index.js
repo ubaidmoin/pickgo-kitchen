@@ -1,9 +1,11 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 import Login from './Screens/Login';
 import Tables from './Screens/Tables';
 import Reservations from './Screens/Reservations';
@@ -52,6 +54,80 @@ const Header = (
       : null,
 });
 
+const HeaderWithRightButtons = (
+  {
+    title = null,
+    showBackButton = false,
+    showTitle = false,
+    showMenuButton = false,
+    isTransparent = false,
+  },
+  navigation,
+) => ({
+  title: showTitle ? title : null,
+  headerTitleStyle: {
+    color: '#fff',
+  },
+  headerTransparent: isTransparent,
+  headerStyle: {
+    backgroundColor: '#27ae61',
+  },
+  headerLeft:
+    showBackButton || showMenuButton
+      ? () => (
+          <TouchableOpacity
+            onPress={() =>
+              showBackButton ? navigation.pop() : navigation.toggleDrawer()
+            }>
+            <FeatherIcon
+              style={{marginLeft: 10}}
+              name={showBackButton ? 'chevron-left' : 'menu'}
+              size={25}
+              color={'#fff'}
+            />
+          </TouchableOpacity>
+        )
+      : null,
+  // eslint-disable-next-line react/display-name
+  headerRight: () => (
+    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <Entypo style={{marginRight: 10}} name="home" size={25} color={'#fff'} />
+      <Entypo
+        style={{marginRight: 10}}
+        name="credit-card"
+        size={25}
+        color={'#fff'}
+      />
+      <TouchableOpacity
+        onPress={() => navigation.navigate('NotificationCenter')}>
+        <FontAwesome
+          style={{marginRight: 10}}
+          name="bell"
+          size={25}
+          color={'#fff'}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            top: -10,
+            right: 1,
+            // height: 20,
+            // width: 20,
+            backgroundColor: '#cc0001',
+            borderRadius: 15,
+            borderWidth: 1,
+            borderColor: '#fff',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 5,
+          }}>
+          <Text style={{color: 'white', fontSize: 10}}>14</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  ),
+});
+
 const LoggedOutStack = () => (
   <Stack.Navigator>
     <Stack.Screen
@@ -68,7 +144,7 @@ const SignedInStack = () => (
       name="Tables"
       component={Tables}
       options={({navigation}) =>
-        Header(
+        HeaderWithRightButtons(
           {
             title: 'Tables',
             showTitle: true,
@@ -82,7 +158,7 @@ const SignedInStack = () => (
       name="Reservations"
       component={Reservations}
       options={({navigation}) =>
-        Header(
+        HeaderWithRightButtons(
           {
             title: 'Reservations',
             showTitle: true,
