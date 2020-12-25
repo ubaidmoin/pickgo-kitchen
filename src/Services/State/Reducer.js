@@ -1,15 +1,15 @@
 export const actions = {
-  SET_USER: 'SET_USER',
+  SET_USER_INFO: 'SET_USER_INFO',
   SET_ALERT_SETTINGS: 'SET_ALERT_SETTINGS',
   SET_PROGRESS_SETTINGS: 'SET_PROGRESS_SETTINGS',
 };
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case actions.SET_USER:
+    case actions.SET_USER_INFO:
       return {
         ...state,
-        user: action.user,
+        userInfo: action.userInfo,
       };
     case actions.SET_PROGRESS_SETTINGS: {
       return {

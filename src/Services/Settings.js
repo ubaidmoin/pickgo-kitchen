@@ -1,6 +1,6 @@
 export const settings = {
-  baseUrl: 'https://restaurant-api.pickgo.la',
-  login: '/api/user/login',
+  baseUrl: 'https://pickgo.la',
+  login: '/restaurants/main/login_auth',
   driver: {
     getOnlineDrivers: '/api/user/online-drivers',
     updateDriverStatus: '/api/user/update-driver-status?access_token=[token]',
