@@ -3,18 +3,9 @@ import {settings as s} from '../Settings';
 
 const getUrl = (ep) => `${s.baseUrl}${ep}`;
 
-export const getData = async (relativeUrl) => {
-  const url = getUrl(relativeUrl);
-  const options = {
-    mode: 'no-cors',
-    headers: {
-      // Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
-      Accept: '*/*',
-    },
-  };
+export const getData = async (url) => {
   try {
-    const response = await get(url, options).then((res) => res);
+    const response = await get(url).then((res) => res);
     return {status: response.status, data: response.data};
   } catch (err) {
     if (err.response) {
@@ -25,14 +16,13 @@ export const getData = async (relativeUrl) => {
 };
 
 export const authService = async (data) => {
-  const url = getUrl(s.login);
   const config = {
     method: 'post',
-    url,
+    url: s.LOGIN,
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/json',
     },
-    data,
+    data: JSON.stringify(data),
   };
   try {
     const response = await axios(config)
@@ -44,25 +34,24 @@ export const authService = async (data) => {
   }
 };
 
-export const postData = async (relativeUrl, data) => {
-  const url = getUrl(relativeUrl);
+export const postData = async (url, data = null) => {
   const config = {
     method: 'post',
     url,
     headers: {
       'Content-Type': 'application/json',
-      Accept: '*/*',
     },
-    data,
   };
-
+  if (data) {
+    config.data = JSON.stringify(data);
+  }
   try {
     const response = await axios(config)
       .then((res) => res)
       .catch((error) => error);
     return response;
   } catch (err) {
-    return {status: null};
+    return null;
   }
 };
 

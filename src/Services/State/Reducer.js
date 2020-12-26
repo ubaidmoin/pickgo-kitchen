@@ -2,6 +2,7 @@ export const actions = {
   SET_USER_INFO: 'SET_USER_INFO',
   SET_ALERT_SETTINGS: 'SET_ALERT_SETTINGS',
   SET_PROGRESS_SETTINGS: 'SET_PROGRESS_SETTINGS',
+  SET_TABLES: 'SET_TABLES',
 };
 
 export const reducer = (state, action) => {
@@ -21,6 +22,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         alertSettings: {settings: action.alertSettings, promise: null},
+      };
+    case actions.SET_TABLES:
+      return {
+        ...state,
+        tables: action.tables,
       };
     default:
       return state;

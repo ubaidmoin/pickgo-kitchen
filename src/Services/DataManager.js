@@ -23,3 +23,19 @@ export const getUserInfo = async () => {
     return null;
   }
 };
+
+export const getAccessToken = async () => {
+  try {
+    const response = await AsyncStorage.getItem(KEYS.USER_INFO);
+    if (response) {
+      const userInfo = JSON.parse(response);
+      if (userInfo.access_token) {
+        return userInfo.access_token;
+      }
+      return null;
+    }
+    return null;
+  } catch (err) {
+    return null;
+  }
+};

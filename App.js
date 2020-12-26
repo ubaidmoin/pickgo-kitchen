@@ -35,7 +35,12 @@ const RootNavigator = () => {
     try {
       setLoading(true);
       const userInfo = await getUserInfo();
-      if (userInfo && userInfo.username) {
+      if (
+        userInfo &&
+        userInfo.access_token &&
+        userInfo.user &&
+        userInfo.user.uid
+      ) {
         dispatch({
           type: actions.SET_USER_INFO,
           userInfo: userInfo,
@@ -122,7 +127,7 @@ const RootNavigator = () => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <ActivityIndicator color="#000" />
+      <ActivityIndicator size={30} color="#000" />
     </View>
   ) : (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
@@ -130,7 +135,12 @@ const RootNavigator = () => {
       <AppAlert {...getAlertSettings()} />
       <AppActivityIndicator visible={show} />
       <CreateRootNavigator
-        isLoggedIn={userInfo && userInfo.username ? true : false}
+        isLoggedIn={
+          userInfo &&
+          userInfo.access_token &&
+          userInfo.user &&
+          userInfo.user.uid
+        }
       />
     </SafeAreaView>
   );

@@ -15,18 +15,12 @@ class Dropdown extends Component {
 
   UNSAFE_componentWillMount() {
     this.refActionSheet = null;
-    this._animatedIsFocused = new Animated.Value(
-      this.props.selected && this.props.selected.value ? 1 : 0,
-    );
+    this._animatedIsFocused = new Animated.Value(this.props.selected ? 1 : 0);
   }
-
-  handleFocus = () => this.setState({isFocused: true});
-
-  handleBlur = () => this.setState({isFocused: false});
 
   componentDidUpdate() {
     Animated.timing(this._animatedIsFocused, {
-      toValue: this.state.isFocused || this.props.value !== '' ? 1 : 0,
+      toValue: this.props.selected ? 1 : 0,
       duration: 200,
     }).start();
   }
@@ -34,23 +28,20 @@ class Dropdown extends Component {
   render() {
     const {
       label = '',
-      icon = null,
       options = [],
       selected = {},
       onSelect = () => {},
+      labelField = 'label',
+      disabled = false,
       ...props
     } = this.props;
+
     const labelStyle = {
       position: 'absolute',
-      width: '100%',
-      left: '6%',
-      bottom: this._animatedIsFocused.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['25%', '5%'],
-      }),
+      left: 0,
       top: this._animatedIsFocused.interpolate({
         inputRange: [0, 1],
-        outputRange: ['25%', '8%'],
+        outputRange: [18, 0],
       }),
       fontSize: this._animatedIsFocused.interpolate({
         inputRange: [0, 1],
@@ -58,44 +49,26 @@ class Dropdown extends Component {
       }),
       color: this._animatedIsFocused.interpolate({
         inputRange: [0, 1],
-        outputRange: ['#36373a', '#c0c8d3'],
+        outputRange: ['#aaa', '#000'],
       }),
     };
+
     return (
       <TouchableWithoutFeedback
+        disabled={disabled}
         onPress={() => {
           Keyboard.dismiss();
           this.refActionSheet.show();
         }}>
-        <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#fff',
-            borderRadius: 5,
-            height: 55,
-            borderWidth: this.state.isFocused ? 2 : 0,
-            borderColor: this.state.isFocused ? '#0faeaa' : null,
-            elevation: 5,
-            shadowRadius: 2,
-            shadowOpacity: 0.3,
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            marginVertical: 5,
-          }}>
+        <View style={{paddingTop: 10, paddingBottom: 10}}>
+          {console.log('data9: ', options)}
           <ActionSheet
             ref={(ref) => (this.refActionSheet = ref)}
             title={label}
             options={
-              options &&
-              options.length > 0 && [
-                ...options.map((option) => option.label),
-                'Cancel',
-              ]
+              options && options.length > 0
+                ? [...options.map((option) => option[labelField]), 'Cancel']
+                : ['Cancel']
             }
             cancelButtonIndex={options.length}
             destructiveButtonIndex={options.length}
@@ -118,29 +91,21 @@ class Dropdown extends Component {
               },
             }}
           />
-          <View
+          <Animated.Text style={labelStyle}>{label}</Animated.Text>
+          <TextInput
+            {...props}
+            value={selected && selected[labelField]}
             style={{
-              width: icon ? '85%' : '100%',
-              paddingHorizontal: '5%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Animated.Text style={labelStyle}>{label}</Animated.Text>
-            <TextInput
-              {...props}
-              value={selected && selected.label}
-              style={{
-                marginTop:
-                  this.state.isFocused || (selected && selected.value)
-                    ? '3%'
-                    : 0,
-                width: '100%',
-                color: '#000',
-              }}
-              editable={false}
-            />
-          </View>
-          {icon ? <View style={{width: '15%'}}>{icon}</View> : null}
+              paddingHorizontal: 0,
+              width: '100%',
+              height: 40,
+              fontSize: 15,
+              color: '#000',
+              borderBottomWidth: 1,
+              borderBottomColor: '#000',
+            }}
+            editable={false}
+          />
         </View>
       </TouchableWithoutFeedback>
     );

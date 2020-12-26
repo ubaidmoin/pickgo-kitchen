@@ -8,7 +8,7 @@ class Input extends Component {
 
   UNSAFE_componentWillMount() {
     this._animatedIsFocused = new Animated.Value(
-      this.props.value === '' ? 0 : 1,
+      this.props.value || this.props.value === 0 ? 1 : 0,
     );
   }
 
@@ -18,13 +18,16 @@ class Input extends Component {
 
   componentDidUpdate() {
     Animated.timing(this._animatedIsFocused, {
-      toValue: this.state.isFocused || this.props.value !== '' ? 1 : 0,
+      toValue:
+        this.state.isFocused || this.props.value || this.props.value === 0
+          ? 1
+          : 0,
       duration: 200,
     }).start();
   }
 
   render() {
-    const {label, ...props} = this.props;
+    const {label, value = '', ...props} = this.props;
     const labelStyle = {
       position: 'absolute',
       left: 0,
@@ -54,6 +57,7 @@ class Input extends Component {
             borderBottomWidth: this.state.isFocused ? 2 : 1,
             borderBottomColor: '#000',
           }}
+          value={`${value}`}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
           blurOnSubmit

@@ -1,8 +1,6 @@
 export const initialState = {
-  userInfo: {
-    email: 'sam1@pickgo.la',
-    name: 'Jon Sam Kok',
-  },
+  userInfo: null,
   progressSettings: {show: false, promise: null},
   alertSettings: {settings: {}, promise: null},
+  tables: [],
 };

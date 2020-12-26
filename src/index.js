@@ -9,6 +9,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Login from './Screens/Login';
 import Tables from './Screens/Tables';
 import Reservations from './Screens/Reservations';
+import OrderSummary from './Screens/OrderSummary';
 import MenuOrders from './Screens/MenuOrders';
 import SearchUsers from './Screens/SearchUsers';
 import NotificationCenter from './Screens/NotificationCenter';
@@ -161,6 +162,20 @@ const SignedInStack = () => (
         HeaderWithRightButtons(
           {
             title: 'Reservations',
+            showTitle: true,
+            showMenuButton: true,
+          },
+          navigation,
+        )
+      }
+    />
+    <Stack.Screen
+      name="OrderSummary"
+      component={OrderSummary}
+      options={({navigation}) =>
+        HeaderWithRightButtons(
+          {
+            title: 'Order Summary',
             showTitle: true,
             showMenuButton: true,
           },

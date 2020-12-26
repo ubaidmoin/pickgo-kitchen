@@ -4,6 +4,10 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Button from './Button';
 import Ripple from './Ripple';
+import {useStateValue} from '../Services/State/State';
+import {setUserInfo} from '../Services/DataManager';
+import {actions} from '../Services/State/Reducer';
+import {settings as s} from '../Services/Settings';
 
 const Drawer = ({navigation}) => {
   const drawerMenu = [
@@ -45,6 +49,16 @@ const Drawer = ({navigation}) => {
     },
   ];
 
+  const [{userInfo}, dispatch] = useStateValue();
+
+  const {first_name = '', last_name = '', email_address = '', picture = ''} =
+    (userInfo && userInfo.user) || {};
+
+  const logout = async () => {
+    await setUserInfo('');
+    dispatch({type: actions.SET_USER_INFO, userInfo: null});
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: '#27ae61'}}>
       <StatusBar backgroundColor="#27ae61" barStyle="light-content" />
@@ -57,29 +71,29 @@ const Drawer = ({navigation}) => {
           borderBottomColor: '#fff',
         }}>
         <Image
-          style={styles.image}
-          source={require('../Assets/userAvator.png')}
+          style={{
+            width: 80,
+            height: 80,
+            borderRadius: 40,
+            borderWidth: 1,
+            borderColor: '#fff',
+          }}
+          source={
+            picture
+              ? {uri: `${s.IMAGE_BASEURL}${picture}`}
+              : require('../Assets/userAvator.png')
+          }
         />
         <View
           style={{
-            marginTop: 5,
-            flexDirection: 'row',
+            marginTop: '2%',
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <View style={{marginLeft: 5}}>
-            <Text style={{fontWeight: 'bold', color: '#fff'}}>
-              Jon Abbas Kok
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text style={{color: '#fff', fontSize: 10}}>sam1@pickgo.la</Text>
-            </View>
-          </View>
+          <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 18}}>
+            {`${first_name} ${last_name}`}
+          </Text>
+          <Text style={{color: '#fff', fontSize: 12}}>{email_address}</Text>
         </View>
       </View>
       <View style={{flex: 0.7}}>
@@ -121,12 +135,13 @@ const Drawer = ({navigation}) => {
             </View>
           </Ripple>
         ))}
-        <View style={{marginHorizontal: '10%', marginVertical: '4%'}}>
+        <View style={{marginHorizontal: '10%', marginVertical: '10%'}}>
           <Button
             title="Logout"
             color="#fff"
             textColor="#000"
             icon={<MaterialIcon size={20} color="#000" name="logout" />}
+            onPress={logout}
           />
         </View>
       </View>
@@ -135,42 +150,3 @@ const Drawer = ({navigation}) => {
 };
 
 export default Drawer;
-
-const styles = {
-  container: {
-    flex: 1,
-    // backgroundColor: '#1e2023',
-    // paddingTop: 20,
-  },
-  profileImage: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: '100%',
-    paddingTop: 30,
-    padding: 10,
-  },
-  userName: {
-    color: 'white',
-    fontSize: 20,
-    alignSelf: 'center',
-    paddingVertical: 10,
-  },
-  genderAndAge: {
-    color: 'white',
-    fontSize: 14,
-    paddingRight: 10,
-  },
-  location: {
-    color: 'white',
-    fontSize: 14,
-    paddingLeft: 10,
-  },
-  image: {
-    alignSelf: 'center',
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    padding: 10,
-  },
-};

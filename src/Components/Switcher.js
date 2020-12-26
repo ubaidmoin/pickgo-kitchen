@@ -30,7 +30,7 @@ const Switcher = (props) => {
           key={index}
           style={{
             flexDirection: 'row',
-            backgroundColor: index === selected ? '#00a9a5' : '#fff',
+            backgroundColor: index === selected ? '#27ae61' : '#fff',
             borderRadius: 5,
             flex: 1,
             marginHorizontal: '1%',
@@ -39,10 +39,12 @@ const Switcher = (props) => {
             height: '100%',
           }}
           onPress={() => onChange(index)}>
-          {option.icon(index === selected ? '#fff' : '#949aa2')}
+          {option.icon
+            ? option.icon(index === selected ? '#fff' : '#27ae61')
+            : null}
           <Text
             style={{
-              marginLeft: '10%',
+              marginLeft: option.icon ? '10%' : 0,
               color: index === selected ? '#fff' : '#000',
             }}>
             {option.title}

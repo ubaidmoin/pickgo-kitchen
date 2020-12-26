@@ -3,7 +3,7 @@ import {View, Keyboard} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Input from '../Components/Input';
 import Button from '../Components/Button';
-import {authService} from '../Services/API/ApiCalls';
+import {authService} from '../Services/API/CoreAPICalls';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import {validateEmail} from '../Services/Common';
@@ -12,7 +12,7 @@ import {setUserInfo} from '../Services/DataManager';
 const Login = () => {
   const [email, setEmail] = useState('sam1@pickgo.la');
   const [password, setPassword] = useState('sam123');
-  const [loading, setLoading] = useState('');
+  const [loading, setLoading] = useState(false);
   const [, dispatch] = useStateValue();
 
   const login = async () => {
@@ -62,26 +62,18 @@ const Login = () => {
         show: true,
       });
       setLoading(true);
-      const responseLogin = await authService(
-        `username=${email}&password=${password}`,
-      );
+      const responseLogin = await authService({
+        username: email,
+        password: password,
+      });
       if (responseLogin.data) {
-        const {message = ''} = responseLogin.data || {};
-        if (message && message.includes('Successfully')) {
+        const {user = '', message = '', access_token = ''} =
+          responseLogin.data || {};
+        if (access_token && user && user.uid) {
           await setUserInfo(JSON.stringify(responseLogin.data));
           dispatch({
             type: actions.SET_USER_INFO,
             userInfo: responseLogin.data,
-          });
-          dispatch({
-            type: actions.SET_ALERT_SETTINGS,
-            alertSettings: {
-              show: true,
-              type: 'success',
-              title: `Logged In`,
-              showConfirmButton: true,
-              confirmText: 'Ok',
-            },
           });
         } else {
           dispatch({
