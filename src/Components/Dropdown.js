@@ -61,7 +61,6 @@ class Dropdown extends Component {
           this.refActionSheet.show();
         }}>
         <View style={{paddingTop: 10, paddingBottom: 10}}>
-          {console.log('data9: ', options)}
           <ActionSheet
             ref={(ref) => (this.refActionSheet = ref)}
             title={label}
@@ -74,7 +73,7 @@ class Dropdown extends Component {
             destructiveButtonIndex={options.length}
             onPress={(index) => {
               if (options[index]) {
-                onSelect(options[index]);
+                onSelect(options[index], index);
               }
             }}
             styles={{

@@ -8,6 +8,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Login from './Screens/Login';
 import Tables from './Screens/Tables';
+import TableCart from './Screens/TableCart';
+import AddToCart from './Screens/AddToCart';
+import AddCartItem from './Screens/AddCartItem';
+import Payment from './Screens/Payment';
+import TerminalConnection from './Screens/TerminalConnection';
 import Reservations from './Screens/Reservations';
 import OrderSummary from './Screens/OrderSummary';
 import MenuOrders from './Screens/MenuOrders';
@@ -150,6 +155,88 @@ const SignedInStack = () => (
             title: 'Tables',
             showTitle: true,
             showMenuButton: true,
+          },
+          navigation,
+        )
+      }
+    />
+    <Stack.Screen
+      name="TableCart"
+      component={TableCart}
+      options={({navigation, route}) => {
+        const title =
+          route.params && route.params.title
+            ? route.params.title
+            : 'Table Cart';
+        return HeaderWithRightButtons(
+          {
+            title,
+            showTitle: true,
+            showBackButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="AddToCart"
+      component={AddToCart}
+      options={({navigation, route}) => {
+        const title =
+          route.params && route.params.title
+            ? route.params.title
+            : 'Add To Cart';
+        return HeaderWithRightButtons(
+          {
+            title,
+            showTitle: true,
+            showBackButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="AddCartItem"
+      component={AddCartItem}
+      options={({navigation, route}) => {
+        const title =
+          route.params && route.params.title
+            ? route.params.title
+            : 'Add Cart Item';
+        return HeaderWithRightButtons(
+          {
+            title,
+            showTitle: true,
+            showBackButton: true,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="Payment"
+      component={Payment}
+      options={({navigation}) =>
+        HeaderWithRightButtons(
+          {
+            title: 'Payment',
+            showTitle: true,
+            showBackButton: true,
+          },
+          navigation,
+        )
+      }
+    />
+    <Stack.Screen
+      name="TerminalConnection"
+      component={TerminalConnection}
+      options={({navigation}) =>
+        HeaderWithRightButtons(
+          {
+            title: 'Terminal Connection',
+            showTitle: true,
+            showBackButton: true,
           },
           navigation,
         )

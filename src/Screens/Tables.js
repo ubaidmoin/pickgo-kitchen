@@ -12,9 +12,10 @@ import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import {getTables} from '../Services/API/APIManager';
 
-const Tables = () => {
+const Tables = ({navigation}) => {
   useEffect(() => {
     fetchTables();
+    return navigation.addListener('focus', () => fetchTables());
   }, []);
 
   const [{tables = []}, dispatch] = useStateValue();
@@ -77,6 +78,7 @@ const Tables = () => {
         data={tables}
         renderItem={({item}) => (
           <Ripple
+            onPress={() => navigation.navigate('TableCart', {tableId: item.id})}
             key={item.id}
             style={{
               ...styles.item,

@@ -11,6 +11,7 @@ const Button = (props) => {
     textColor = '#fff',
     icon = null,
     height = null,
+    disabled = false,
   } = props || {};
 
   return (
@@ -25,7 +26,7 @@ const Button = (props) => {
         },
         height: height,
         width: '100%',
-        backgroundColor: color,
+        backgroundColor: disabled ? '#999' : color,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
@@ -33,6 +34,7 @@ const Button = (props) => {
         paddingHorizontal: 10,
         marginVertical: 5,
       }}
+      disabled={disabled}
       onPress={onPress}>
       {loading ? (
         <ActivityIndicator color="#fff" />

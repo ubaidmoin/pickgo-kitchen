@@ -55,6 +55,27 @@ export const postData = async (url, data = null) => {
   }
 };
 
+export const deleteData = async (url, data = null) => {
+  const config = {
+    method: 'delete',
+    url,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  if (data) {
+    config.data = JSON.stringify(data);
+  }
+  try {
+    const response = await axios(config)
+      .then((res) => res)
+      .catch((error) => error);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
 export const postFile = async (relativeUrl, user, data) => {
   const url = getUrl(relativeUrl);
   const headers = {
@@ -85,28 +106,6 @@ export const putData = async (relativeUrl, data) => {
   };
   try {
     const response = await axios(config)
-      .then((res) => res)
-      .catch((error) => error);
-    return response;
-  } catch (err) {
-    return {status: null};
-  }
-};
-
-export const deleteData = async (relativeUrl, user) => {
-  const url = getUrl(relativeUrl);
-
-  const options = {
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json-patch+json',
-      Accept: '*/*',
-    },
-  };
-
-  try {
-    const response = await axios
-      .delete(url, options)
       .then((res) => res)
       .catch((error) => error);
     return response;
