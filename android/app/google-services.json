@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "361448633168",
+    "firebase_url": "https://pickgo-1498514382578.firebaseio.com",
+    "project_id": "pickgo-1498514382578",
+    "storage_bucket": "pickgo-1498514382578.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361448633168:android:78169549d95aa14514b255",
+        "android_client_info": {
+          "package_name": "com.pickgo.eat.pickeatadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "361448633168-pn9138mt2vug6uishlkugmhjkhf3c94c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKJbdeJpfR9Q3s66IG_KkHlzzFeXlxbeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "361448633168-pn9138mt2vug6uishlkugmhjkhf3c94c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
