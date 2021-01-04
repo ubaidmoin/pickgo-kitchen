@@ -6,6 +6,7 @@ import {actions} from '../Services/State/Reducer';
 import {getMenu} from '../Services/API/APIManager';
 import Dropdown from '../Components/Dropdown';
 import {formatCurrency} from '../Services/Common';
+import {getNotificationCount} from '../Services/DataManager';
 
 const AddToCart = ({navigation, ...props}) => {
   useEffect(() => {
@@ -15,6 +16,11 @@ const AddToCart = ({navigation, ...props}) => {
       navigation.setParams({title: `Add to ${table.name}`});
       fetchMenu();
     }
+    return navigation.addListener('focus', () =>
+      getNotificationCount().then((notificationCount) =>
+        navigation.setParams({notificationCount}),
+      ),
+    );
   }, []);
 
   const fetchMenu = async () => {
@@ -33,6 +39,21 @@ const AddToCart = ({navigation, ...props}) => {
           companyHoursToday.length > 0
         ) {
           setMenu(result.data);
+          if (
+            companyHoursToday &&
+            companyHoursToday.length > 0 &&
+            companyHoursToday[0]
+          ) {
+            const companyHours = companyHoursToday[0];
+            setSelectedCompanyHours({
+              label: `${companyHours.name} (from ${companyHours.time_from} to ${companyHours.time_to})`,
+            });
+            const {menuCourses = []} = companyHours || {};
+            if (menuCourses && menuCourses.length > 0 && menuCourses[0]) {
+              setMenuCourses(menuCourses);
+              setSelectedMenuCourse(menuCourses[0]);
+            }
+          }
         } else {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
@@ -149,7 +170,13 @@ const AddToCart = ({navigation, ...props}) => {
                 backgroundColor:
                   selectedMenuCourse.id === item.id ? '#27ae61' : '#fff',
               }}>
-              <Text style={{color: '#000'}}>{item.name}</Text>
+              <Text
+                style={{
+                  color: selectedMenuCourse.id === item.id ? '#fff' : '#000',
+                  fontSize: 18,
+                }}>
+                {item.name}
+              </Text>
             </Ripple>
           )}
         />
@@ -187,10 +214,10 @@ const AddToCart = ({navigation, ...props}) => {
                 marginBottom:
                   index === selectedMenuCourse.menu.length - 1 ? '40%' : '1.5%',
               }}>
-              <Text style={{color: '#000', textAlign: 'center'}}>
+              <Text style={{color: '#000', textAlign: 'center', fontSize: 18}}>
                 {item.name}
               </Text>
-              <Text style={{color: '#000', textAlign: 'center'}}>
+              <Text style={{color: '#000', textAlign: 'center', fontSize: 18}}>
                 {formatCurrency(item.price)}
               </Text>
             </Ripple>

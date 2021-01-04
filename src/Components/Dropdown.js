@@ -41,11 +41,11 @@ class Dropdown extends Component {
       left: 0,
       top: this._animatedIsFocused.interpolate({
         inputRange: [0, 1],
-        outputRange: [18, 0],
+        outputRange: [28, 5],
       }),
       fontSize: this._animatedIsFocused.interpolate({
         inputRange: [0, 1],
-        outputRange: [15, 10],
+        outputRange: [15, 12],
       }),
       color: this._animatedIsFocused.interpolate({
         inputRange: [0, 1],
@@ -97,12 +97,14 @@ class Dropdown extends Component {
             style={{
               paddingHorizontal: 0,
               width: '100%',
-              height: 40,
-              fontSize: 15,
+              height: 45,
+              fontSize: 20,
               color: '#000',
               borderBottomWidth: 1,
               borderBottomColor: '#000',
+              paddingBottom: this.props.selected ? -20 : 0,
             }}
+            selection={{start: 0}}
             editable={false}
           />
         </View>

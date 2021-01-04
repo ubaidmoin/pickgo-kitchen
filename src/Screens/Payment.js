@@ -14,8 +14,17 @@ import {
   makeTransaction,
 } from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
+import {getNotificationCount} from '../Services/DataManager';
 
 const Payment = ({navigation, ...props}) => {
+  useEffect(() => {
+    return navigation.addListener('focus', () =>
+      getNotificationCount().then((notificationCount) =>
+        navigation.setParams({notificationCount}),
+      ),
+    );
+  }, []);
+
   useEffect(() => {
     const {tableId = ''} = props.route.params || {};
     if (tableId) {
@@ -459,7 +468,7 @@ const Payment = ({navigation, ...props}) => {
                 elevation: 5,
               }}>
               <Text
-                style={{fontSize: 15, textAlign: 'center', fontWeight: 'bold'}}>
+                style={{fontSize: 18, textAlign: 'center', fontWeight: 'bold'}}>
                 Confirm Cash
               </Text>
               {dialogType === 'PayCashFixed' ? (
@@ -505,6 +514,7 @@ const Payment = ({navigation, ...props}) => {
                         textAlign: 'center',
                         marginVertical: '1.5%',
                         marginHorizontal: '8%',
+                        fontSize: 18,
                       }}>
                       {confirmCashQuantity}
                     </Text>
@@ -531,7 +541,7 @@ const Payment = ({navigation, ...props}) => {
                       <EntypoIcon name="plus" size={25} color="#fff" />
                     </Ripple>
                   </View>
-                  <Text style={{fontSize: 15}}>
+                  <Text style={{fontSize: 18}}>
                     {formatCurrency(
                       confirmCashAmount * confirmCashQuantity,
                       true,
@@ -551,8 +561,8 @@ const Payment = ({navigation, ...props}) => {
                   justifyContent: 'space-between',
                   marginTop: '5%',
                 }}>
-                <Text style={{fontSize: 15}}>Change</Text>
-                <Text style={{fontSize: 15}}>
+                <Text style={{fontSize: 18}}>Change</Text>
+                <Text style={{fontSize: 18}}>
                   {dialogType === 'PayCashFixed'
                     ? getPayableAmount() -
                         confirmCashAmount * confirmCashQuantity <
@@ -584,7 +594,7 @@ const Payment = ({navigation, ...props}) => {
                     backgroundColor: '#ed3237',
                   }}
                   onPress={() => setDialogType('')}>
-                  <Text style={{color: '#fff', fontSize: 13}}>Cancel</Text>
+                  <Text style={{color: '#fff', fontSize: 15}}>Cancel</Text>
                 </Ripple>
                 <Ripple
                   style={{
@@ -605,7 +615,7 @@ const Payment = ({navigation, ...props}) => {
                       onMakeTransaction(paymentAmount);
                     }
                   }}>
-                  <Text style={{color: '#fff', fontSize: 13}}>Confirm</Text>
+                  <Text style={{color: '#fff', fontSize: 15}}>Confirm</Text>
                 </Ripple>
               </View>
             </View>
@@ -628,7 +638,7 @@ const Payment = ({navigation, ...props}) => {
                 elevation: 5,
               }}>
               <Text
-                style={{fontSize: 15, textAlign: 'center', fontWeight: 'bold'}}>
+                style={{fontSize: 18, textAlign: 'center', fontWeight: 'bold'}}>
                 Custom Split
               </Text>
               <View
@@ -667,6 +677,7 @@ const Payment = ({navigation, ...props}) => {
                     textAlign: 'center',
                     marginVertical: '1.5%',
                     marginHorizontal: '5%',
+                    fontSize: 18,
                   }}>
                   {customSplitQuantity}
                 </Text>
@@ -707,7 +718,7 @@ const Payment = ({navigation, ...props}) => {
                     backgroundColor: '#ed3237',
                   }}
                   onPress={() => setDialogType('')}>
-                  <Text style={{color: '#fff', fontSize: 13}}>Cancel</Text>
+                  <Text style={{color: '#fff', fontSize: 15}}>Cancel</Text>
                 </Ripple>
                 <Ripple
                   style={{
@@ -721,7 +732,7 @@ const Payment = ({navigation, ...props}) => {
                     setDialogType('');
                     onSplitEqual(customSplitQuantity);
                   }}>
-                  <Text style={{color: '#fff', fontSize: 13}}>Confirm</Text>
+                  <Text style={{color: '#fff', fontSize: 15}}>Confirm</Text>
                 </Ripple>
               </View>
             </View>
@@ -743,7 +754,7 @@ const Payment = ({navigation, ...props}) => {
               numberOfLines={1}>
               {formatCurrency(getPayableAmount(), true)}
             </Text>
-            <Text numberOfLines={1}>
+            <Text numberOfLines={1} style={{fontSize: 16}}>
               {`Out of ${formatCurrency(
                 summary.subtotal,
                 true,
@@ -770,7 +781,7 @@ const Payment = ({navigation, ...props}) => {
             {selected === 0 ? (
               <View style={{width: '100%'}}>
                 <View style={{marginTop: '3%'}}>
-                  <Text>Card</Text>
+                  <Text style={{fontSize: 18}}>Card</Text>
                   <Button
                     title="Terminal #Unknown"
                     loading={loading}
@@ -779,7 +790,7 @@ const Payment = ({navigation, ...props}) => {
                   />
                 </View>
                 <View style={{marginTop: '3%'}}>
-                  <Text>Cash</Text>
+                  <Text style={{fontSize: 18}}>Cash</Text>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -807,12 +818,12 @@ const Payment = ({navigation, ...props}) => {
                           alignItems: 'center',
                           borderRadius: 5,
                           paddingVertical: 10,
-                          paddingHorizontal: 5,
+                          paddingHorizontal: 10,
                           marginVertical: 5,
                           marginRight: 5,
                         }}
                         onPress={() => onPayCash(item, index)}>
-                        <Text style={{color: '#fff'}}>
+                        <Text style={{color: '#fff', fontSize: 18}}>
                           {isNaN(item) ? item : formatCurrency(item, true)}
                         </Text>
                       </Ripple>
@@ -835,11 +846,18 @@ const Payment = ({navigation, ...props}) => {
                     height={40}
                   />
                 </View>
-                <Text style={{marginVertical: '3%', textAlign: 'center'}}>
+                <Text
+                  style={{
+                    marginVertical: '3%',
+                    textAlign: 'center',
+                    fontSize: 18,
+                  }}>
                   OR
                 </Text>
                 <View>
-                  <Text>Split into equal payments (two or more)</Text>
+                  <Text style={{fontSize: 16}}>
+                    Split into equal payments (two or more)
+                  </Text>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -866,7 +884,9 @@ const Payment = ({navigation, ...props}) => {
                           marginRight: 5,
                         }}
                         onPress={() => onSplitPayment(item)}>
-                        <Text style={{color: '#fff'}}>{item}</Text>
+                        <Text style={{color: '#fff', fontSize: 18}}>
+                          {item}
+                        </Text>
                       </Ripple>
                     ))}
                   </View>

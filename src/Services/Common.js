@@ -3,14 +3,15 @@ export const validateEmail = (email) => {
   return re.test(String(email).toLowerCase());
 };
 
-export const formatCurrency = (value, divide = false) => {
-  if (divide) {
-    return `₭ ${parseFloat(value / 100)
+export const formatCurrency = (value, divide = false, showCents = false) => {
+  const val = divide ? value / 100 : value;
+  if (showCents) {
+    return `₭ ${parseFloat(val)
       .toFixed(1)
       .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
   } else {
-    return `₭ ${parseFloat(value)
-      .toFixed(1)
-      .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+    return `₭ ${parseFloat(val)
+      .toString()
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`;
   }
 };

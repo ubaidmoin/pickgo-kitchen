@@ -1,10 +1,10 @@
 import React from 'react';
-import {TouchableOpacity, View, Text} from 'react-native';
+import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Login from './Screens/Login';
 import Tables from './Screens/Tables';
@@ -20,6 +20,7 @@ import SearchUsers from './Screens/SearchUsers';
 import NotificationCenter from './Screens/NotificationCenter';
 import Settings from './Screens/Settings';
 import DrawerComponent from './Components/DrawerComponent';
+import Ripple from './Components/Ripple';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -31,6 +32,8 @@ const Header = (
     showTitle = false,
     showMenuButton = false,
     isTransparent = false,
+    showRightButtons = true,
+    notificationCount = null,
   },
   navigation,
 ) => ({
@@ -45,93 +48,66 @@ const Header = (
   headerLeft:
     showBackButton || showMenuButton
       ? () => (
-          <TouchableOpacity
+          <Ripple
+            style={{marginLeft: 10}}
             onPress={() =>
               showBackButton ? navigation.pop() : navigation.toggleDrawer()
             }>
             <FeatherIcon
-              style={{marginLeft: 10}}
               name={showBackButton ? 'chevron-left' : 'menu'}
               size={25}
               color={'#fff'}
             />
-          </TouchableOpacity>
+          </Ripple>
         )
       : null,
-});
-
-const HeaderWithRightButtons = (
-  {
-    title = null,
-    showBackButton = false,
-    showTitle = false,
-    showMenuButton = false,
-    isTransparent = false,
-  },
-  navigation,
-) => ({
-  title: showTitle ? title : null,
-  headerTitleStyle: {
-    color: '#fff',
-  },
-  headerTransparent: isTransparent,
-  headerStyle: {
-    backgroundColor: '#27ae61',
-  },
-  headerLeft:
-    showBackButton || showMenuButton
-      ? () => (
-          <TouchableOpacity
-            onPress={() =>
-              showBackButton ? navigation.pop() : navigation.toggleDrawer()
-            }>
-            <FeatherIcon
-              style={{marginLeft: 10}}
-              name={showBackButton ? 'chevron-left' : 'menu'}
-              size={25}
-              color={'#fff'}
-            />
-          </TouchableOpacity>
-        )
-      : null,
-  // eslint-disable-next-line react/display-name
-  headerRight: () => (
-    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-      <Entypo style={{marginRight: 10}} name="home" size={25} color={'#fff'} />
-      <Entypo
-        style={{marginRight: 10}}
-        name="credit-card"
-        size={25}
-        color={'#fff'}
-      />
-      <TouchableOpacity
-        onPress={() => navigation.navigate('NotificationCenter')}>
-        <FontAwesome
-          style={{marginRight: 10}}
-          name="bell"
-          size={25}
-          color={'#fff'}
-        />
+  headerRight: showRightButtons
+    ? () => (
         <View
           style={{
-            position: 'absolute',
-            top: -10,
-            right: 1,
-            // height: 20,
-            // width: 20,
-            backgroundColor: '#cc0001',
-            borderRadius: 15,
-            borderWidth: 1,
-            borderColor: '#fff',
-            justifyContent: 'center',
+            flexDirection: 'row',
             alignItems: 'center',
-            padding: 5,
+            marginRight: 10,
           }}>
-          <Text style={{color: 'white', fontSize: 10}}>14</Text>
+          <Ripple
+            style={{paddingHorizontal: 5}}
+            onPress={() => navigation.navigate('Tables')}>
+            <Entypo name="home" size={25} color={'#fff'} />
+          </Ripple>
+          <Ripple disabled style={{paddingHorizontal: 5}}>
+            <Entypo name="credit-card" size={25} color={'#fff'} />
+          </Ripple>
+          <Ripple onPress={() => navigation.navigate('NotificationCenter')}>
+            <MaterialIcon name="notifications-on" size={25} color={'#fff'} />
+            {notificationCount ? (
+              <View
+                style={{
+                  position: 'absolute',
+                  top: '-30%',
+                  right: '-15%',
+                  width: 20,
+                  height: 20,
+                  borderRadius: 10,
+                  backgroundColor: '#cc0001',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderWidth: 1,
+                  borderColor: '#fff',
+                }}>
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontSize: 10,
+                    textAlign: 'center',
+                  }}>
+                  {notificationCount}
+                </Text>
+              </View>
+            ) : null}
+          </Ripple>
         </View>
-      </TouchableOpacity>
-    </View>
-  ),
+      )
+    : null,
 });
 
 const LoggedOutStack = () => (
@@ -149,16 +125,21 @@ const SignedInStack = () => (
     <Stack.Screen
       name="Tables"
       component={Tables}
-      options={({navigation}) =>
-        HeaderWithRightButtons(
+      options={({navigation, route}) => {
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
           {
             title: 'Tables',
             showTitle: true,
             showMenuButton: true,
+            notificationCount,
           },
           navigation,
-        )
-      }
+        );
+      }}
     />
     <Stack.Screen
       name="TableCart"
@@ -168,11 +149,16 @@ const SignedInStack = () => (
           route.params && route.params.title
             ? route.params.title
             : 'Table Cart';
-        return HeaderWithRightButtons(
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
           {
             title,
             showTitle: true,
             showBackButton: true,
+            notificationCount,
           },
           navigation,
         );
@@ -186,11 +172,16 @@ const SignedInStack = () => (
           route.params && route.params.title
             ? route.params.title
             : 'Add To Cart';
-        return HeaderWithRightButtons(
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
           {
             title,
             showTitle: true,
             showBackButton: true,
+            notificationCount,
           },
           navigation,
         );
@@ -204,11 +195,16 @@ const SignedInStack = () => (
           route.params && route.params.title
             ? route.params.title
             : 'Add Cart Item';
-        return HeaderWithRightButtons(
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
           {
             title,
             showTitle: true,
             showBackButton: true,
+            notificationCount,
           },
           navigation,
         );
@@ -217,114 +213,154 @@ const SignedInStack = () => (
     <Stack.Screen
       name="Payment"
       component={Payment}
-      options={({navigation}) =>
-        HeaderWithRightButtons(
+      options={({navigation, route}) => {
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
           {
             title: 'Payment',
             showTitle: true,
             showBackButton: true,
+            notificationCount,
           },
           navigation,
-        )
-      }
+        );
+      }}
     />
     <Stack.Screen
       name="TerminalConnection"
       component={TerminalConnection}
-      options={({navigation}) =>
-        HeaderWithRightButtons(
+      options={({navigation, route}) => {
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
           {
             title: 'Terminal Connection',
             showTitle: true,
             showBackButton: true,
+            notificationCount,
           },
           navigation,
-        )
-      }
+        );
+      }}
     />
     <Stack.Screen
       name="Reservations"
       component={Reservations}
-      options={({navigation}) =>
-        HeaderWithRightButtons(
+      options={({navigation, route}) => {
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
           {
             title: 'Reservations',
             showTitle: true,
             showMenuButton: true,
+            notificationCount,
           },
           navigation,
-        )
-      }
+        );
+      }}
     />
     <Stack.Screen
       name="OrderSummary"
       component={OrderSummary}
-      options={({navigation}) =>
-        HeaderWithRightButtons(
+      options={({navigation, route}) => {
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
           {
             title: 'Order Summary',
             showTitle: true,
             showMenuButton: true,
+            notificationCount,
           },
           navigation,
-        )
-      }
+        );
+      }}
     />
     <Stack.Screen
       name="MenuOrders"
       component={MenuOrders}
-      options={({navigation}) =>
-        Header(
+      options={({navigation, route}) => {
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
           {
             title: 'Menu Orders',
             showTitle: true,
             showMenuButton: true,
+            notificationCount,
           },
           navigation,
-        )
-      }
+        );
+      }}
     />
     <Stack.Screen
       name="SearchUsers"
       component={SearchUsers}
-      options={({navigation}) =>
-        Header(
+      options={({navigation, route}) => {
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
           {
             title: 'Search Users',
             showTitle: true,
             showMenuButton: true,
+            notificationCount,
           },
           navigation,
-        )
-      }
+        );
+      }}
     />
     <Stack.Screen
       name="NotificationCenter"
       component={NotificationCenter}
-      options={({navigation}) =>
-        Header(
+      options={({navigation, route}) => {
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
           {
             title: 'Notification Center',
             showTitle: true,
-            showMenuButton: true,
+            showBackButton: true,
+            notificationCount,
           },
           navigation,
-        )
-      }
+        );
+      }}
     />
     <Stack.Screen
       name="Settings"
       component={Settings}
-      options={({navigation}) =>
-        Header(
+      options={({navigation, route}) => {
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
           {
             title: 'Settings',
             showTitle: true,
             showMenuButton: true,
+            notificationCount,
           },
           navigation,
-        )
-      }
+        );
+      }}
     />
   </Stack.Navigator>
 );

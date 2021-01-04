@@ -77,7 +77,7 @@ const Login = () => {
         const {user = '', message = '', access_token = ''} =
           responseLogin.data || {};
         if (access_token && user && user.uid) {
-          await setUserInfo(JSON.stringify(responseLogin.data));
+          await setUserInfo(responseLogin.data);
           dispatch({
             type: actions.SET_USER_INFO,
             userInfo: responseLogin.data,

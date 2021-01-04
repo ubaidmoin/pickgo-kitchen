@@ -1,8 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import Button from '../Components/Button';
+import {getNotificationCount} from '../Services/DataManager';
 
-const TerminalConnection = () => {
+const TerminalConnection = ({navigation}) => {
+  useEffect(() => {
+    return navigation.addListener('focus', () =>
+      getNotificationCount().then((notificationCount) =>
+        navigation.setParams({notificationCount}),
+      ),
+    );
+  }, []);
+
   return (
     <View
       style={{
@@ -11,7 +20,7 @@ const TerminalConnection = () => {
         marginHorizontal: '3%',
       }}>
       <View style={{position: 'absolute', bottom: 0, left: 0, right: 0}}>
-        <Button title="Sacn" height={45} />
+        <Button title="Scan" height={45} />
       </View>
     </View>
   );

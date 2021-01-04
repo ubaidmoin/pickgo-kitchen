@@ -8,6 +8,7 @@ import {actions} from '../Services/State/Reducer';
 import RadioButton from '../Components/RadioButton';
 import {getMenuDetails, addToTableCart} from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
+import {getNotificationCount} from '../Services/DataManager';
 
 const AddCartItem = ({navigation, ...props}) => {
   useEffect(() => {
@@ -17,6 +18,11 @@ const AddCartItem = ({navigation, ...props}) => {
       setTable(table);
       fetchMenuDetails(menuItem.id);
     }
+    return navigation.addListener('focus', () =>
+      getNotificationCount().then((notificationCount) =>
+        navigation.setParams({notificationCount}),
+      ),
+    );
   }, []);
 
   const fetchMenuDetails = async (menuId) => {
@@ -216,10 +222,10 @@ const AddCartItem = ({navigation, ...props}) => {
             }}>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={{color: '#000', textAlign: 'center'}}>
+              <Text style={{color: '#000', textAlign: 'center', fontSize: 20}}>
                 {menu && menu.name ? menu.name : ''}
               </Text>
-              <Text style={{color: '#000', textAlign: 'center'}}>
+              <Text style={{color: '#000', textAlign: 'center', fontSize: 20}}>
                 {formatCurrency(menu.price)}
               </Text>
             </View>
@@ -228,6 +234,7 @@ const AddCartItem = ({navigation, ...props}) => {
                 color: '#000',
                 textAlign: 'justify',
                 marginVertical: '1.5%',
+                fontSize: 18,
               }}>
               {menu && menu.description ? menu.description : ''}
             </Text>
@@ -265,6 +272,7 @@ const AddCartItem = ({navigation, ...props}) => {
                   textAlign: 'center',
                   marginVertical: '1.5%',
                   marginHorizontal: '1.5%',
+                  fontSize: 18,
                 }}>
                 {quantity}
               </Text>
@@ -298,9 +306,6 @@ const AddCartItem = ({navigation, ...props}) => {
               const menuOptionIndex = index;
               return (
                 <View
-                  // onPress={() =>
-                  //   navigation.navigate('AddCartItem', {table, menuItem: item})
-                  // }
                   key={item.id}
                   style={{
                     shadowColor: '#cc0001',
@@ -319,7 +324,8 @@ const AddCartItem = ({navigation, ...props}) => {
                     marginBottom:
                       index === menuOptions.length - 1 ? '20%' : '1.5%',
                   }}>
-                  <Text style={{color: '#000', textAlign: 'center'}}>
+                  <Text
+                    style={{color: '#000', textAlign: 'center', fontSize: 18}}>
                     {`${item.title} (optional)`}
                   </Text>
                   <View style={{marginHorizontal: '2%', marginTop: '2%'}}>

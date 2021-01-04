@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CreateRootNavigator from './src/index';
-// import {theme} from './components/common/theme';
 import {StateProvider} from './src/Services/State/State';
 import {initialState} from './src/Services/State/InitialState';
 import {reducer, actions} from './src/Services/State/Reducer';
@@ -17,59 +16,23 @@ import AppAlert from './src/Components/AppAlert';
 import VersionCheck from 'react-native-version-check';
 import {getUserInfo} from './src/Services/DataManager';
 import PushNotification from 'react-native-push-notification';
+import {addNotification} from './src/Services/DataManager';
+import moment from 'moment';
 
-// Must be outside of any component LifeCycle (such as `componentDidMount`).
 PushNotification.configure({
-  // (optional) Called when Token is generated (iOS and Android)
-  onRegister: function (token) {
-    console.log('TOKEN:', token);
-  },
-
-  // (required) Called when a remote is received or opened, or local notification is opened
   onNotification: function (notification) {
-    console.log('NOTIFICATION123:', notification);
-    PushNotification.localNotification({
-      ...notification,
-      notification: notification.data,
+    addNotification({
+      ...notification.data,
+      time: moment().valueOf(),
+      isSeen: false,
     });
-
-    // process the notification
-
-    // (required) Called when a remote is received or opened, or local notification is opened
-    // notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
-
-  // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
-  onAction: function (notification) {
-    console.log('ACTION:', notification.action);
-    console.log('NOTIFICATION:', notification);
-
-    // process the action
-  },
-
-  // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-  onRegistrationError: function (err) {
-    console.error(err.message, err);
-  },
-
-  // IOS ONLY (optional): default: all - Permissions to register.
   permissions: {
     alert: true,
     badge: true,
     sound: true,
   },
-
-  // Should the initial notification be popped automatically
-  // default: true
   popInitialNotification: true,
-
-  /**
-   * (optional) default: true
-   * - Specified if permissions (ios) and token (android and ios) will requested or not,
-   * - if not, you must call PushNotificationsHandler.requestPermissions() later
-   * - if you are not using remote notification or do not have Firebase installed, use this:
-   *     requestPermissions: Platform.OS === 'ios'
-   */
   requestPermissions: true,
 });
 
@@ -164,7 +127,7 @@ const RootNavigator = () => {
           type: actions.SET_ALERT_SETTINGS,
           alertSettings: null,
         });
-        onConfirmPressed();
+        setTimeout(() => onConfirmPressed(), 100);
       },
       onCancelPressed: () => {
         dispatch({
@@ -183,7 +146,7 @@ const RootNavigator = () => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <ActivityIndicator size={30} color="#000" />
+      <ActivityIndicator size={30} color="#27ae61" />
     </View>
   ) : (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>

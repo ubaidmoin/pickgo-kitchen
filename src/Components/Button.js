@@ -57,7 +57,7 @@ const Button = (props) => {
             }}>
             {icon}
           </View>
-          <Text style={{color: textColor, fontSize: 13}}>{title}</Text>
+          <Text style={{color: textColor, fontSize: 18}}>{title}</Text>
         </View>
       )}
     </Ripple>

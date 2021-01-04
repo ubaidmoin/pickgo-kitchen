@@ -33,11 +33,11 @@ class Input extends Component {
       left: 0,
       top: this._animatedIsFocused.interpolate({
         inputRange: [0, 1],
-        outputRange: [18, 0],
+        outputRange: [28, 5],
       }),
       fontSize: this._animatedIsFocused.interpolate({
         inputRange: [0, 1],
-        outputRange: [15, 10],
+        outputRange: [15, 12],
       }),
       color: this._animatedIsFocused.interpolate({
         inputRange: [0, 1],
@@ -51,11 +51,12 @@ class Input extends Component {
           {...props}
           style={{
             paddingHorizontal: 0,
-            height: 40,
-            fontSize: 15,
+            height: 45,
+            fontSize: 20,
             color: '#000',
             borderBottomWidth: this.state.isFocused ? 2 : 1,
             borderBottomColor: '#000',
+            paddingBottom: this.props.value || this.props.value === 0 ? -20 : 0,
           }}
           value={`${value}`}
           onFocus={this.handleFocus}

@@ -264,12 +264,12 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     maxWidth: '90%',
     color: '#000',
-    fontSize: 16,
+    fontSize: 18,
   },
   message: {
     paddingTop: 5,
     color: '#000',
-    fontSize: 14,
+    fontSize: 16,
   },
   button: {
     paddingHorizontal: 25,
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 13,
+    fontSize: 15,
   },
 });
 

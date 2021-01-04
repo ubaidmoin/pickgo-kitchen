@@ -44,6 +44,7 @@ const Switcher = (props) => {
             : null}
           <Text
             style={{
+              fontSize: 18,
               marginLeft: option.icon ? '10%' : 0,
               color: index === selected ? '#fff' : '#000',
             }}>

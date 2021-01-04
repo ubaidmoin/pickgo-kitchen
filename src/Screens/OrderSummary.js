@@ -10,8 +10,17 @@ import {
   getOrderSummary,
   sendOrderRequest,
 } from '../Services/API/APIManager';
+import {getNotificationCount} from '../Services/DataManager';
 
-const OrderSummary = (props) => {
+const OrderSummary = ({navigation, ...props}) => {
+  useEffect(() => {
+    return navigation.addListener('focus', () =>
+      getNotificationCount().then((notificationCount) =>
+        navigation.setParams({notificationCount}),
+      ),
+    );
+  }, []);
+
   useEffect(() => {
     const {order} = props.route.params || {};
     if (order && order.c_oid) {
@@ -327,7 +336,8 @@ const OrderSummary = (props) => {
                       {`- ${formatCurrency(summary.discount)}`}
                     </Text>
                   </View>
-                  <View style={{...styles.row, marginTop: '5%'}}>
+                  <View style={styles.divider} />
+                  <View style={styles.row}>
                     <Text style={styles.rowText}>New Subtotal</Text>
                     <Text style={styles.rowText}>
                       {formatCurrency(
@@ -352,7 +362,8 @@ const OrderSummary = (props) => {
                       {`+ ${formatCurrency(summary.tips)}`}
                     </Text>
                   </View>
-                  <View style={{...styles.row, marginTop: '5%'}}>
+                  <View style={styles.divider} />
+                  <View style={styles.row}>
                     <Text style={styles.rowText}>Order Total</Text>
                     <Text style={styles.rowText}>
                       {formatCurrency(
@@ -396,12 +407,15 @@ const OrderSummary = (props) => {
                 width: '100%',
               }}>
               <View style={{width: '33.33%'}}>
-                <Text style={{fontSize: 10, color: '#a6a5a5'}}>ORDER #</Text>
-                <Text>{c_oid}</Text>
+                <Text style={{fontSize: 12, color: '#a6a5a5'}}>ORDER #</Text>
+                <Text style={{fontSize: 16}}>{c_oid}</Text>
               </View>
               <View style={{width: '66.66%'}}>
-                <Text style={{fontSize: 10, color: '#a6a5a5'}}>CUSTOMER</Text>
-                <Text>{`${customer_first_name} ${customer_last_name}`}</Text>
+                <Text style={{fontSize: 12, color: '#a6a5a5'}}>CUSTOMER</Text>
+                <Text
+                  style={{
+                    fontSize: 16,
+                  }}>{`${customer_first_name} ${customer_last_name}`}</Text>
               </View>
             </View>
             <View
@@ -411,16 +425,16 @@ const OrderSummary = (props) => {
                 width: '100%',
               }}>
               <View style={{width: '33.33%'}}>
-                <Text style={{fontSize: 10, color: '#a6a5a5'}}>TABLE</Text>
-                <Text>{table_name}</Text>
+                <Text style={{fontSize: 12, color: '#a6a5a5'}}>TABLE</Text>
+                <Text style={{fontSize: 16}}>{table_name}</Text>
               </View>
               <View style={{width: '33.33%'}}>
-                <Text style={{fontSize: 10, color: '#a6a5a5'}}>GUESTS</Text>
-                <Text>{guests_count}</Text>
+                <Text style={{fontSize: 12, color: '#a6a5a5'}}>GUESTS</Text>
+                <Text style={{fontSize: 16}}>{guests_count}</Text>
               </View>
               <View style={{width: '33.33%'}}>
-                <Text style={{fontSize: 10, color: '#a6a5a5'}}>STATUS</Text>
-                <Text>Paid</Text>
+                <Text style={{fontSize: 12, color: '#a6a5a5'}}>STATUS</Text>
+                <Text style={{fontSize: 16}}>Paid</Text>
               </View>
             </View>
             <View
@@ -450,7 +464,8 @@ const OrderSummary = (props) => {
                   {`- ${formatCurrency(discount)}`}
                 </Text>
               </View>
-              <View style={{...styles.row, marginTop: '5%'}}>
+              <View style={styles.divider} />
+              <View style={styles.row}>
                 <Text style={styles.rowText}>New Subtotal</Text>
                 <Text style={styles.rowText}>
                   {formatCurrency(parseFloat(subtotal) - parseFloat(discount))}
@@ -468,7 +483,8 @@ const OrderSummary = (props) => {
                   {`+ ${formatCurrency(tips)}`}
                 </Text>
               </View>
-              <View style={{...styles.row, marginTop: '5%'}}>
+              <View style={styles.divider} />
+              <View style={styles.row}>
                 <Text style={styles.rowText}>Order Total</Text>
                 <Text style={styles.rowText}>
                   {formatCurrency(
@@ -495,7 +511,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   rowText: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#000',
+  },
+  divider: {
+    marginVertical: 10,
+    borderWidth: 0.5,
+    borderColor: '#767676',
   },
 });

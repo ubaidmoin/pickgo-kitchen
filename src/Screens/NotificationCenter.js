@@ -1,71 +1,95 @@
-import React from 'react';
-import {View, Text, FlatList, StyleSheet, Dimensions} from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-const data = [
-  {
-    title: 'Test',
-    date: new Date().toISOString(),
-  },
-  {
-    title: 'Test',
-    date: new Date().toISOString(),
-  },
-  {
-    title: 'Test',
-    date: new Date().toISOString(),
-  },
-  {
-    title: 'Test',
-    date: new Date().toISOString(),
-  },
-];
-const NotificationCenter = () => {
+import React, {useEffect, useState} from 'react';
+import {View, Text, FlatList} from 'react-native';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import moment from 'moment';
+import Ripple from '../Components/Ripple';
+import {
+  getNotifications,
+  updateNotification,
+  getNotificationCount,
+} from '../Services/DataManager';
+
+const NotificationCenter = ({navigation}) => {
+  useEffect(() => {
+    return navigation.addListener('focus', () =>
+      getNotificationCount().then((notificationCount) =>
+        navigation.setParams({notificationCount}),
+      ),
+    );
+  });
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const [notifications, setNotifications] = useState([]);
+
+  const fetchNotifications = () => {
+    getNotifications().then((notifications) => {
+      setNotifications(notifications);
+      getNotificationCount().then((notificationCount) =>
+        navigation.setParams({notificationCount}),
+      );
+    });
+  };
+
+  const onPressNotification = async (notification) => {
+    await updateNotification(notification.time, {
+      ...notification,
+      isSeen: !notification.isSeen,
+    });
+    fetchNotifications();
+  };
+
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{flex: 1}}>
       <FlatList
-        data={data}
-        renderItem={({item}) => (
-          <View style={styles.item}>
-            <View>
-              <Text style={styles.itemTitle}>{item.title}</Text>
-              <Text style={styles.itemTitle}>{item.date}</Text>
+        style={{paddingVertical: '2%'}}
+        data={notifications}
+        renderItem={({item, index}) => (
+          <Ripple
+            style={{
+              shadowColor: '#cc0001',
+              backgroundColor: '#fff',
+              shadowOpacity: 0.3,
+              shadowRadius: 5,
+              shadowOffset: {
+                height: 5,
+                width: 2,
+              },
+              elevation: 5,
+              padding: '3%',
+              marginHorizontal: '3.5%',
+              marginVertical: '1%',
+              marginBottom: index === notifications.length - 1 ? '8%' : '1%',
+              borderRadius: 5,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+            onPress={() => onPressNotification(item)}>
+            <View style={{width: '85%', paddingHorizontal: '2%'}}>
+              <Text
+                style={{fontSize: 18, color: '#757575', fontWeight: 'bold'}}>
+                {item.title}
+              </Text>
+              <Text style={{color: '#555', fontSize: 16}}>{item.body}</Text>
+              <Text style={{color: '#999', fontSize: 15}}>
+                {moment(item.time).format('MM/DD/YYYY hh:mm:ss a')}
+              </Text>
             </View>
-            <FontAwesome
-              style={{marginRight: 10}}
-              name="bell"
-              size={25}
-              color={'#cc0001'}
-            />
-          </View>
+            <View style={{width: '20%', alignItems: 'center'}}>
+              <MaterialIcon
+                style={{marginRight: 10}}
+                name="notifications"
+                size={25}
+                color={item.isSeen ? '#555' : '#fe0000'}
+              />
+            </View>
+          </Ripple>
         )}
-        numColumns={2}
       />
     </View>
   );
 };
 
 export default NotificationCenter;
-
-const styles = StyleSheet.create({
-  item: {
-    width: Dimensions.get('screen').width * 0.95,
-    shadowColor: '#cc0001',
-    backgroundColor: '#fff',
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    shadowOffset: {
-      height: 5,
-      width: 2,
-    },
-    elevation: 5,
-    padding: 20,
-    margin: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
-  itemTitle: {
-    fontSize: 15,
-  },
-});

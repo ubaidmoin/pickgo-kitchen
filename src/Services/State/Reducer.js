@@ -3,6 +3,7 @@ export const actions = {
   SET_ALERT_SETTINGS: 'SET_ALERT_SETTINGS',
   SET_PROGRESS_SETTINGS: 'SET_PROGRESS_SETTINGS',
   SET_TABLES: 'SET_TABLES',
+  SET_NOTIFICATION_COUNT: 'SET_NOTIFICATION_COUNT',
 };
 
 export const reducer = (state, action) => {

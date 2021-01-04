@@ -11,6 +11,7 @@ import Ripple from '../Components/Ripple';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import {getTables} from '../Services/API/APIManager';
+import {getNotificationCount} from '../Services/DataManager';
 
 const Tables = ({navigation}) => {
   useEffect(() => {
@@ -22,6 +23,9 @@ const Tables = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const fetchTables = async () => {
+    getNotificationCount().then((notificationCount) =>
+      navigation.setParams({notificationCount}),
+    );
     try {
       dispatch({
         type: actions.SET_PROGRESS_SETTINGS,
@@ -112,14 +116,14 @@ const styles = StyleSheet.create({
       width: 2,
     },
     elevation: 5,
-    padding: '10%',
+    padding: '9%',
     margin: '2%',
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
   itemTitle: {
-    fontSize: 15,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#fff',
   },

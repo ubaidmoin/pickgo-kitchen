@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, FlatList, RefreshControl} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  ScrollView,
+} from 'react-native';
 import Button from '../Components/Button';
 import Ripple from '../Components/Ripple';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -12,6 +19,7 @@ import {
   sendToKitchen,
 } from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
+import {getNotificationCount} from '../Services/DataManager';
 
 const TableCart = ({navigation, ...props}) => {
   useEffect(() => {
@@ -29,6 +37,9 @@ const TableCart = ({navigation, ...props}) => {
   const [tableDetails, setTableDetails] = useState('');
 
   const refreshScreen = (table_id = tableId) => {
+    getNotificationCount().then((notificationCount) =>
+      navigation.setParams({notificationCount}),
+    );
     if (table_id) {
       fetchTableDetails(table_id);
     }
@@ -270,9 +281,16 @@ const TableCart = ({navigation, ...props}) => {
       </View>
       {cartItems && cartItems.length > 0 ? (
         <>
-          <View style={{marginTop: '2%'}}>
+          <ScrollView
+            style={{marginTop: '2%'}}
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={fetchTableDetails}
+              />
+            }>
             <FlatList
-              showsVerticalScrollIndicator={false}
               data={cartItems}
               renderItem={({item}) => (
                 <View
@@ -290,7 +308,6 @@ const TableCart = ({navigation, ...props}) => {
                     padding: '3%',
                     marginHorizontal: '5%',
                     marginVertical: '1%',
-                    //   marginBottom: index === cartItems.length - 1 ? '18%' : '1%',
                     borderRadius: 5,
                     alignItems: 'center',
                     flexDirection: 'row',
@@ -301,7 +318,7 @@ const TableCart = ({navigation, ...props}) => {
                       alignItems: 'center',
                       color: '#767676',
                     }}>
-                    <Text>{`x ${item.qty}`}</Text>
+                    <Text style={{fontSize: 18}}>{`x ${item.qty}`}</Text>
                   </View>
                   <View
                     style={{
@@ -310,7 +327,7 @@ const TableCart = ({navigation, ...props}) => {
                     }}>
                     <Text
                       style={{
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: 'bold',
                         color: '#767676',
                       }}>
@@ -328,19 +345,25 @@ const TableCart = ({navigation, ...props}) => {
                             <Text
                               style={{
                                 marginLeft: '3%',
-                                fontSize: 12,
+                                fontSize: 15,
                                 color: '#979797',
                               }}>
                               {`${
                                 item.menu_option_item_name
-                              }  (+ ${formatCurrency(item.price)})`}
+                              }  (+ ${formatCurrency(
+                                item.price,
+                                false,
+                                true,
+                              )})`}
                             </Text>
                           </View>
                         ))
                       : null}
                   </View>
-                  <View style={{width: '27%', alignItems: 'center'}}>
-                    <Text style={{color: '#767676'}} numberOfLines={1}>
+                  <View style={{width: '27%', alignItems: 'flex-end'}}>
+                    <Text
+                      style={{color: '#767676', fontSize: 18}}
+                      numberOfLines={1}>
                       {formatCurrency(item.total_amount)}
                     </Text>
                   </View>
@@ -355,12 +378,6 @@ const TableCart = ({navigation, ...props}) => {
                   </Ripple>
                 </View>
               )}
-              refreshControl={
-                <RefreshControl
-                  refreshing={loading}
-                  onRefresh={fetchTableDetails}
-                />
-              }
             />
             {summary && summary.subtotal ? (
               <View
@@ -434,7 +451,7 @@ const TableCart = ({navigation, ...props}) => {
                 </View>
               </View>
             ) : null}
-          </View>
+          </ScrollView>
           <View
             style={{
               position: 'absolute',
@@ -477,13 +494,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#000',
     marginBottom: '3%',
+    fontSize: 18,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   rowText: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#000',
   },
   divider: {

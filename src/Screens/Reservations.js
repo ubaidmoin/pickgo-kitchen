@@ -12,8 +12,17 @@ import Switcher from '../Components/Switcher';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import {getReservations} from '../Services/API/APIManager';
+import {getNotificationCount} from '../Services/DataManager';
 
 const Reservations = ({navigation}) => {
+  useEffect(() => {
+    return navigation.addListener('focus', () =>
+      getNotificationCount().then((notificationCount) =>
+        navigation.setParams({notificationCount}),
+      ),
+    );
+  }, []);
+
   useEffect(() => {
     fetchReservations();
   }, []);
@@ -99,6 +108,7 @@ const Reservations = ({navigation}) => {
             <Text
               style={{
                 ...styles.itemTitle,
+                fontWeight: 'bold',
                 color: item.type && parseInt(item.type) === 3 ? '#fff' : '#000',
               }}
               numberOfLines={1}>
@@ -114,7 +124,7 @@ const Reservations = ({navigation}) => {
                 ...styles.itemTitle,
                 color: item.type && parseInt(item.type) === 3 ? '#fff' : '#000',
               }}>
-              {`Total Orders: ${formatCurrency(item.subtotal)}`}
+              {`Total Orders ${formatCurrency(item.subtotal)}`}
             </Text>
           </Ripple>
         )}
@@ -146,8 +156,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   itemTitle: {
-    fontSize: 15,
-    fontWeight: 'bold',
+    fontSize: 18,
+    // fontWeight: 'bold',
     color: '#fff',
   },
 });
