@@ -6,17 +6,21 @@ import {
   FlatList,
   RefreshControl,
   ScrollView,
+  Keyboard,
 } from 'react-native';
 import Button from '../Components/Button';
 import Ripple from '../Components/Ripple';
+import Input from '../Components/Input';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import {
   getTableDetails,
   deleteFromTableCart,
   sendToKitchen,
+  getOrderSummary,
 } from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
@@ -35,6 +39,7 @@ const TableCart = ({navigation, ...props}) => {
 
   const [tableId, setTableId] = useState('');
   const [tableDetails, setTableDetails] = useState('');
+  const [amount, setAmount] = useState('');
 
   const refreshScreen = (table_id = tableId) => {
     getNotificationCount().then((notificationCount) =>
@@ -56,6 +61,7 @@ const TableCart = ({navigation, ...props}) => {
       if (result.data) {
         const {table} = result.data || {};
         if (table && table.id) {
+          console.log('TDetails: ', result.data);
           setTableDetails(result.data);
           navigation.setParams({title: table.name});
         } else {
@@ -263,6 +269,77 @@ const TableCart = ({navigation, ...props}) => {
     }
   };
 
+  const onAddAmount = async () => {
+    try {
+      Keyboard.dismiss();
+      if (!amount) {
+        dispatch({
+          type: actions.SET_ALERT_SETTINGS,
+          alertSettings: {
+            show: true,
+            type: 'warn',
+            title: `Field Required`,
+            message: 'Please enter amount',
+            showConfirmButton: true,
+            confirmText: 'Ok',
+          },
+        });
+        return;
+      }
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: true,
+      });
+      setLoading(true);
+      const {orderCart, activeOrder, summary} = tableDetails || {};
+      const {cid: company_id} = orderCart || {};
+      const {id: order_id, guests_count, tbl_id: table_id} = activeOrder || {};
+      const {subtotal} = summary || {};
+      const newSubTotal = parseFloat(
+        parseInt(subtotal) / 100 + parseInt(amount),
+      )
+        .toFixed(2)
+        .toString();
+      const requestObj = {
+        company_id,
+        guests_count,
+        order_id,
+        subtotal: newSubTotal,
+        table_id,
+      };
+      // console.log('ReqData: ', requestObj);
+      const result = await getOrderSummary(requestObj);
+      if (result.data) {
+        console.log('SummaryData: ', result.data);
+        const {summary = {}} = result.data || {};
+        if (summary && (summary.subtotal || summary.subtotal === 0)) {
+          if (table_id) {
+            fetchTableDetails(table_id);
+          }
+        }
+      }
+    } catch (error) {
+      dispatch({
+        type: actions.SET_ALERT_SETTINGS,
+        alertSettings: {
+          show: true,
+          type: 'error',
+          title: 'Error Occured',
+          message:
+            'This Operation Could Not Be Completed. Please Try Again Later.',
+          showConfirmButton: true,
+          confirmText: 'Ok',
+        },
+      });
+    } finally {
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: false,
+      });
+      setLoading(false);
+    }
+  };
+
   const {summary = {}, cartItems = []} = tableDetails || {};
 
   return (
@@ -271,13 +348,37 @@ const TableCart = ({navigation, ...props}) => {
         flex: 1,
         marginVertical: '2%',
       }}>
-      <View style={{marginHorizontal: '5%'}}>
-        <Button
-          title="Add Items"
-          loading={loading}
+      <View
+        style={{
+          marginHorizontal: '5%',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <View style={{width: '50%'}}>
+          <Input
+            label="Enter Amount"
+            value={amount}
+            onChangeText={(val) => setAmount(val)}
+          />
+        </View>
+        <View style={{width: '18%', marginLeft: '2%'}}>
+          <Button title="Add" onPress={onAddAmount} height={40} />
+        </View>
+        <View style={{width: '15%'}}>
+          <Text style={{textAlign: 'center'}}>OR</Text>
+        </View>
+        <Ripple
           onPress={addItems}
-          height={45}
-        />
+          style={{
+            borderRadius: 25,
+            padding: 5,
+            backgroundColor: '#2bae6a',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <EntypoIcon name="plus" size={25} color="#fff" />
+        </Ripple>
       </View>
       {cartItems && cartItems.length > 0 ? (
         <>
