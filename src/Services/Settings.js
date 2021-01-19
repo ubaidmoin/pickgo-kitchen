@@ -9,6 +9,10 @@ export const settings = {
   IMAGE_BASEURL: BASE_URLS.IMAGE_BASEURL,
   APP_BASEURL: BASE_URLS.APP_BASEURL,
   LOGIN: `${BASE_URLS.AUTH_BASEURL}/main/login_auth_mobile`,
+  USER: {
+    SAVE_FCM_TOKEN: `${BASE_URLS.APP_BASEURL}/api/user/notifications-token?access_token=$[acces_token]`,
+    NOTIFY: `${BASE_URLS.APP_BASEURL}/api/user/notify?access_token=$[acces_token]`,
+  },
   TABLES: {
     LIST: `${BASE_URLS.APP_BASEURL}/api/company-table/index?access_token=$[acces_token]`,
     GET_DETAILS: `${BASE_URLS.APP_BASEURL}/api/company-table/view/$[table_id]?access_token=$[acces_token]`,

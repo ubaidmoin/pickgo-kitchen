@@ -19,6 +19,7 @@ import MenuOrders from './Screens/MenuOrders';
 import SearchUsers from './Screens/SearchUsers';
 import NotificationCenter from './Screens/NotificationCenter';
 import Settings from './Screens/Settings';
+import TestPush from './Screens/TestPush';
 import DrawerComponent from './Components/DrawerComponent';
 import Ripple from './Components/Ripple';
 
@@ -357,6 +358,20 @@ const SignedInStack = () => (
             showTitle: true,
             showMenuButton: true,
             notificationCount,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="TestPush"
+      component={TestPush}
+      options={({navigation}) => {
+        return Header(
+          {
+            title: 'Test Push',
+            showTitle: true,
+            showBackButton: true,
           },
           navigation,
         );

@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const KEYS = {
   USER_INFO: 'USER_INFO',
   NOTIFICATIONS: 'NOTIFICATIONS',
+  FCM_TOKEN: 'FCM_TOKEN',
 };
 
 export const setUserInfo = async (userDetails) => {
@@ -109,5 +110,19 @@ export const getNotificationCount = async () => {
     return 0;
   } catch (err) {
     return 0;
+  }
+};
+
+export const isFcmTokenExists = async (fcmToken) => {
+  try {
+    const response = await AsyncStorage.getItem(KEYS.FCM_TOKEN);
+    if (response && response === fcmToken) {
+      return true;
+    } else {
+      await AsyncStorage.setItem(KEYS.FCM_TOKEN, fcmToken);
+      return false;
+    }
+  } catch (err) {
+    return false;
   }
 };

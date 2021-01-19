@@ -177,3 +177,26 @@ export const makeTransaction = async (transactionId, data) => {
     return null;
   }
 };
+
+export const saveFcmToken = async (data) => {
+  try {
+    const url = s.USER.SAVE_FCM_TOKEN.replace(
+      '$[acces_token]',
+      await getAccessToken(),
+    );
+    const response = await postData(url, data);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const sendNotification = async (data) => {
+  try {
+    const url = s.USER.NOTIFY.replace('$[acces_token]', await getAccessToken());
+    const response = await postData(url, data);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};

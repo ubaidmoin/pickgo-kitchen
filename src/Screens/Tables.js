@@ -10,8 +10,53 @@ import {
 import Ripple from '../Components/Ripple';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
-import {getTables} from '../Services/API/APIManager';
-import {getNotificationCount} from '../Services/DataManager';
+import {getTables, saveFcmToken} from '../Services/API/APIManager';
+import {
+  getNotificationCount,
+  addNotification,
+  isFcmTokenExists,
+  getUserInfo,
+} from '../Services/DataManager';
+import PushNotification from 'react-native-push-notification';
+import moment from 'moment';
+
+PushNotification.configure({
+  onRegister: async (info) => {
+    const userInfo = await getUserInfo();
+    if (
+      userInfo &&
+      userInfo.access_token &&
+      userInfo.user &&
+      userInfo.user.uid
+    ) {
+      if (info) {
+        const {token} = info || {};
+        if (token) {
+          if (!(await isFcmTokenExists(token))) {
+            const response = await saveFcmToken({token});
+            if (!(response && response.data && response.data.id)) {
+              isFcmTokenExists('');
+            }
+          }
+        }
+      }
+    }
+  },
+  onNotification: (notification) => {
+    addNotification({
+      ...notification.data,
+      time: moment().valueOf(),
+      isSeen: false,
+    });
+  },
+  permissions: {
+    alert: true,
+    badge: true,
+    sound: true,
+  },
+  popInitialNotification: true,
+  requestPermissions: true,
+});
 
 const Tables = ({navigation}) => {
   useEffect(() => {

@@ -15,26 +15,6 @@ import AppActivityIndicator from './src/Components/ActivityIndicator';
 import AppAlert from './src/Components/AppAlert';
 import VersionCheck from 'react-native-version-check';
 import {getUserInfo} from './src/Services/DataManager';
-import PushNotification from 'react-native-push-notification';
-import {addNotification} from './src/Services/DataManager';
-import moment from 'moment';
-
-PushNotification.configure({
-  onNotification: function (notification) {
-    addNotification({
-      ...notification.data,
-      time: moment().valueOf(),
-      isSeen: false,
-    });
-  },
-  permissions: {
-    alert: true,
-    badge: true,
-    sound: true,
-  },
-  popInitialNotification: true,
-  requestPermissions: true,
-});
 
 const RootNavigator = () => {
   useEffect(() => {
