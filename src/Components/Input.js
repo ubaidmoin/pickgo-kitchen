@@ -27,7 +27,7 @@ class Input extends Component {
   }
 
   render() {
-    const {label, value = '', ...props} = this.props;
+    const {label, value = '', type = 'default', ...props} = this.props;
     const labelStyle = {
       position: 'absolute',
       left: 0,
@@ -64,6 +64,13 @@ class Input extends Component {
           blurOnSubmit
           autoCapitalize="none"
           autoCorrect={false}
+          onChangeText={(text) => {
+            if (type && type === 'number') {
+              this.props.onChangeText(text.replace(/[^0-9]/g, ''));
+            } else {
+              this.props.onChangeText(text);
+            }
+          }}
         />
       </View>
     );

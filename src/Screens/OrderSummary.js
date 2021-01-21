@@ -257,8 +257,10 @@ const OrderSummary = ({navigation, ...props}) => {
               }}>
               <View style={{width: '47%'}}>
                 <Input
+                  type="number"
                   label="Guests"
                   value={guestsCount}
+                  keyboardType="phone-pad"
                   onChangeText={(val) => setGuestsCount(val)}
                 />
               </View>

@@ -366,12 +366,17 @@ const SignedInStack = () => (
     <Stack.Screen
       name="TestPush"
       component={TestPush}
-      options={({navigation}) => {
+      options={({navigation, route}) => {
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
         return Header(
           {
             title: 'Test Push',
             showTitle: true,
-            showBackButton: true,
+            showMenuButton: true,
+            notificationCount,
           },
           navigation,
         );

@@ -42,13 +42,6 @@ PushNotification.configure({
       }
     }
   },
-  onNotification: (notification) => {
-    addNotification({
-      ...notification.data,
-      time: moment().valueOf(),
-      isSeen: false,
-    });
-  },
   permissions: {
     alert: true,
     badge: true,
@@ -60,6 +53,43 @@ PushNotification.configure({
 
 const Tables = ({navigation}) => {
   useEffect(() => {
+    PushNotification.configure({
+      onNotification: (notification) => {
+        if (notification.foreground && !notification.message) {
+          PushNotification.localNotification({
+            ...notification,
+            message:
+              notification.data && notification.data.body
+                ? notification.data.body
+                : '',
+          });
+        }
+        addNotification({
+          ...notification.data,
+          time: moment().valueOf(),
+          isSeen: false,
+        });
+        if (
+          notification &&
+          notification.userInteraction &&
+          notification.data &&
+          notification.data.type
+        ) {
+          switch (notification.data.type) {
+            case 'pay-by-cash':
+              if (notification.data.table_id) {
+                navigation.navigate('Payment', {
+                  tableId: notification.data.table_id,
+                });
+              }
+              break;
+            case 'reservation':
+              navigation.navigate('Reservations');
+              break;
+          }
+        }
+      },
+    });
     fetchTables();
     return navigation.addListener('focus', () => fetchTables());
   }, []);
@@ -132,10 +162,12 @@ const Tables = ({navigation}) => {
             style={{
               ...styles.item,
               backgroundColor: item.has_order
-                ? item.activeOrder && item.activeOrder.tbl_no
-                  ? '#fe0000'
-                  : '#2b78e4'
-                : '#27ae61',
+                ? item.activeOrder &&
+                  item.activeOrder.uid &&
+                  item.activeOrder.uid > -1
+                  ? '#fe0000' //Red
+                  : '#2b78e4' //Blue
+                : '#27ae61', //Green
             }}>
             <Text style={styles.itemTitle}>{item.name}</Text>
           </Ripple>

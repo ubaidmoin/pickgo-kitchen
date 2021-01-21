@@ -7,7 +7,7 @@ import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import {sendNotification} from '../Services/API/APIManager';
 
-const Settings = ({navigation}) => {
+const TestPush = ({navigation}) => {
   useEffect(() => {
     return navigation.addListener('focus', () =>
       getNotificationCount().then((notificationCount) =>
@@ -194,4 +194,4 @@ const Settings = ({navigation}) => {
   );
 };
 
-export default Settings;
+export default TestPush;

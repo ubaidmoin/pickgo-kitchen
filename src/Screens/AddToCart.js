@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, ScrollView, RefreshControl} from 'react-native';
 import Ripple from '../Components/Ripple';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
@@ -138,7 +138,9 @@ const AddToCart = ({navigation, ...props}) => {
 
   return (
     <View style={{flex: 1}}>
-      <View style={{marginVertical: '2%', marginHorizontal: '5%'}}>
+      <ScrollView
+        style={{paddingVertical: '2%', marginHorizontal: '5%'}}
+        showsVerticalScrollIndicator={false}>
         <Dropdown
           label="Select One"
           options={getCompanyHours()}
@@ -212,7 +214,7 @@ const AddToCart = ({navigation, ...props}) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 marginBottom:
-                  index === selectedMenuCourse.menu.length - 1 ? '40%' : '1.5%',
+                  index === selectedMenuCourse.menu.length - 1 ? '12%' : '1.5%',
               }}>
               <Text style={{color: '#000', textAlign: 'center', fontSize: 18}}>
                 {item.name}
@@ -223,7 +225,7 @@ const AddToCart = ({navigation, ...props}) => {
             </Ripple>
           )}
         />
-      </View>
+      </ScrollView>
     </View>
   );
 };

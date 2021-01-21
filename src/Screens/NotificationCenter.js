@@ -39,6 +39,20 @@ const NotificationCenter = ({navigation}) => {
       isSeen: !notification.isSeen,
     });
     fetchNotifications();
+    if (notification && notification.type) {
+      switch (notification.type) {
+        case 'pay-by-cash':
+          if (notification.table_id) {
+            navigation.navigate('Payment', {
+              tableId: notification.table_id,
+            });
+          }
+          break;
+        case 'reservation':
+          navigation.navigate('Reservations');
+          break;
+      }
+    }
   };
 
   return (

@@ -316,7 +316,6 @@ const TableCart = ({navigation, ...props}) => {
         const {success, message} = result.data || {};
         if (success) {
           setAmount('');
-          refreshScreen();
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
             alertSettings: {
@@ -328,6 +327,10 @@ const TableCart = ({navigation, ...props}) => {
                 : 'Custom Amount is added to order successfully',
               showConfirmButton: true,
               confirmText: 'Ok',
+              onConfirmPressed: () => {
+                refreshScreen(tableId);
+                refreshScreen(tableId);
+              },
             },
           });
         } else {
@@ -395,8 +398,10 @@ const TableCart = ({navigation, ...props}) => {
         }}>
         <View style={{width: '50%'}}>
           <Input
-            label="Enter Amount"
+            type="number"
             value={amount}
+            label="Enter Amount"
+            keyboardType="phone-pad"
             onChangeText={(val) => setAmount(val)}
           />
         </View>

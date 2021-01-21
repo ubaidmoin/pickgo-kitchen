@@ -39,9 +39,7 @@ export const postData = async (url, data = null, isFormData = false) => {
     method: 'post',
     url,
     headers: {
-      'Content-Type': isFormData
-        ? 'application/x-www-form-urlencoded'
-        : 'multipart/form-data',
+      'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
     },
   };
   if (data) {

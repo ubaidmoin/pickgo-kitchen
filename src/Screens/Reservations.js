@@ -16,15 +16,8 @@ import {getNotificationCount} from '../Services/DataManager';
 
 const Reservations = ({navigation}) => {
   useEffect(() => {
-    return navigation.addListener('focus', () =>
-      getNotificationCount().then((notificationCount) =>
-        navigation.setParams({notificationCount}),
-      ),
-    );
-  }, []);
-
-  useEffect(() => {
     fetchReservations();
+    return navigation.addListener('focus', () => fetchReservations);
   }, []);
 
   const [, dispatch] = useStateValue();
@@ -33,6 +26,9 @@ const Reservations = ({navigation}) => {
   const [selected, setSelected] = useState(0);
 
   const fetchReservations = async () => {
+    getNotificationCount().then((notificationCount) =>
+      navigation.setParams({notificationCount}),
+    );
     try {
       dispatch({
         type: actions.SET_PROGRESS_SETTINGS,
