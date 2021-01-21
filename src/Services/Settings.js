@@ -35,4 +35,7 @@ export const settings = {
   TRANSACTIONS: {
     MAKE_TRANSACTION: `${BASE_URLS.APP_BASEURL}/api/transaction/confirm/$[transaction_id]?access_token=$[acces_token]`,
   },
+  DISCOUNT: {
+    CUSTOM_ORDER_AMOUNT: `${BASE_URLS.APP_BASEURL}/api/discount/customorderamount`,
+  },
 };

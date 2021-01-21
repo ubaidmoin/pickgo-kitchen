@@ -200,3 +200,13 @@ export const sendNotification = async (data) => {
     return null;
   }
 };
+
+export const addCustomOrderAmount = async (data) => {
+  try {
+    const url = s.DISCOUNT.CUSTOM_ORDER_AMOUNT;
+    const response = await postData(url, data, true);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};

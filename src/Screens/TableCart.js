@@ -20,7 +20,7 @@ import {
   getTableDetails,
   deleteFromTableCart,
   sendToKitchen,
-  getOrderSummary,
+  addCustomOrderAmount,
 } from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
@@ -61,7 +61,6 @@ const TableCart = ({navigation, ...props}) => {
       if (result.data) {
         const {table} = result.data || {};
         if (table && table.id) {
-          console.log('TDetails: ', result.data);
           setTableDetails(result.data);
           navigation.setParams({title: table.name});
         } else {
@@ -102,7 +101,7 @@ const TableCart = ({navigation, ...props}) => {
     }
   };
 
-  const [, dispatch] = useStateValue();
+  const [{userInfo}, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
 
   const addItems = () =>
@@ -286,37 +285,76 @@ const TableCart = ({navigation, ...props}) => {
         });
         return;
       }
+      const {orderCart} = tableDetails || {};
+      const {cid, id: order_cart_id} = orderCart || {};
+      if (!(orderCart && orderCart.id)) {
+        dispatch({
+          type: actions.SET_ALERT_SETTINGS,
+          alertSettings: {
+            show: true,
+            type: 'warn',
+            title: `Cart is Empty`,
+            message: 'Please add cart items.',
+            showConfirmButton: true,
+            confirmText: 'Ok',
+          },
+        });
+        return;
+      }
       dispatch({
         type: actions.SET_PROGRESS_SETTINGS,
         show: true,
       });
       setLoading(true);
-      const {orderCart, activeOrder, summary} = tableDetails || {};
-      const {cid: company_id} = orderCart || {};
-      const {id: order_id, guests_count, tbl_id: table_id} = activeOrder || {};
-      const {subtotal} = summary || {};
-      const newSubTotal = parseFloat(
-        parseInt(subtotal) / 100 + parseInt(amount),
-      )
-        .toFixed(2)
-        .toString();
-      const requestObj = {
-        company_id,
-        guests_count,
-        order_id,
-        subtotal: newSubTotal,
-        table_id,
-      };
-      // console.log('ReqData: ', requestObj);
-      const result = await getOrderSummary(requestObj);
+      let data = new FormData();
+      data.append('order_cart_id', order_cart_id);
+      data.append('cid', cid);
+      data.append('amount', amount);
+      data.append('uid', userInfo.user.uid);
+      const result = await addCustomOrderAmount(data);
       if (result.data) {
-        console.log('SummaryData: ', result.data);
-        const {summary = {}} = result.data || {};
-        if (summary && (summary.subtotal || summary.subtotal === 0)) {
-          if (table_id) {
-            fetchTableDetails(table_id);
-          }
+        const {success, message} = result.data || {};
+        if (success) {
+          setAmount('');
+          refreshScreen();
+          dispatch({
+            type: actions.SET_ALERT_SETTINGS,
+            alertSettings: {
+              show: true,
+              type: 'success',
+              title: 'Success',
+              message: message
+                ? message
+                : 'Custom Amount is added to order successfully',
+              showConfirmButton: true,
+              confirmText: 'Ok',
+            },
+          });
+        } else {
+          dispatch({
+            type: actions.SET_ALERT_SETTINGS,
+            alertSettings: {
+              show: true,
+              type: 'error',
+              title: 'An Error Occured',
+              message: 'Please try again later.',
+              showConfirmButton: true,
+              confirmText: 'Ok',
+            },
+          });
         }
+      } else {
+        dispatch({
+          type: actions.SET_ALERT_SETTINGS,
+          alertSettings: {
+            show: true,
+            type: 'error',
+            title: 'An Error Occured',
+            message: 'Please try again later.',
+            showConfirmButton: true,
+            confirmText: 'Ok',
+          },
+        });
       }
     } catch (error) {
       dispatch({
