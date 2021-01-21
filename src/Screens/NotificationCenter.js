@@ -26,7 +26,8 @@ const NotificationCenter = ({navigation}) => {
 
   const fetchNotifications = () => {
     getNotifications().then((notifications) => {
-      setNotifications(notifications);
+      const sortedNotifications = notifications.sort((a, b) => a.time < b.time);
+      setNotifications(sortedNotifications);
       getNotificationCount().then((notificationCount) =>
         navigation.setParams({notificationCount}),
       );
