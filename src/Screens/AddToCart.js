@@ -29,6 +29,7 @@ const AddToCart = ({navigation, ...props}) => {
         type: actions.SET_PROGRESS_SETTINGS,
         show: true,
       });
+      setLoading(true);
       const result = await getMenu();
       if (result.data) {
         const {company = {}, companyHoursToday = []} = result.data || {};
@@ -98,6 +99,7 @@ const AddToCart = ({navigation, ...props}) => {
         type: actions.SET_PROGRESS_SETTINGS,
         show: false,
       });
+      setLoading(false);
     }
   };
 
@@ -106,6 +108,7 @@ const AddToCart = ({navigation, ...props}) => {
   const [selectedCompanyHours, setSelectedCompanyHours] = useState('');
   const [menuCourses, setMenuCourses] = useState([]);
   const [selectedMenuCourse, setSelectedMenuCourse] = useState('');
+  const [loading, setLoading] = useState(false);
   const [, dispatch] = useStateValue();
 
   const {companyHoursToday = []} = menu || {};
@@ -137,10 +140,11 @@ const AddToCart = ({navigation, ...props}) => {
   };
 
   return (
-    <View style={{flex: 1}}>
-      <ScrollView
-        style={{paddingVertical: '2%', marginHorizontal: '5%'}}
-        showsVerticalScrollIndicator={false}>
+    <RefreshControl
+      refreshing={loading}
+      onRefresh={fetchMenu}
+      style={{flex: 1, paddingVertical: '2%', marginHorizontal: '5%'}}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Dropdown
           label="Select One"
           options={getCompanyHours()}
@@ -226,7 +230,7 @@ const AddToCart = ({navigation, ...props}) => {
           )}
         />
       </ScrollView>
-    </View>
+    </RefreshControl>
   );
 };
 

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {
-  View,
   Text,
   FlatList,
   StyleSheet,
@@ -145,7 +144,9 @@ const Tables = ({navigation}) => {
   };
 
   return (
-    <View
+    <RefreshControl
+      refreshing={loading}
+      onRefresh={fetchTables}
       style={{
         flex: 1,
         justifyContent: 'center',
@@ -173,11 +174,8 @@ const Tables = ({navigation}) => {
           </Ripple>
         )}
         numColumns={2}
-        refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={fetchTables} />
-        }
       />
-    </View>
+    </RefreshControl>
   );
 };
 
