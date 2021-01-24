@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Keyboard} from 'react-native';
+import {View, Keyboard, Image, Text} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Input from '../Components/Input';
 import Button from '../Components/Button';
@@ -10,12 +10,12 @@ import {validateEmail} from '../Services/Common';
 import {setUserInfo} from '../Services/DataManager';
 
 const Login = () => {
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   // const [email, setEmail] = useState('sam1@pickgo.la');
   // const [password, setPassword] = useState('sam123');
-  const [email, setEmail] = useState('pickgrocery@gmail.com');
-  const [password, setPassword] = useState('123456');
+  // const [email, setEmail] = useState('pickgrocery@gmail.com');
+  // const [password, setPassword] = useState('123456');
 
   const [loading, setLoading] = useState(false);
   const [, dispatch] = useStateValue();
@@ -126,6 +126,19 @@ const Login = () => {
           alignItems: 'center',
           marginHorizontal: '5%',
         }}>
+        <Image
+          style={{height: 120, width: 120, borderWidth: 1}}
+          source={require('../Assets/logo.png')}
+        />
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 15,
+            color: '#2bae6a',
+            marginBottom: '2%',
+          }}>
+          PickEat Admin
+        </Text>
         <Input
           label="Email"
           value={email}
@@ -138,6 +151,7 @@ const Login = () => {
           value={password}
           onChangeText={(val) => setPassword(val)}
         />
+        <View style={{height: '1.5%'}} />
         <Button title="Login" loading={loading} onPress={login} height={40} />
       </KeyboardAwareScrollView>
     </View>
