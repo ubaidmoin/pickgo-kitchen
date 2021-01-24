@@ -31,6 +31,8 @@ export const settings = {
     MAKE_REQUEST: `${BASE_URLS.APP_BASEURL}/api/order/admin-send-to-customer/$[order_id]?access_token=$[acces_token]`,
     SPLIT_EQUAL: `${BASE_URLS.APP_BASEURL}/api/order/split-equal/$[order_id]?access_token=$[acces_token]`,
     SPLIT_BY_AMOUNT: `${BASE_URLS.APP_BASEURL}/api/order/split-by-amount/$[order_id]?access_token=$[acces_token]`,
+    ADMIN_SEND_TO_CUSTOMER: `${BASE_URLS.APP_BASEURL}/api/order/admin-send-to-customer/$[order_id]?access_token=$[acces_token]`,
+    ADMIN_PAY: `${BASE_URLS.APP_BASEURL}/api/order/admin-pay/$[order_id]?access_token=$[acces_token]`,
   },
   TRANSACTIONS: {
     MAKE_TRANSACTION: `${BASE_URLS.APP_BASEURL}/api/transaction/confirm/$[transaction_id]?access_token=$[acces_token]`,

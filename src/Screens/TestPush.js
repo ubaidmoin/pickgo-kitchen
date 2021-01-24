@@ -115,12 +115,7 @@ const TestPush = ({navigation}) => {
         show: true,
       });
       const result = await sendNotification(notification.body);
-      if (
-        result &&
-        result.data &&
-        result.data.success &&
-        result.data.token_count > 0
-      ) {
+      if (result && result.success && result.token_count > 0) {
         dispatch({
           type: actions.SET_ALERT_SETTINGS,
           alertSettings: {

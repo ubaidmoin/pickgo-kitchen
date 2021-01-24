@@ -12,6 +12,8 @@ import {
   splitByAmount,
   splitEqual,
   makeTransaction,
+  adminSendToCustomer,
+  adminPay,
 } from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
@@ -117,12 +119,12 @@ const Payment = ({navigation, ...props}) => {
       setLoading(true);
       const orderId = transactions[0].order_id;
       const result = await splitByAmount(orderId, {amount: splitByAmountVal});
-      if (result.data) {
-        const {order = {}, transactions = []} = result.data || {};
+      if (result) {
+        const {order = {}, transactions = []} = result || {};
         if (order && order.id && transactions && transactions.length > 0) {
           setSelected(0);
           setSplitByAmountVal('');
-          setTableDetails(result.data);
+          setTableDetails(result);
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
             alertSettings: {
@@ -190,12 +192,12 @@ const Payment = ({navigation, ...props}) => {
       setLoading(true);
       const orderId = transactions[0].order_id;
       const result = await splitEqual(orderId, {number});
-      if (result.data) {
-        const {order = {}, transactions = []} = result.data || {};
+      if (result) {
+        const {order = {}, transactions = []} = result || {};
         if (order && order.id && transactions && transactions.length > 0) {
           setSelected(0);
           setSplitByAmountVal('');
-          setTableDetails(result.data);
+          setTableDetails(result);
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
             alertSettings: {
@@ -287,9 +289,9 @@ const Payment = ({navigation, ...props}) => {
       const result = await makeTransaction(transaction.id, {
         confirmed_amount: transaction_amount,
       });
-      if (result.data) {
+      if (result) {
         const {model = {}, transactions = [], transactions_paid = false} =
-          result.data || {};
+          result || {};
         if (transactions_paid) {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
@@ -309,7 +311,7 @@ const Payment = ({navigation, ...props}) => {
           transactions &&
           transactions.length > 0
         ) {
-          setTableDetails(result.data);
+          setTableDetails(result);
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
             alertSettings: {
@@ -424,12 +426,272 @@ const Payment = ({navigation, ...props}) => {
     }
   };
 
+  const onPayNow = async (customerName, cardType) => {
+    dispatch({
+      type: actions.SET_ALERT_SETTINGS,
+      alertSettings: {
+        show: true,
+        type: 'warn',
+        title: 'Charging from',
+        message: `Customer: ${customerName}\nPayment Type: ${cardType}\nTotal: ${formatCurrency(
+          getPayableAmount(),
+          true,
+        )}`,
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmText: 'Ok',
+        cancelText: 'Cancel',
+        onConfirmPressed: () => {
+          payNow();
+        },
+      },
+    });
+  };
+
+  const payNow = async () => {
+    try {
+      Keyboard.dismiss();
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: true,
+      });
+      setLoading(true);
+      const orderId = transactions[0].order_id;
+      const result = await adminPay(orderId);
+      if (result) {
+        const {
+          status = '',
+          message = '',
+          transactions_paid = false,
+          order = {},
+        } = result || {};
+        if (transactions_paid) {
+          dispatch({
+            type: actions.SET_ALERT_SETTINGS,
+            alertSettings: {
+              show: true,
+              type: 'success',
+              title: 'Paid Successfully',
+              showConfirmButton: true,
+              confirmText: 'Ok',
+              onConfirmPressed: () => navigation.navigate('Tables'),
+            },
+          });
+        } else if (order && order.id) {
+          dispatch({
+            type: actions.SET_ALERT_SETTINGS,
+            alertSettings: {
+              show: true,
+              type: 'error',
+              title: 'An Error Occured',
+              message: 'Please try again later.',
+              showConfirmButton: true,
+              confirmText: 'Ok',
+              onConfirmPressed: () => fetchTableDetails(tableId),
+            },
+          });
+        } else if (status === 401) {
+          if (message) {
+            dispatch({
+              type: actions.SET_ALERT_SETTINGS,
+              alertSettings: {
+                show: true,
+                type: 'error',
+                title: 'An Error Occured',
+                message: message,
+                showConfirmButton: true,
+                confirmText: 'Ok',
+              },
+            });
+          } else {
+            dispatch({
+              type: actions.SET_ALERT_SETTINGS,
+              alertSettings: {
+                show: true,
+                type: 'error',
+                title: 'An Error Occured',
+                message: 'Please try again later.',
+                showConfirmButton: true,
+                confirmText: 'Ok',
+              },
+            });
+          }
+        } else {
+          dispatch({
+            type: actions.SET_ALERT_SETTINGS,
+            alertSettings: {
+              show: true,
+              type: 'success',
+              title: 'An Error Occured',
+              showConfirmButton: true,
+              confirmText: 'Ok',
+            },
+          });
+        }
+      } else {
+        dispatch({
+          type: actions.SET_ALERT_SETTINGS,
+          alertSettings: {
+            show: true,
+            type: 'error',
+            title: 'An Error Occured',
+            message: 'Please try again later.',
+            showConfirmButton: true,
+            confirmText: 'Ok',
+          },
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: actions.SET_ALERT_SETTINGS,
+        alertSettings: {
+          show: true,
+          type: 'error',
+          title: 'Error Occured',
+          message:
+            'This Operation Could Not Be Completed. Please Try Again Later.',
+          showConfirmButton: true,
+          confirmText: 'Ok',
+        },
+      });
+    } finally {
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: false,
+      });
+      setLoading(false);
+    }
+  };
+
+  const onSendBill = async () => {
+    dispatch({
+      type: actions.SET_ALERT_SETTINGS,
+      alertSettings: {
+        show: true,
+        type: 'warn',
+        title: 'Confirm',
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmText: 'Ok',
+        cancelText: 'Cancel',
+        onConfirmPressed: () => {
+          sendBill();
+        },
+      },
+    });
+  };
+
+  const sendBill = async () => {
+    try {
+      Keyboard.dismiss();
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: true,
+      });
+      setLoading(true);
+      const orderId = transactions[0].order_id;
+      const result = await adminSendToCustomer(orderId);
+      if (result) {
+        const {status = '', message = '', order = {}} = result || {};
+        if (order && order.id) {
+          dispatch({
+            type: actions.SET_ALERT_SETTINGS,
+            alertSettings: {
+              show: true,
+              type: 'success',
+              title: 'Sent Successfully',
+              showConfirmButton: true,
+              confirmText: 'Ok',
+              onConfirmPressed: () => fetchTableDetails(tableId),
+            },
+          });
+        } else if (status === 401) {
+          if (message) {
+            dispatch({
+              type: actions.SET_ALERT_SETTINGS,
+              alertSettings: {
+                show: true,
+                type: 'error',
+                title: 'An Error Occured',
+                message: message,
+                showConfirmButton: true,
+                confirmText: 'Ok',
+              },
+            });
+          } else {
+            dispatch({
+              type: actions.SET_ALERT_SETTINGS,
+              alertSettings: {
+                show: true,
+                type: 'error',
+                title: 'An Error Occured',
+                message: 'Please try again later.',
+                showConfirmButton: true,
+                confirmText: 'Ok',
+              },
+            });
+          }
+        } else {
+          dispatch({
+            type: actions.SET_ALERT_SETTINGS,
+            alertSettings: {
+              show: true,
+              type: 'error',
+              title: 'An Error Occured',
+              message: 'Please try again later.',
+              showConfirmButton: true,
+              confirmText: 'Ok',
+            },
+          });
+        }
+      } else {
+        dispatch({
+          type: actions.SET_ALERT_SETTINGS,
+          alertSettings: {
+            show: true,
+            type: 'error',
+            title: 'An Error Occured',
+            message: 'Please try again later.',
+            showConfirmButton: true,
+            confirmText: 'Ok',
+          },
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: actions.SET_ALERT_SETTINGS,
+        alertSettings: {
+          show: true,
+          type: 'error',
+          title: 'Error Occured',
+          message:
+            'This Operation Could Not Be Completed. Please Try Again Later.',
+          showConfirmButton: true,
+          confirmText: 'Ok',
+        },
+      });
+    } finally {
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: false,
+      });
+      setLoading(false);
+    }
+  };
+
   const getPayableAmount = () => {
     return transactions.find((transaction) => transaction.status === 0)
       .amount_cents;
   };
 
-  const {summary = {}, transactions = []} = tableDetails || {};
+  const {
+    summary = {},
+    transactions = [],
+    activeOrder = {},
+    orderUserInfo = {},
+    orderUserCard = {},
+    orderCart = {},
+  } = tableDetails || {};
 
   return (
     <View
@@ -830,6 +1092,56 @@ const Payment = ({navigation, ...props}) => {
                     ))}
                   </View>
                 </View>
+                {!(
+                  (activeOrder &&
+                    parseInt(activeOrder.type) === 6 &&
+                    orderCart &&
+                    parseInt(orderCart.status) === 1) ||
+                  (orderUserCard &&
+                    orderUserCard.type &&
+                    orderUserCard.type.toLowerCase() === 'onepay')
+                ) ? (
+                  <>
+                    {orderUserInfo &&
+                    orderUserInfo.uid &&
+                    orderUserCard &&
+                    orderUserCard.id ? (
+                      <View style={{marginTop: '3%'}}>
+                        <Text style={{fontSize: 18}}>{`User: ${
+                          orderUserInfo.first_name
+                            ? orderUserInfo.first_name
+                            : ''
+                        } ${
+                          orderUserInfo.last_name ? orderUserInfo.last_name : ''
+                        }, Card: ${
+                          orderUserCard.type ? orderUserCard.type : ''
+                        }`}</Text>
+                        {activeOrder ? (
+                          parseInt(activeOrder.type) === 4 ? (
+                            <Button
+                              title="Pay Now"
+                              onPress={() =>
+                                onPayNow(
+                                  `${orderUserInfo.first_name} ${orderUserInfo.last_name}`,
+                                  orderUserCard.type,
+                                )
+                              }
+                              loading={loading}
+                              height={40}
+                            />
+                          ) : (
+                            <Button
+                              title="Send Bill"
+                              onPress={onSendBill}
+                              loading={loading}
+                              height={40}
+                            />
+                          )
+                        ) : null}
+                      </View>
+                    ) : null}
+                  </>
+                ) : null}
               </View>
             ) : (
               <View style={{width: '100%'}}>

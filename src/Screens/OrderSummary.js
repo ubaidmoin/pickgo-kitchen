@@ -106,8 +106,8 @@ const OrderSummary = ({navigation, ...props}) => {
       };
       if (index === 0) {
         const result = await acceptOrder(requestObj);
-        if (result.data) {
-          const {order_id = '', order: orderInfo = {}} = result.data || {};
+        if (result) {
+          const {order_id = '', order: orderInfo = {}} = result || {};
           if (order_id && orderInfo && orderInfo.id) {
             setOrder({...order, ...orderInfo});
             const {guests_count = '', tbl_id = ''} = orderInfo || {};
@@ -122,8 +122,8 @@ const OrderSummary = ({navigation, ...props}) => {
         }
       } else if (index === 1) {
         const result = await getOrderSummary(requestObj);
-        if (result.data) {
-          const {summary = {}} = result.data || {};
+        if (result) {
+          const {summary = {}} = result || {};
           if (summary && (summary.subtotal || summary.subtotal === 0)) {
             setSummary(summary);
           }

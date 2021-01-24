@@ -37,16 +37,16 @@ export const authService = async (data) => {
 export const postData = async (url, data = null, isFormData = false) => {
   const config = {
     method: 'post',
-    url,
     headers: {
       'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
     },
   };
   if (data) {
-    config.data = isFormData ? data : JSON.stringify(data);
+    config.body = isFormData ? data : JSON.stringify(data);
   }
   try {
-    const response = await axios(config)
+    const response = await fetch(url, config)
+      .then((res) => res.json())
       .then((res) => res)
       .catch((error) => error);
     return response;

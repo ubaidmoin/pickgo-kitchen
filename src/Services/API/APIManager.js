@@ -210,3 +210,29 @@ export const addCustomOrderAmount = async (data) => {
     return null;
   }
 };
+
+export const adminSendToCustomer = async (orderId) => {
+  try {
+    const url = s.RESERVATIONS.ADMIN_SEND_TO_CUSTOMER.replace(
+      '$[order_id]',
+      orderId,
+    ).replace('$[acces_token]', await getAccessToken());
+    const response = await postData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const adminPay = async (orderId) => {
+  try {
+    const url = s.RESERVATIONS.ADMIN_PAY.replace(
+      '$[order_id]',
+      orderId,
+    ).replace('$[acces_token]', await getAccessToken());
+    const response = await postData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};

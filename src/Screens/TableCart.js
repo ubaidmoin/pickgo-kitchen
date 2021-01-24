@@ -30,7 +30,7 @@ const TableCart = ({navigation, ...props}) => {
     const {tableId = ''} = props.route.params || {};
     if (tableId) {
       setTableId(tableId);
-      fetchTableDetails(tableId);
+      fetchTableDetails(tableId, true);
     }
     return navigation.addListener('focus', () => {
       refreshScreen(tableId);
@@ -50,7 +50,7 @@ const TableCart = ({navigation, ...props}) => {
     }
   };
 
-  const fetchTableDetails = async (tableID = tableId) => {
+  const fetchTableDetails = async (tableID = tableId, isFirstTime = false) => {
     try {
       dispatch({
         type: actions.SET_PROGRESS_SETTINGS,
@@ -59,10 +59,13 @@ const TableCart = ({navigation, ...props}) => {
       setLoading(true);
       const result = await getTableDetails(tableID);
       if (result.data) {
-        const {table} = result.data || {};
+        const {table = {}, cartItems = []} = result.data || {};
         if (table && table.id) {
           setTableDetails(result.data);
           navigation.setParams({title: table.name});
+          if (isFirstTime && !(cartItems && cartItems.length > 0)) {
+            addItems();
+          }
         } else {
           setTableDetails('');
           navigation.setParams({title: null});
@@ -101,7 +104,7 @@ const TableCart = ({navigation, ...props}) => {
     }
   };
 
-  const [{userInfo}, dispatch] = useStateValue();
+  const [, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
 
   const addItems = () =>
@@ -205,8 +208,8 @@ const TableCart = ({navigation, ...props}) => {
       });
       setLoading(true);
       const result = await sendToKitchen(tableId);
-      if (result.data) {
-        const {table = {}, transactions = []} = result.data || {};
+      if (result) {
+        const {table = {}, transactions = []} = result || {};
         if (table && table.id && transactions && transactions.length > 0) {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
@@ -285,35 +288,21 @@ const TableCart = ({navigation, ...props}) => {
         });
         return;
       }
-      const {orderCart} = tableDetails || {};
-      const {cid, id: order_cart_id} = orderCart || {};
-      if (!(orderCart && orderCart.id)) {
-        dispatch({
-          type: actions.SET_ALERT_SETTINGS,
-          alertSettings: {
-            show: true,
-            type: 'warn',
-            title: `Cart is Empty`,
-            message: 'Please add cart items.',
-            showConfirmButton: true,
-            confirmText: 'Ok',
-          },
-        });
-        return;
-      }
+      const {table, activeOrder = {}} = tableDetails || {};
+      const {cid, id: table_id} = table || {};
       dispatch({
         type: actions.SET_PROGRESS_SETTINGS,
         show: true,
       });
       setLoading(true);
       let data = new FormData();
-      data.append('order_cart_id', order_cart_id);
+      data.append('table_id', table_id);
       data.append('cid', cid);
       data.append('amount', amount);
-      data.append('uid', userInfo.user.uid);
+      data.append('uid', activeOrder && activeOrder.uid ? activeOrder.uid : -1);
       const result = await addCustomOrderAmount(data);
-      if (result.data) {
-        const {success, message} = result.data || {};
+      if (result) {
+        const {success, message} = result || {};
         if (success) {
           setAmount('');
           dispatch({
@@ -436,7 +425,7 @@ const TableCart = ({navigation, ...props}) => {
             }>
             <FlatList
               data={cartItems}
-              renderItem={({item}) => (
+              renderItem={({item, index}) => (
                 <View
                   key={item.id}
                   style={{
@@ -452,6 +441,12 @@ const TableCart = ({navigation, ...props}) => {
                     padding: '3%',
                     marginHorizontal: '5%',
                     marginVertical: '1%',
+                    marginBottom:
+                      index === cartItems.length - 1
+                        ? !(summary && summary.subtotal)
+                          ? '18%'
+                          : '2%'
+                        : '1%',
                     borderRadius: 5,
                     alignItems: 'center',
                     flexDirection: 'row',

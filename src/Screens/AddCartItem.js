@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, ToastAndroid} from 'react-native';
 import Button from '../Components/Button';
 import Ripple from '../Components/Ripple';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
@@ -34,9 +34,8 @@ const AddCartItem = ({navigation, ...props}) => {
       setLoading(true);
       const result = await getMenuDetails(menuId);
       if (result.data) {
-        const {isTimeForOrder = false, menu = {}, menuOptions = []} =
-          result.data || {};
-        if (isTimeForOrder && menu && menu.id) {
+        const {menu = {}, menuOptions = []} = result.data || {};
+        if (menu && menu.id) {
           setMenuItem(result.data);
           if (menuOptions && menuOptions.length > 0) {
             const allSelectedOptionItems = {};
@@ -113,21 +112,14 @@ const AddCartItem = ({navigation, ...props}) => {
         table_id: table.id,
       };
       const result = await addToTableCart(reqObj);
-      if (result.data) {
-        const {success = false, table = {}, cart = []} = result.data || {};
-        if (success && table && table.id && cart && cart.id) {
-          dispatch({
-            type: actions.SET_ALERT_SETTINGS,
-            alertSettings: {
-              show: true,
-              type: 'success',
-              title: 'Added To Cart',
-              message: 'Menu item(s) are successfully added to table.',
-              showConfirmButton: true,
-              confirmText: 'Ok',
-              onConfirmPressed: () => navigation.pop(),
-            },
-          });
+      if (result) {
+        const {table = {}, cart = []} = result || {};
+        if (table && table.id && cart && cart.id) {
+          navigation.pop();
+          ToastAndroid.show(
+            'Menu item(s) are successfully added to table.',
+            1000,
+          );
         } else {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,

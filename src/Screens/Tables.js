@@ -34,7 +34,7 @@ PushNotification.configure({
         if (token) {
           if (!(await isFcmTokenExists(token))) {
             const response = await saveFcmToken({token});
-            if (!(response && response.data && response.data.id)) {
+            if (!(response && response && response.id)) {
               isFcmTokenExists('');
             }
           }
