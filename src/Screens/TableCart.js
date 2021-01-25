@@ -64,7 +64,7 @@ const TableCart = ({navigation, ...props}) => {
           setTableDetails(result.data);
           navigation.setParams({title: table.name});
           if (isFirstTime && !(cartItems && cartItems.length > 0)) {
-            addItems();
+            navigation.navigate('AddToCart', {table});
           }
         } else {
           setTableDetails('');
