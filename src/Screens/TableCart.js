@@ -7,6 +7,7 @@ import {
   RefreshControl,
   ScrollView,
   Keyboard,
+  ToastAndroid,
 } from 'react-native';
 import Button from '../Components/Button';
 import Ripple from '../Components/Ripple';
@@ -140,18 +141,11 @@ const TableCart = ({navigation, ...props}) => {
       if (result.data) {
         const {success = false, model = {}} = result.data || {};
         if (success && model && model.id) {
-          dispatch({
-            type: actions.SET_ALERT_SETTINGS,
-            alertSettings: {
-              show: true,
-              type: 'success',
-              title: 'Deleted',
-              message: 'Menu item deleted successfully.',
-              showConfirmButton: true,
-              confirmText: 'Ok',
-              onConfirmPressed: refreshScreen,
-            },
-          });
+          ToastAndroid.show(
+            'Menu item deleted successfully.',
+            ToastAndroid.LONG,
+          );
+          refreshScreen();
         } else {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
@@ -211,18 +205,11 @@ const TableCart = ({navigation, ...props}) => {
       if (result) {
         const {table = {}, transactions = []} = result || {};
         if (table && table.id && transactions && transactions.length > 0) {
-          dispatch({
-            type: actions.SET_ALERT_SETTINGS,
-            alertSettings: {
-              show: true,
-              type: 'success',
-              title: 'Sent',
-              message: 'Order sent to kitchen successfully.',
-              showConfirmButton: true,
-              confirmText: 'Ok',
-              onConfirmPressed: refreshScreen,
-            },
-          });
+          ToastAndroid.show(
+            'Order sent to kitchen successfully.',
+            ToastAndroid.LONG,
+          );
+          refreshScreen();
         } else {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
@@ -305,23 +292,11 @@ const TableCart = ({navigation, ...props}) => {
         const {success, message} = result || {};
         if (success) {
           setAmount('');
-          dispatch({
-            type: actions.SET_ALERT_SETTINGS,
-            alertSettings: {
-              show: true,
-              type: 'success',
-              title: 'Success',
-              message: message
-                ? message
-                : 'Custom Amount is added to order successfully',
-              showConfirmButton: true,
-              confirmText: 'Ok',
-              onConfirmPressed: () => {
-                refreshScreen(tableId);
-                refreshScreen(tableId);
-              },
-            },
-          });
+          ToastAndroid.show(
+            message ? message : 'Custom Amount is added to order successfully.',
+            ToastAndroid.LONG,
+          );
+          refreshScreen(tableId);
         } else {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,

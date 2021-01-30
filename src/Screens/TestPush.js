@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Text, FlatList} from 'react-native';
+import {Text, FlatList, ToastAndroid} from 'react-native';
 import Ripple from '../Components/Ripple';
 import {getNotificationCount} from '../Services/DataManager';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -116,17 +116,7 @@ const TestPush = ({navigation}) => {
       });
       const result = await sendNotification(notification.body);
       if (result && result.success && result.token_count > 0) {
-        dispatch({
-          type: actions.SET_ALERT_SETTINGS,
-          alertSettings: {
-            show: true,
-            type: 'success',
-            title: 'Success',
-            message: 'Notification Sent Successfully.',
-            showConfirmButton: true,
-            confirmText: 'Ok',
-          },
-        });
+        ToastAndroid.show('Notification Sent Successfully.', ToastAndroid.LONG);
       } else {
         dispatch({
           type: actions.SET_ALERT_SETTINGS,

@@ -18,7 +18,10 @@ class Dropdown extends Component {
     this._animatedIsFocused = new Animated.Value(this.props.selected ? 1 : 0);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(props) {
+    if (props.show) {
+      this.refActionSheet.show();
+    }
     Animated.timing(this._animatedIsFocused, {
       toValue: this.props.selected ? 1 : 0,
       duration: 200,

@@ -71,12 +71,9 @@ const Header = (
             marginRight: 10,
           }}>
           <Ripple
-            style={{paddingHorizontal: 5}}
+            style={{paddingHorizontal: 10}}
             onPress={() => navigation.navigate('Tables')}>
             <Entypo name="home" size={25} color={'#fff'} />
-          </Ripple>
-          <Ripple disabled style={{paddingHorizontal: 5}}>
-            <Entypo name="credit-card" size={25} color={'#fff'} />
           </Ripple>
           <Ripple onPress={() => navigation.navigate('NotificationCenter')}>
             <MaterialIcon name="notifications-on" size={25} color={'#fff'} />

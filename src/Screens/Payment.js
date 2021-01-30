@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Keyboard, Modal} from 'react-native';
+import {View, Text, Keyboard, Modal, ToastAndroid} from 'react-native';
 import Button from '../Components/Button';
 import Ripple from '../Components/Ripple';
 import Switcher from '../Components/Switcher';
@@ -125,16 +125,7 @@ const Payment = ({navigation, ...props}) => {
           setSelected(0);
           setSplitByAmountVal('');
           setTableDetails(result);
-          dispatch({
-            type: actions.SET_ALERT_SETTINGS,
-            alertSettings: {
-              show: true,
-              type: 'success',
-              title: 'Split Successfully',
-              showConfirmButton: true,
-              confirmText: 'Ok',
-            },
-          });
+          ToastAndroid.show('Split Successfully.', ToastAndroid.LONG);
         } else {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
@@ -198,16 +189,7 @@ const Payment = ({navigation, ...props}) => {
           setSelected(0);
           setSplitByAmountVal('');
           setTableDetails(result);
-          dispatch({
-            type: actions.SET_ALERT_SETTINGS,
-            alertSettings: {
-              show: true,
-              type: 'success',
-              title: 'Split Successfully',
-              showConfirmButton: true,
-              confirmText: 'Ok',
-            },
-          });
+          ToastAndroid.show('Split Successfully.', ToastAndroid.LONG);
         } else {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
@@ -293,18 +275,8 @@ const Payment = ({navigation, ...props}) => {
         const {model = {}, transactions = [], transactions_paid = false} =
           result || {};
         if (transactions_paid) {
-          dispatch({
-            type: actions.SET_ALERT_SETTINGS,
-            alertSettings: {
-              show: true,
-              type: 'success',
-              title: `Payment Success`,
-              message: 'Payment success complete.',
-              showConfirmButton: true,
-              confirmText: 'Ok',
-              onConfirmPressed: () => navigation.navigate('Tables'),
-            },
-          });
+          ToastAndroid.show('Payment success complete.', ToastAndroid.LONG);
+          navigation.navigate('Tables');
         } else if (
           model &&
           model.id &&
@@ -312,17 +284,7 @@ const Payment = ({navigation, ...props}) => {
           transactions.length > 0
         ) {
           setTableDetails(result);
-          dispatch({
-            type: actions.SET_ALERT_SETTINGS,
-            alertSettings: {
-              show: true,
-              type: 'success',
-              title: `Payment Success`,
-              message: 'Payment success complete.',
-              showConfirmButton: true,
-              confirmText: 'Ok',
-            },
-          });
+          ToastAndroid.show('Payment success complete.', ToastAndroid.LONG);
         } else {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
@@ -466,17 +428,8 @@ const Payment = ({navigation, ...props}) => {
           order = {},
         } = result || {};
         if (transactions_paid) {
-          dispatch({
-            type: actions.SET_ALERT_SETTINGS,
-            alertSettings: {
-              show: true,
-              type: 'success',
-              title: 'Paid Successfully',
-              showConfirmButton: true,
-              confirmText: 'Ok',
-              onConfirmPressed: () => navigation.navigate('Tables'),
-            },
-          });
+          ToastAndroid.show('Paid Successfully.', ToastAndroid.LONG);
+          navigation.navigate('Tables');
         } else if (order && order.id) {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
@@ -594,17 +547,8 @@ const Payment = ({navigation, ...props}) => {
       if (result) {
         const {status = '', message = '', order = {}} = result || {};
         if (order && order.id) {
-          dispatch({
-            type: actions.SET_ALERT_SETTINGS,
-            alertSettings: {
-              show: true,
-              type: 'success',
-              title: 'Sent Successfully',
-              showConfirmButton: true,
-              confirmText: 'Ok',
-              onConfirmPressed: () => fetchTableDetails(tableId),
-            },
-          });
+          ToastAndroid.show('Sent Successfully.', ToastAndroid.LONG);
+          fetchTableDetails(tableId);
         } else if (status === 401) {
           if (message) {
             dispatch({

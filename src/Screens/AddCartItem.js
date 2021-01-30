@@ -118,7 +118,7 @@ const AddCartItem = ({navigation, ...props}) => {
           navigation.pop();
           ToastAndroid.show(
             'Menu item(s) are successfully added to table.',
-            1000,
+            ToastAndroid.LONG,
           );
         } else {
           dispatch({
