@@ -24,6 +24,7 @@ import {
 import Dropdown from '../Components/Dropdown';
 import {formatCurrency} from '../Services/Common';
 import AntIcon from 'react-native-vector-icons/AntDesign';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {getNotificationCount} from '../Services/DataManager';
@@ -454,11 +455,9 @@ const AddToCart = ({navigation, ...props}) => {
           style={{
             borderRadius: 10,
             paddingHorizontal: 15,
-            paddingVertical: 10,
-            backgroundColor: '#2bae6a',
             justifyContent: 'center',
             alignItems: 'center',
-            marginRight: '2%',
+            marginTop: '3%',
           }}>
           <View style={{height: 0, width: 0, opacity: 0}}>
             <Dropdown
@@ -469,10 +468,10 @@ const AddToCart = ({navigation, ...props}) => {
               show={showMenu}
             />
           </View>
-          <AntIcon name="clockcircleo" size={25} color="#fff" />
-          <Text style={{color: '#fff', fontSize: 12}}>Menu</Text>
+          <AntIcon name="clockcircleo" size={20} color="#000" />
+          <Text style={{color: '#000', fontSize: 12}}>Menu</Text>
         </Ripple>
-        <View style={{width: '60%', maxWidth: 180}}>
+        <View style={{width: '65%', maxWidth: 190}}>
           <Input
             type="number"
             value={amount}
@@ -574,6 +573,17 @@ const AddToCart = ({navigation, ...props}) => {
         {cartItems && cartItems.length > 0 ? (
           <>
             <View style={styles.divider} />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: '3%',
+              }}>
+              <EntypoIcon name="chevron-right" size={18} />
+              <Text style={{fontWeight: 'bold'}}>
+                Order Details: {table && table.name ? table.name : ''}
+              </Text>
+            </View>
             <FlatList
               data={cartItems}
               renderItem={({item, index}) => (
