@@ -4,6 +4,8 @@ import {
   View,
   ActivityIndicator,
   Linking,
+  Dimensions,
+  PixelRatio,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CreateRootNavigator from './src/index';
@@ -119,6 +121,35 @@ const RootNavigator = () => {
     };
   };
 
+  const checkDevice = () => {
+    const isWideScreen = isScreenWide() ? true : false;
+    dispatch({type: actions.SET_IS_WIDE_SCREEN, isWideScreen});
+  };
+
+  const isScreenWide = () => {
+    try {
+      let isTablet = false;
+      const dim = Dimensions.get('window');
+      let pixelDensity = PixelRatio.get();
+      const adjustedWidth = dim.width * pixelDensity;
+      const adjustedHeight = dim.height * pixelDensity;
+      if (
+        pixelDensity < 2 &&
+        (adjustedWidth >= 1000 || adjustedHeight >= 1000)
+      ) {
+        isTablet = true;
+      } else {
+        isTablet =
+          pixelDensity === 2 &&
+          (adjustedWidth >= 1920 || adjustedHeight >= 1920);
+      }
+      const isLandscape = !(dim.width < dim.height);
+      return isTablet || isLandscape ? true : false;
+    } catch (error) {
+      return false;
+    }
+  };
+
   return loading ? (
     <View
       style={{
@@ -129,7 +160,9 @@ const RootNavigator = () => {
       <ActivityIndicator size={30} color="#27ae61" />
     </View>
   ) : (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+    <SafeAreaView
+      style={{flex: 1, backgroundColor: '#fff'}}
+      onLayout={() => checkDevice()}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
       <AppAlert {...getAlertSettings()} />
       <AppActivityIndicator visible={show} />

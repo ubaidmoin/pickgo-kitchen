@@ -64,7 +64,6 @@ const AddToCart = ({navigation, ...props}) => {
         }
       }
     } catch (error) {
-      console.log('Error112233: ', error);
       dispatch({
         type: actions.SET_ALERT_SETTINGS,
         alertSettings: {
@@ -408,7 +407,7 @@ const AddToCart = ({navigation, ...props}) => {
   const [showMenu, setShowMenu] = useState(false);
   const [tableDetails, setTableDetails] = useState('');
   const [loading, setLoading] = useState(false);
-  const [, dispatch] = useStateValue();
+  const [{isWideScreen}, dispatch] = useStateValue();
 
   const {companyHoursToday = []} = menu || {};
 
@@ -484,113 +483,532 @@ const AddToCart = ({navigation, ...props}) => {
           <Button title="Add" onPress={onAddAmount} height={40} />
         </View>
       </View>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={refreshScreen} />
-        }>
-        <FlatList
-          horizontal={true}
-          data={menuCourses}
-          renderItem={({item}) => (
-            <Ripple
-              onPress={() => setSelectedMenuCourse(item)}
-              key={item.id}
-              style={{
-                shadowColor: '#cc0001',
-                shadowOpacity: 0.3,
-                shadowRadius: 5,
-                shadowOffset: {
-                  height: 5,
-                  width: 2,
-                },
-                elevation: 5,
-                padding: 15,
-                marginHorizontal: 5,
-                marginVertical: 10,
-                borderRadius: 5,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor:
-                  selectedMenuCourse.id === item.id ? '#27ae61' : '#fff',
-              }}>
-              <Text
-                style={{
-                  color: selectedMenuCourse.id === item.id ? '#fff' : '#000',
-                  fontSize: 18,
-                }}>
-                {item.name}
-              </Text>
-            </Ripple>
-          )}
-        />
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={
-            selectedMenuCourse &&
-            selectedMenuCourse.menu &&
-            selectedMenuCourse.menu.length > 0
-              ? selectedMenuCourse.menu
-              : []
-          }
-          renderItem={({item, index}) => (
-            <Ripple
-              onPress={() =>
-                navigation.navigate('AddCartItem', {table, menuItem: item})
-              }
-              key={item.id}
-              style={{
-                shadowColor: '#cc0001',
-                shadowOpacity: 0.3,
-                shadowRadius: 5,
-                shadowOffset: {
-                  height: 5,
-                  width: 2,
-                },
-                elevation: 5,
-                padding: 10,
-                marginHorizontal: '1%',
-                marginVertical: '1.5%',
-                borderRadius: 5,
-                backgroundColor: '#fff',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginBottom:
-                  !(cartItems && cartItems.length > 0) &&
-                  index === selectedMenuCourse.menu.length - 1
-                    ? '12%'
-                    : '1.5%',
-              }}>
-              <Text style={{color: '#000', textAlign: 'center', fontSize: 18}}>
-                {item.name}
-              </Text>
-              <Text style={{color: '#000', textAlign: 'center', fontSize: 18}}>
-                {formatCurrency(item.price)}
-              </Text>
-            </Ripple>
-          )}
-        />
-        {cartItems && cartItems.length > 0 ? (
-          <>
-            <View style={styles.divider} />
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: '3%',
-              }}>
-              <EntypoIcon name="chevron-right" size={18} />
-              <Text style={{fontWeight: 'bold'}}>
-                Order Details: {table && table.name ? table.name : ''}
-              </Text>
-            </View>
+      {isWideScreen ? (
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: '2%',
+            marginBottom: '10%',
+            justifyContent: 'space-between',
+          }}>
+          <View style={{width: '30%'}}>
             <FlatList
-              data={cartItems}
-              renderItem={({item, index}) => (
-                <View
+              data={menuCourses}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => (
+                <Ripple
+                  onPress={() => setSelectedMenuCourse(item)}
                   key={item.id}
                   style={{
                     shadowColor: '#cc0001',
+                    shadowOpacity: 0.3,
+                    shadowRadius: 5,
+                    shadowOffset: {
+                      height: 5,
+                      width: 2,
+                    },
+                    elevation: 5,
+                    padding: 15,
+                    marginHorizontal: 5,
+                    marginVertical: 10,
+                    borderRadius: 5,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor:
+                      selectedMenuCourse.id === item.id ? '#27ae61' : '#fff',
+                  }}>
+                  <Text
+                    style={{
+                      color:
+                        selectedMenuCourse.id === item.id ? '#fff' : '#000',
+                      fontSize: 18,
+                    }}>
+                    {item.name}
+                  </Text>
+                </Ripple>
+              )}
+            />
+          </View>
+          <View style={{width: '65%', marginTop: '0.5%'}}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={
+                  selectedMenuCourse &&
+                  selectedMenuCourse.menu &&
+                  selectedMenuCourse.menu.length > 0
+                    ? selectedMenuCourse.menu
+                    : []
+                }
+                renderItem={({item, index}) => (
+                  <Ripple
+                    onPress={() =>
+                      navigation.navigate('AddCartItem', {
+                        table,
+                        menuItem: item,
+                      })
+                    }
+                    key={item.id}
+                    style={{
+                      shadowColor: '#cc0001',
+                      shadowOpacity: 0.3,
+                      shadowRadius: 5,
+                      shadowOffset: {
+                        height: 5,
+                        width: 2,
+                      },
+                      elevation: 5,
+                      padding: 10,
+                      marginHorizontal: '1%',
+                      marginVertical: '1.5%',
+                      borderRadius: 5,
+                      backgroundColor: '#fff',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginBottom:
+                        !(cartItems && cartItems.length > 0) &&
+                        index === selectedMenuCourse.menu.length - 1
+                          ? '12%'
+                          : '1.5%',
+                    }}>
+                    <Text
+                      style={{
+                        color: '#000',
+                        textAlign: 'center',
+                        fontSize: 18,
+                      }}>
+                      {item.name}
+                    </Text>
+                    <Text
+                      style={{
+                        color: '#000',
+                        textAlign: 'center',
+                        fontSize: 18,
+                      }}>
+                      {formatCurrency(item.price)}
+                    </Text>
+                  </Ripple>
+                )}
+              />
+              {cartItems && cartItems.length > 0 ? (
+                <>
+                  <View style={styles.divider} />
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginBottom: '3%',
+                    }}>
+                    <EntypoIcon name="chevron-right" size={18} />
+                    <Text style={{fontWeight: 'bold'}}>
+                      Order Details: {table && table.name ? table.name : ''}
+                    </Text>
+                  </View>
+                  <FlatList
+                    data={cartItems}
+                    renderItem={({item, index}) => (
+                      <View
+                        key={item.id}
+                        style={{
+                          shadowColor: '#cc0001',
+                          backgroundColor: '#fff',
+                          shadowOpacity: 0.3,
+                          shadowRadius: 5,
+                          shadowOffset: {
+                            height: 5,
+                            width: 2,
+                          },
+                          elevation: 5,
+                          padding: '3%',
+                          marginHorizontal: '1%',
+                          marginVertical: '1%',
+                          marginBottom:
+                            index === cartItems.length - 1
+                              ? !(summary && summary.subtotal)
+                                ? '18%'
+                                : '2%'
+                              : '1%',
+                          borderRadius: 5,
+                          alignItems: 'center',
+                          flexDirection: 'row',
+                        }}>
+                        <View
+                          style={{
+                            width: '13%',
+                            alignItems: 'center',
+                            color: '#767676',
+                          }}>
+                          <Text style={{fontSize: 18}}>{`x ${item.qty}`}</Text>
+                        </View>
+                        <View
+                          style={{
+                            width: '50%',
+                            paddingLeft: '3%',
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              fontWeight: 'bold',
+                              color: '#767676',
+                            }}>
+                            {item.menu_name}
+                          </Text>
+                          {item.options && item.options.length > 0
+                            ? item.options.map((item) => (
+                                <View
+                                  key={item.id}
+                                  style={{flexDirection: 'row'}}>
+                                  <FontAwesomeIcon
+                                    size={8}
+                                    name="circle-o"
+                                    color="#979797"
+                                    style={{marginTop: '4%'}}
+                                  />
+                                  <Text
+                                    style={{
+                                      marginLeft: '3%',
+                                      fontSize: 15,
+                                      color: '#979797',
+                                    }}>
+                                    {`${
+                                      item.menu_option_item_name
+                                    }  (+ ${formatCurrency(
+                                      item.price,
+                                      false,
+                                      true,
+                                    )})`}
+                                  </Text>
+                                </View>
+                              ))
+                            : null}
+                        </View>
+                        <View style={{width: '27%', alignItems: 'flex-end'}}>
+                          <Text
+                            style={{color: '#767676', fontSize: 18}}
+                            numberOfLines={1}>
+                            {formatCurrency(item.total_amount)}
+                          </Text>
+                        </View>
+                        <Ripple
+                          style={{width: '10%', alignItems: 'center'}}
+                          onPress={() => onDeleteCartItem(item)}>
+                          <MaterialIcon
+                            name="delete-forever"
+                            size={25}
+                            color="#000"
+                          />
+                        </Ripple>
+                      </View>
+                    )}
+                  />
+                  {summary && summary.subtotal ? (
+                    <View
+                      style={{
+                        marginHorizontal: '1%',
+                        marginVertical: '2%',
+                        backgroundColor: '#fff',
+                        shadowOpacity: 0.3,
+                        shadowRadius: 5,
+                        shadowOffset: {
+                          height: 5,
+                          width: 2,
+                        },
+                        elevation: 5,
+                        padding: '3%',
+                        borderRadius: 5,
+                      }}>
+                      <Text style={styles.header}>Summary</Text>
+                      <View style={styles.row}>
+                        <Text style={styles.rowText}>Subtotal</Text>
+                        <Text style={styles.rowText}>
+                          {formatCurrency(summary.subtotal, true)}
+                        </Text>
+                      </View>
+                      <View style={styles.row}>
+                        <Text style={{...styles.rowText, color: '#f00'}}>
+                          Credits Discounted
+                        </Text>
+                        <Text style={{...styles.rowText, color: '#f00'}}>
+                          {`- ${formatCurrency(summary.discount, true)}`}
+                        </Text>
+                      </View>
+                      <View style={styles.divider} />
+                      <View style={{...styles.row}}>
+                        <Text style={styles.rowText}>New Subtotal</Text>
+                        <Text style={styles.rowText}>
+                          {formatCurrency(
+                            parseFloat(summary.subtotal) -
+                              parseFloat(summary.discount),
+                            true,
+                          )}
+                        </Text>
+                      </View>
+                      <View style={styles.row}>
+                        <Text style={{...styles.rowText, color: '#27ae61'}}>
+                          Tax
+                        </Text>
+                        <Text style={{...styles.rowText, color: '#27ae61'}}>
+                          {`+ ${formatCurrency(summary.tax, true)}`}
+                        </Text>
+                      </View>
+                      <View style={styles.row}>
+                        <Text style={{...styles.rowText, color: '#27ae61'}}>
+                          Tips
+                        </Text>
+                        <Text style={{...styles.rowText, color: '#27ae61'}}>
+                          {`+ ${formatCurrency(summary.tips, true)}`}
+                        </Text>
+                      </View>
+                      <View style={styles.divider} />
+                      <View style={{...styles.row}}>
+                        <Text style={styles.rowText}>Order Total</Text>
+                        <Text style={styles.rowText}>
+                          {formatCurrency(
+                            parseFloat(summary.subtotal) -
+                              parseFloat(summary.discount) +
+                              parseFloat(summary.tax) +
+                              parseFloat(summary.tips),
+                            true,
+                          )}
+                        </Text>
+                      </View>
+                    </View>
+                  ) : null}
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginHorizontal: '1%',
+                      marginBottom: '2%',
+                    }}>
+                    <View style={{width: '49%'}}>
+                      <Button
+                        title="Send"
+                        loading={loading}
+                        onPress={onSendToKitchen}
+                        height={45}
+                      />
+                    </View>
+                    <View style={{width: '49%'}}>
+                      <Button
+                        title="Make Payment"
+                        disabled={!(summary && summary.subtotal)}
+                        loading={loading}
+                        onPress={() =>
+                          navigation.navigate('Payment', {tableId: table.id})
+                        }
+                        height={45}
+                      />
+                    </View>
+                  </View>
+                </>
+              ) : null}
+            </ScrollView>
+          </View>
+        </View>
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={loading} onRefresh={refreshScreen} />
+          }>
+          <FlatList
+            horizontal={true}
+            data={menuCourses}
+            renderItem={({item}) => (
+              <Ripple
+                onPress={() => setSelectedMenuCourse(item)}
+                key={item.id}
+                style={{
+                  shadowColor: '#cc0001',
+                  shadowOpacity: 0.3,
+                  shadowRadius: 5,
+                  shadowOffset: {
+                    height: 5,
+                    width: 2,
+                  },
+                  elevation: 5,
+                  padding: 15,
+                  marginHorizontal: 5,
+                  marginVertical: 10,
+                  borderRadius: 5,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor:
+                    selectedMenuCourse.id === item.id ? '#27ae61' : '#fff',
+                }}>
+                <Text
+                  style={{
+                    color: selectedMenuCourse.id === item.id ? '#fff' : '#000',
+                    fontSize: 18,
+                  }}>
+                  {item.name}
+                </Text>
+              </Ripple>
+            )}
+          />
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={
+              selectedMenuCourse &&
+              selectedMenuCourse.menu &&
+              selectedMenuCourse.menu.length > 0
+                ? selectedMenuCourse.menu
+                : []
+            }
+            renderItem={({item, index}) => (
+              <Ripple
+                onPress={() =>
+                  navigation.navigate('AddCartItem', {table, menuItem: item})
+                }
+                key={item.id}
+                style={{
+                  shadowColor: '#cc0001',
+                  shadowOpacity: 0.3,
+                  shadowRadius: 5,
+                  shadowOffset: {
+                    height: 5,
+                    width: 2,
+                  },
+                  elevation: 5,
+                  padding: 10,
+                  marginHorizontal: '1%',
+                  marginVertical: '1.5%',
+                  borderRadius: 5,
+                  backgroundColor: '#fff',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginBottom:
+                    !(cartItems && cartItems.length > 0) &&
+                    index === selectedMenuCourse.menu.length - 1
+                      ? '12%'
+                      : '1.5%',
+                }}>
+                <Text
+                  style={{color: '#000', textAlign: 'center', fontSize: 18}}>
+                  {item.name}
+                </Text>
+                <Text
+                  style={{color: '#000', textAlign: 'center', fontSize: 18}}>
+                  {formatCurrency(item.price)}
+                </Text>
+              </Ripple>
+            )}
+          />
+          {cartItems && cartItems.length > 0 ? (
+            <>
+              <View style={styles.divider} />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginBottom: '3%',
+                }}>
+                <EntypoIcon name="chevron-right" size={18} />
+                <Text style={{fontWeight: 'bold'}}>
+                  Order Details: {table && table.name ? table.name : ''}
+                </Text>
+              </View>
+              <FlatList
+                data={cartItems}
+                renderItem={({item, index}) => (
+                  <View
+                    key={item.id}
+                    style={{
+                      shadowColor: '#cc0001',
+                      backgroundColor: '#fff',
+                      shadowOpacity: 0.3,
+                      shadowRadius: 5,
+                      shadowOffset: {
+                        height: 5,
+                        width: 2,
+                      },
+                      elevation: 5,
+                      padding: '3%',
+                      marginHorizontal: '1%',
+                      marginVertical: '1%',
+                      marginBottom:
+                        index === cartItems.length - 1
+                          ? !(summary && summary.subtotal)
+                            ? '18%'
+                            : '2%'
+                          : '1%',
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                    }}>
+                    <View
+                      style={{
+                        width: '13%',
+                        alignItems: 'center',
+                        color: '#767676',
+                      }}>
+                      <Text style={{fontSize: 18}}>{`x ${item.qty}`}</Text>
+                    </View>
+                    <View
+                      style={{
+                        width: '50%',
+                        paddingLeft: '3%',
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: 'bold',
+                          color: '#767676',
+                        }}>
+                        {item.menu_name}
+                      </Text>
+                      {item.options && item.options.length > 0
+                        ? item.options.map((item) => (
+                            <View key={item.id} style={{flexDirection: 'row'}}>
+                              <FontAwesomeIcon
+                                size={8}
+                                name="circle-o"
+                                color="#979797"
+                                style={{marginTop: '4%'}}
+                              />
+                              <Text
+                                style={{
+                                  marginLeft: '3%',
+                                  fontSize: 15,
+                                  color: '#979797',
+                                }}>
+                                {`${
+                                  item.menu_option_item_name
+                                }  (+ ${formatCurrency(
+                                  item.price,
+                                  false,
+                                  true,
+                                )})`}
+                              </Text>
+                            </View>
+                          ))
+                        : null}
+                    </View>
+                    <View style={{width: '27%', alignItems: 'flex-end'}}>
+                      <Text
+                        style={{color: '#767676', fontSize: 18}}
+                        numberOfLines={1}>
+                        {formatCurrency(item.total_amount)}
+                      </Text>
+                    </View>
+                    <Ripple
+                      style={{width: '10%', alignItems: 'center'}}
+                      onPress={() => onDeleteCartItem(item)}>
+                      <MaterialIcon
+                        name="delete-forever"
+                        size={25}
+                        color="#000"
+                      />
+                    </Ripple>
+                  </View>
+                )}
+              />
+              {summary && summary.subtotal ? (
+                <View
+                  style={{
+                    marginHorizontal: '1%',
+                    marginVertical: '2%',
                     backgroundColor: '#fff',
                     shadowOpacity: 0.3,
                     shadowRadius: 5,
@@ -600,186 +1018,96 @@ const AddToCart = ({navigation, ...props}) => {
                     },
                     elevation: 5,
                     padding: '3%',
-                    marginHorizontal: '1%',
-                    marginVertical: '1%',
-                    marginBottom:
-                      index === cartItems.length - 1
-                        ? !(summary && summary.subtotal)
-                          ? '18%'
-                          : '2%'
-                        : '1%',
                     borderRadius: 5,
-                    alignItems: 'center',
-                    flexDirection: 'row',
                   }}>
-                  <View
-                    style={{
-                      width: '13%',
-                      alignItems: 'center',
-                      color: '#767676',
-                    }}>
-                    <Text style={{fontSize: 18}}>{`x ${item.qty}`}</Text>
-                  </View>
-                  <View
-                    style={{
-                      width: '50%',
-                      paddingLeft: '3%',
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        fontWeight: 'bold',
-                        color: '#767676',
-                      }}>
-                      {item.menu_name}
-                    </Text>
-                    {item.options && item.options.length > 0
-                      ? item.options.map((item) => (
-                          <View key={item.id} style={{flexDirection: 'row'}}>
-                            <FontAwesomeIcon
-                              size={8}
-                              name="circle-o"
-                              color="#979797"
-                              style={{marginTop: '4%'}}
-                            />
-                            <Text
-                              style={{
-                                marginLeft: '3%',
-                                fontSize: 15,
-                                color: '#979797',
-                              }}>
-                              {`${
-                                item.menu_option_item_name
-                              }  (+ ${formatCurrency(
-                                item.price,
-                                false,
-                                true,
-                              )})`}
-                            </Text>
-                          </View>
-                        ))
-                      : null}
-                  </View>
-                  <View style={{width: '27%', alignItems: 'flex-end'}}>
-                    <Text
-                      style={{color: '#767676', fontSize: 18}}
-                      numberOfLines={1}>
-                      {formatCurrency(item.total_amount)}
+                  <Text style={styles.header}>Summary</Text>
+                  <View style={styles.row}>
+                    <Text style={styles.rowText}>Subtotal</Text>
+                    <Text style={styles.rowText}>
+                      {formatCurrency(summary.subtotal, true)}
                     </Text>
                   </View>
-                  <Ripple
-                    style={{width: '10%', alignItems: 'center'}}
-                    onPress={() => onDeleteCartItem(item)}>
-                    <MaterialIcon
-                      name="delete-forever"
-                      size={25}
-                      color="#000"
-                    />
-                  </Ripple>
+                  <View style={styles.row}>
+                    <Text style={{...styles.rowText, color: '#f00'}}>
+                      Credits Discounted
+                    </Text>
+                    <Text style={{...styles.rowText, color: '#f00'}}>
+                      {`- ${formatCurrency(summary.discount, true)}`}
+                    </Text>
+                  </View>
+                  <View style={styles.divider} />
+                  <View style={{...styles.row}}>
+                    <Text style={styles.rowText}>New Subtotal</Text>
+                    <Text style={styles.rowText}>
+                      {formatCurrency(
+                        parseFloat(summary.subtotal) -
+                          parseFloat(summary.discount),
+                        true,
+                      )}
+                    </Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={{...styles.rowText, color: '#27ae61'}}>
+                      Tax
+                    </Text>
+                    <Text style={{...styles.rowText, color: '#27ae61'}}>
+                      {`+ ${formatCurrency(summary.tax, true)}`}
+                    </Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={{...styles.rowText, color: '#27ae61'}}>
+                      Tips
+                    </Text>
+                    <Text style={{...styles.rowText, color: '#27ae61'}}>
+                      {`+ ${formatCurrency(summary.tips, true)}`}
+                    </Text>
+                  </View>
+                  <View style={styles.divider} />
+                  <View style={{...styles.row}}>
+                    <Text style={styles.rowText}>Order Total</Text>
+                    <Text style={styles.rowText}>
+                      {formatCurrency(
+                        parseFloat(summary.subtotal) -
+                          parseFloat(summary.discount) +
+                          parseFloat(summary.tax) +
+                          parseFloat(summary.tips),
+                        true,
+                      )}
+                    </Text>
+                  </View>
                 </View>
-              )}
-            />
-            {summary && summary.subtotal ? (
+              ) : null}
               <View
                 style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
                   marginHorizontal: '1%',
-                  marginVertical: '2%',
-                  backgroundColor: '#fff',
-                  shadowOpacity: 0.3,
-                  shadowRadius: 5,
-                  shadowOffset: {
-                    height: 5,
-                    width: 2,
-                  },
-                  elevation: 5,
-                  padding: '3%',
-                  borderRadius: 5,
+                  marginBottom: '2%',
                 }}>
-                <Text style={styles.header}>Summary</Text>
-                <View style={styles.row}>
-                  <Text style={styles.rowText}>Subtotal</Text>
-                  <Text style={styles.rowText}>
-                    {formatCurrency(summary.subtotal, true)}
-                  </Text>
+                <View style={{width: '49%'}}>
+                  <Button
+                    title="Send"
+                    loading={loading}
+                    onPress={onSendToKitchen}
+                    height={45}
+                  />
                 </View>
-                <View style={styles.row}>
-                  <Text style={{...styles.rowText, color: '#f00'}}>
-                    Credits Discounted
-                  </Text>
-                  <Text style={{...styles.rowText, color: '#f00'}}>
-                    {`- ${formatCurrency(summary.discount, true)}`}
-                  </Text>
-                </View>
-                <View style={styles.divider} />
-                <View style={{...styles.row}}>
-                  <Text style={styles.rowText}>New Subtotal</Text>
-                  <Text style={styles.rowText}>
-                    {formatCurrency(
-                      parseFloat(summary.subtotal) -
-                        parseFloat(summary.discount),
-                      true,
-                    )}
-                  </Text>
-                </View>
-                <View style={styles.row}>
-                  <Text style={{...styles.rowText, color: '#27ae61'}}>Tax</Text>
-                  <Text style={{...styles.rowText, color: '#27ae61'}}>
-                    {`+ ${formatCurrency(summary.tax, true)}`}
-                  </Text>
-                </View>
-                <View style={styles.row}>
-                  <Text style={{...styles.rowText, color: '#27ae61'}}>
-                    Tips
-                  </Text>
-                  <Text style={{...styles.rowText, color: '#27ae61'}}>
-                    {`+ ${formatCurrency(summary.tips, true)}`}
-                  </Text>
-                </View>
-                <View style={styles.divider} />
-                <View style={{...styles.row}}>
-                  <Text style={styles.rowText}>Order Total</Text>
-                  <Text style={styles.rowText}>
-                    {formatCurrency(
-                      parseFloat(summary.subtotal) -
-                        parseFloat(summary.discount) +
-                        parseFloat(summary.tax) +
-                        parseFloat(summary.tips),
-                      true,
-                    )}
-                  </Text>
+                <View style={{width: '49%'}}>
+                  <Button
+                    title="Make Payment"
+                    disabled={!(summary && summary.subtotal)}
+                    loading={loading}
+                    onPress={() =>
+                      navigation.navigate('Payment', {tableId: table.id})
+                    }
+                    height={45}
+                  />
                 </View>
               </View>
-            ) : null}
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginHorizontal: '1%',
-                marginBottom: '2%',
-              }}>
-              <View style={{width: '49%'}}>
-                <Button
-                  title="Send"
-                  loading={loading}
-                  onPress={onSendToKitchen}
-                  height={45}
-                />
-              </View>
-              <View style={{width: '49%'}}>
-                <Button
-                  title="Make Payment"
-                  disabled={!(summary && summary.subtotal)}
-                  loading={loading}
-                  onPress={() =>
-                    navigation.navigate('Payment', {tableId: table.id})
-                  }
-                  height={45}
-                />
-              </View>
-            </View>
-          </>
-        ) : null}
-      </ScrollView>
+            </>
+          ) : null}
+        </ScrollView>
+      )}
     </View>
   );
 };

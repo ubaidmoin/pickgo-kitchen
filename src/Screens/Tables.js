@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  FlatList,
-  StyleSheet,
-  Dimensions,
-  RefreshControl,
-} from 'react-native';
+import {Text, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import Ripple from '../Components/Ripple';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
@@ -183,7 +177,7 @@ export default Tables;
 
 const styles = StyleSheet.create({
   item: {
-    width: Dimensions.get('screen').width * 0.44,
+    width: '45.9%',
     shadowOpacity: 0.7,
     shadowRadius: 5,
     shadowOffset: {

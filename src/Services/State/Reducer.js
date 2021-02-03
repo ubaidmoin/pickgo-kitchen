@@ -4,6 +4,7 @@ export const actions = {
   SET_PROGRESS_SETTINGS: 'SET_PROGRESS_SETTINGS',
   SET_TABLES: 'SET_TABLES',
   SET_NOTIFICATION_COUNT: 'SET_NOTIFICATION_COUNT',
+  SET_IS_WIDE_SCREEN: 'SET_IS_WIDE_SCREEN',
 };
 
 export const reducer = (state, action) => {
@@ -28,6 +29,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         tables: action.tables,
+      };
+    case actions.SET_IS_WIDE_SCREEN:
+      return {
+        ...state,
+        isWideScreen: action.isWideScreen,
       };
     default:
       return state;

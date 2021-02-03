@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  Dimensions,
-  RefreshControl,
-} from 'react-native';
+import {View, Text, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import Ripple from '../Components/Ripple';
 import Switcher from '../Components/Switcher';
 import {useStateValue} from '../Services/State/State';
@@ -137,7 +130,7 @@ export default Reservations;
 
 const styles = StyleSheet.create({
   item: {
-    width: Dimensions.get('screen').width * 0.45,
+    width: '45.9%',
     shadowOpacity: 0.7,
     shadowRadius: 5,
     shadowOffset: {
@@ -146,14 +139,13 @@ const styles = StyleSheet.create({
     },
     elevation: 3,
     padding: '3%',
-    margin: '1.5%',
+    margin: '2%',
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
   itemTitle: {
     fontSize: 18,
-    // fontWeight: 'bold',
     color: '#fff',
   },
 });
