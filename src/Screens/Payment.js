@@ -631,7 +631,6 @@ const Payment = ({navigation, ...props}) => {
   };
 
   const {
-    table = {},
     summary = {},
     transactions = [],
     activeOrder = {},
