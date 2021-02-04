@@ -212,13 +212,17 @@ const SignedInStack = () => (
       name="Payment"
       component={Payment}
       options={({navigation, route}) => {
+        const title =
+          route.params && route.params.title
+            ? `Payment - ${route.params.title}`
+            : 'Payment';
         const notificationCount =
           route.params && route.params.notificationCount
             ? route.params.notificationCount
             : null;
         return Header(
           {
-            title: 'Payment',
+            title,
             showTitle: true,
             showBackButton: true,
             notificationCount,

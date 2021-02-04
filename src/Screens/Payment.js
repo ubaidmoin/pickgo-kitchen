@@ -58,8 +58,10 @@ const Payment = ({navigation, ...props}) => {
       if (result.data) {
         const {table} = result.data || {};
         if (table && table.id) {
+          navigation.setParams({title: table.name});
           setTableDetails(result.data);
         } else {
+          navigation.setParams({title: null});
           setTableDetails('');
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
@@ -629,6 +631,7 @@ const Payment = ({navigation, ...props}) => {
   };
 
   const {
+    table = {},
     summary = {},
     transactions = [],
     activeOrder = {},
