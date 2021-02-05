@@ -2,7 +2,11 @@ import React from 'react';
 import {Text, View, StyleSheet, ActivityIndicator, Modal} from 'react-native';
 
 const CustomActivityIndicator = ({visible}) => (
-  <Modal animationType="fade" transparent={true} visible={visible}>
+  <Modal
+    animationType="fade"
+    transparent={true}
+    visible={visible}
+    statusBarTranslucent={true}>
     <View style={styles.centeredView}>
       <View style={styles.modalView}>
         <ActivityIndicator size="large" color="green" />

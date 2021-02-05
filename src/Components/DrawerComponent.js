@@ -44,7 +44,7 @@ const Drawer = ({navigation}) => {
     {
       icon: <IonIcon name="settings-sharp" color={'#fff'} size={20} />,
       title: 'Settings',
-      subTitle: 'Printer, Terminal, Test Push',
+      subTitle: 'Printer, Terminal, Test Push, Manage Menu',
       onPress: () => navigation.navigate('Settings'),
     },
   ];

@@ -198,6 +198,7 @@ export default class Alert extends Component {
           animationType="none"
           transparent={true}
           visible={show}
+          statusBarTranslucent={true}
           onRequestClose={() => {
             if (showSelf && closeOnHardwareBackPress) {
               this._springHide();
@@ -235,8 +236,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   overlay: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: '100%',
+    height: '100%',
     position: 'absolute',
     backgroundColor: 'rgba(52,52,52,0.5)',
   },

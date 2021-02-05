@@ -20,6 +20,7 @@ import SearchUsers from './Screens/SearchUsers';
 import NotificationCenter from './Screens/NotificationCenter';
 import Settings from './Screens/Settings';
 import TestPush from './Screens/TestPush';
+import ManageMenu from './Screens/ManageMenu';
 import DrawerComponent from './Components/DrawerComponent';
 import Ripple from './Components/Ripple';
 
@@ -338,7 +339,7 @@ const SignedInStack = () => (
           {
             title: 'Notification Center',
             showTitle: true,
-            showBackButton: true,
+            showMenuButton: true,
             notificationCount,
           },
           navigation,
@@ -376,7 +377,26 @@ const SignedInStack = () => (
           {
             title: 'Test Push',
             showTitle: true,
-            showMenuButton: true,
+            showBackButton: true,
+            notificationCount,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="ManageMenu"
+      component={ManageMenu}
+      options={({navigation, route}) => {
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
+          {
+            title: 'Manage Menu',
+            showTitle: true,
+            showBackButton: true,
             notificationCount,
           },
           navigation,
