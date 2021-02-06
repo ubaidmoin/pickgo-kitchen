@@ -282,7 +282,7 @@ const EditMenu = ({navigation, ...props}) => {
               }}>
               <CheckBox
                 size={20}
-                title={isMenuItemSoldOut ? 'Sold Out' : 'Available'}
+                title={isMenuItemSoldOut ? 'Sold Out' : 'Sold Out?'}
                 isChecked={isMenuItemSoldOut}
                 onChange={(val) => setIsMenuItemSoldOut(val)}
               />
