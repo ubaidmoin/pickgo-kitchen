@@ -574,16 +574,19 @@ const AddToCart = ({navigation, ...props}) => {
                     <Text
                       style={{
                         color: '#000',
-                        textAlign: 'center',
+                        textAlign: 'left',
                         fontSize: 18,
+                        width: '70%',
                       }}>
                       {item.name}
                     </Text>
                     <Text
                       style={{
                         color: '#000',
-                        textAlign: 'center',
+                        alignSelf: 'center',
+                        textAlign: 'right',
                         fontSize: 18,
+                        width: '30%',
                       }}>
                       {formatCurrency(item.price)}
                     </Text>
@@ -885,11 +888,22 @@ const AddToCart = ({navigation, ...props}) => {
                       : '1.5%',
                 }}>
                 <Text
-                  style={{color: '#000', textAlign: 'center', fontSize: 18}}>
+                  style={{
+                    color: '#000',
+                    textAlign: 'left',
+                    fontSize: 18,
+                    width: '70%',
+                  }}>
                   {item.name}
                 </Text>
                 <Text
-                  style={{color: '#000', textAlign: 'center', fontSize: 18}}>
+                  style={{
+                    color: '#000',
+                    alignSelf: 'center',
+                    textAlign: 'right',
+                    fontSize: 18,
+                    width: '30%',
+                  }}>
                   {formatCurrency(item.price)}
                 </Text>
               </Ripple>

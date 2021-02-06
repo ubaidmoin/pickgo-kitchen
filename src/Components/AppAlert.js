@@ -2,7 +2,6 @@ import {
   Animated,
   BackAndroid,
   BackHandler,
-  Dimensions,
   Image,
   Modal,
   Platform,

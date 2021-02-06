@@ -1,21 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, ToastAndroid} from 'react-native';
 import Button from '../Components/Button';
-import Ripple from '../Components/Ripple';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
-import RadioButton from '../Components/RadioButton';
+import CheckBox from '../Components/CheckBox';
 import {getMenuDetails, addToTableCart} from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
 
-const AddCartItem = ({navigation, ...props}) => {
+const EditMenu = ({navigation, ...props}) => {
   useEffect(() => {
-    const {table, menuItem} = props.route.params || {};
-    if (table && table.id && menuItem && menuItem.id) {
-      navigation.setParams({title: `Add to ${table.name}`});
-      setTable(table);
+    const {menuItem} = props.route.params || {};
+    if (menuItem && menuItem.id) {
       fetchMenuDetails(menuItem.id);
     }
     return navigation.addListener('focus', () =>
@@ -36,13 +32,26 @@ const AddCartItem = ({navigation, ...props}) => {
       if (result.data) {
         const {menu = {}, menuOptions = []} = result.data || {};
         if (menu && menu.id) {
+          setIsMenuItemSoldOut(
+            menu.is_sold &&
+              (menu.is_sold.toLowerCase() === 'true' ||
+                menu.is_sold.toLowerCase() === true),
+          );
           setMenuItem(result.data);
           if (menuOptions && menuOptions.length > 0) {
-            const allSelectedOptionItems = {};
-            menuOptions.forEach(
-              (item, index) => (allSelectedOptionItems[`${index}`] = ''),
-            );
-            setSelectedOptionItems(allSelectedOptionItems);
+            const selectedMenuOptions = {};
+            menuOptions.forEach((item, index) => {
+              const menuOptionIndex = index,
+                menuOptionItem =
+                  item && item.option_items ? item.option_items : [];
+              menuOptionItem.forEach((item, index) => {
+                const optionItemIndex = index,
+                  optionItem = item;
+                selectedMenuOptions[`${menuOptionIndex}${optionItemIndex}`] =
+                  optionItem.is_sold;
+              });
+            });
+            setSelectedMenuOptions(selectedMenuOptions);
           }
         } else {
           dispatch({
@@ -80,7 +89,7 @@ const AddCartItem = ({navigation, ...props}) => {
     }
   };
 
-  const onAddToTableCart = async () => {
+  const onUpdateMenu = async () => {
     try {
       dispatch({
         type: actions.SET_PROGRESS_SETTINGS,
@@ -90,14 +99,14 @@ const AddCartItem = ({navigation, ...props}) => {
       const {menu = {}, menuOptions = []} = menuItem || {};
       const optionItems = [];
       let isRequiredItemsNotSelected = false;
-      if (menuOptions && menuOptions.length > 0 && selectedOptionItems) {
+      if (menuOptions && menuOptions.length > 0 && selectedMenuOptions) {
         menuOptions.forEach((item, menuOptionIndex) => {
           if (
-            selectedOptionItems[menuOptionIndex] ||
-            selectedOptionItems[menuOptionIndex] === 0
+            selectedMenuOptions[menuOptionIndex] ||
+            selectedMenuOptions[menuOptionIndex] === 0
           ) {
             const optionItem =
-              item.option_items[selectedOptionItems[menuOptionIndex]];
+              item.option_items[selectedMenuOptions[menuOptionIndex]];
             optionItems.push({
               id: optionItem.id,
               name: optionItem.name,
@@ -126,8 +135,6 @@ const AddCartItem = ({navigation, ...props}) => {
       const reqObj = {
         items: optionItems,
         menu_id: menu.id,
-        qty: quantity,
-        table_id: table.id,
       };
       const result = await addToTableCart(reqObj);
       if (result) {
@@ -187,29 +194,27 @@ const AddCartItem = ({navigation, ...props}) => {
   };
 
   const [menuItem, setMenuItem] = useState('');
-  const [table, setTable] = useState('');
-  const [quantity, setQuantity] = useState(1);
-  const [selectedOptionItems, setSelectedOptionItems] = useState('');
+  const [isMenuItemSoldOut, setIsMenuItemSoldOut] = useState(false);
+  const [selectedMenuOptions, setSelectedMenuOptions] = useState('');
   const [, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
 
   const onSelectOptionItem = (val, menuOptionIndex, optionItemIndex) => {
-    let allSelectedOptionItems = {...selectedOptionItems};
-    if (val) {
-      allSelectedOptionItems[`${menuOptionIndex}`] = optionItemIndex;
-    } else {
-      allSelectedOptionItems[`${menuOptionIndex}`] = '';
+    let allSelectedMenuOptions = {...selectedMenuOptions};
+    if (
+      allSelectedMenuOptions &&
+      allSelectedMenuOptions[`${menuOptionIndex}${optionItemIndex}`]
+    ) {
+      if (val) {
+        allSelectedMenuOptions[`${menuOptionIndex}${optionItemIndex}`] = 'true';
+      } else {
+        allSelectedMenuOptions[`${menuOptionIndex}${optionItemIndex}`] = 'No';
+      }
     }
-    setSelectedOptionItems(allSelectedOptionItems);
+    setSelectedMenuOptions(allSelectedMenuOptions);
   };
 
   const {menu = {}, menuOptions = []} = menuItem || {};
-
-  const isSoldOut =
-    menu &&
-    menu.is_sold &&
-    (menu.is_sold.toLowerCase() === 'true' ||
-      menu.is_sold.toLowerCase() === true);
 
   return (
     <View
@@ -268,79 +273,20 @@ const AddCartItem = ({navigation, ...props}) => {
                 {menu.description}
               </Text>
             ) : null}
-            {isSoldOut ? (
-              <Text
-                style={{
-                  color: '#ed3237',
-                  textAlign: 'center',
-                  fontSize: 15,
-                  marginVertical: '1.5%',
-                }}>
-                Sold Out
-              </Text>
-            ) : (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginTop: '1.5%',
-                }}>
-                <Ripple
-                  style={{
-                    elevation: 5,
-                    shadowRadius: 2,
-                    shadowOpacity: 0.3,
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    width: '42%',
-                    backgroundColor: quantity === 1 ? '#999' : '#2bae6a',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: 5,
-                    paddingVertical: 5,
-                    paddingHorizontal: 5,
-                    marginVertical: 5,
-                  }}
-                  disabled={quantity === 1}
-                  onPress={() => setQuantity(quantity - 1)}>
-                  <EntypoIcon name="minus" size={25} color="#fff" />
-                </Ripple>
-                <Text
-                  style={{
-                    color: '#000',
-                    textAlign: 'center',
-                    marginVertical: '1.5%',
-                    marginHorizontal: '1.5%',
-                    fontSize: 18,
-                  }}>
-                  {quantity}
-                </Text>
-                <Ripple
-                  style={{
-                    elevation: 5,
-                    shadowRadius: 2,
-                    shadowOpacity: 0.3,
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    width: '42%',
-                    backgroundColor: '#2bae6a',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: 5,
-                    paddingVertical: 5,
-                    paddingHorizontal: 5,
-                    marginVertical: 5,
-                  }}
-                  onPress={() => setQuantity(quantity + 1)}>
-                  <EntypoIcon name="plus" size={25} color="#fff" />
-                </Ripple>
-              </View>
-            )}
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                marginTop: '1.5%',
+              }}>
+              <CheckBox
+                size={20}
+                title={isMenuItemSoldOut ? 'Sold Out' : 'Available'}
+                isChecked={isMenuItemSoldOut}
+                onChange={(val) => setIsMenuItemSoldOut(val)}
+              />
+            </View>
           </View>
           <FlatList
             showsVerticalScrollIndicator={false}
@@ -375,24 +321,30 @@ const AddCartItem = ({navigation, ...props}) => {
                   </Text>
                   <View style={{marginHorizontal: '2%', marginTop: '2%'}}>
                     {item.option_items && item.option_items.length > 0
-                      ? item.option_items.map((item, index) => (
-                          <RadioButton
-                            key={item.id}
-                            title={`${item.name} (${formatCurrency(
-                              item.price,
-                            )})`}
-                            size={20}
-                            isChecked={
-                              selectedOptionItems
-                                ? selectedOptionItems[`${menuOptionIndex}`] ===
-                                  index
-                                : false
-                            }
-                            onChange={(val) =>
-                              onSelectOptionItem(val, menuOptionIndex, index)
-                            }
-                          />
-                        ))
+                      ? item.option_items.map((item, index) => {
+                          const optionItemIndex = index;
+                          const isSoldOut =
+                            selectedMenuOptions &&
+                            (selectedMenuOptions[
+                              `${menuOptionIndex}${optionItemIndex}`
+                            ].toLowerCase() === 'true' ||
+                              selectedMenuOptions[
+                                `${menuOptionIndex}${optionItemIndex}`
+                              ] === true);
+                          return (
+                            <CheckBox
+                              key={item.id}
+                              title={`${item.name} (${formatCurrency(
+                                item.price,
+                              )}) ${isSoldOut ? '(Sold Out)' : ''}`}
+                              size={20}
+                              isChecked={isSoldOut}
+                              onChange={(val) =>
+                                onSelectOptionItem(val, menuOptionIndex, index)
+                              }
+                            />
+                          );
+                        })
                       : null}
                   </View>
                 </View>
@@ -401,25 +353,24 @@ const AddCartItem = ({navigation, ...props}) => {
           />
         </>
       ) : null}
-      {!isSoldOut ? (
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            left: 0,
-            marginHorizontal: '5%',
-          }}>
-          <Button
-            title="Add"
-            loading={loading}
-            onPress={onAddToTableCart}
-            height={45}
-          />
-        </View>
-      ) : null}
+
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          left: 0,
+          marginHorizontal: '5%',
+        }}>
+        <Button
+          title="Update"
+          loading={loading}
+          onPress={onUpdateMenu}
+          height={45}
+        />
+      </View>
     </View>
   );
 };
 
-export default AddCartItem;
+export default EditMenu;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Text, Animated, TouchableOpacity, Easing} from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 
-class RadioButton extends React.Component {
+class CheckBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,11 +40,11 @@ class RadioButton extends React.Component {
             width: size,
             height: size,
             borderWidth: 1,
-            borderColor: isChecked ? '#2bae6a' : '#949aa2',
-            borderRadius: 25,
+            borderColor: isChecked ? '#ed3237' : '#949aa2',
+            borderRadius: 5,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: isChecked ? '#2bae6a' : 'transparent',
+            backgroundColor: isChecked ? '#ed3237' : 'transparent',
             transform: [{scale: springValue}],
           }}>
           {isChecked ? (
@@ -53,6 +53,8 @@ class RadioButton extends React.Component {
         </Animated.View>
         <Text
           style={{
+            textDecorationLine: isChecked ? 'line-through' : 'none',
+            color: isChecked ? '#ed3237' : '#000',
             marginLeft: 5,
             paddingRight: 10,
             fontSize: 16,
@@ -66,4 +68,4 @@ class RadioButton extends React.Component {
   }
 }
 
-export default RadioButton;
+export default CheckBox;

@@ -21,6 +21,7 @@ import NotificationCenter from './Screens/NotificationCenter';
 import Settings from './Screens/Settings';
 import TestPush from './Screens/TestPush';
 import ManageMenu from './Screens/ManageMenu';
+import EditMenu from './Screens/EditMenu';
 import DrawerComponent from './Components/DrawerComponent';
 import Ripple from './Components/Ripple';
 
@@ -395,6 +396,25 @@ const SignedInStack = () => (
         return Header(
           {
             title: 'Manage Menu',
+            showTitle: true,
+            showBackButton: true,
+            notificationCount,
+          },
+          navigation,
+        );
+      }}
+    />
+    <Stack.Screen
+      name="EditMenu"
+      component={EditMenu}
+      options={({navigation, route}) => {
+        const notificationCount =
+          route.params && route.params.notificationCount
+            ? route.params.notificationCount
+            : null;
+        return Header(
+          {
+            title: 'Edit Menu',
             showTitle: true,
             showBackButton: true,
             notificationCount,
