@@ -22,6 +22,7 @@ import {
   deleteFromTableCart,
   sendToKitchen,
   addCustomOrderAmount,
+  getCustomerDiscount,
 } from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
@@ -41,6 +42,7 @@ const TableCart = ({navigation, ...props}) => {
   const [tableId, setTableId] = useState('');
   const [tableDetails, setTableDetails] = useState('');
   const [amount, setAmount] = useState('');
+  const [discountAmountApplied, setDiscountAmountApplied] = useState(0);
 
   const refreshScreen = (table_id = tableId) => {
     getNotificationCount().then((notificationCount) =>
@@ -60,12 +62,16 @@ const TableCart = ({navigation, ...props}) => {
       setLoading(true);
       const result = await getTableDetails(tableID);
       if (result.data) {
-        const {table = {}, cartItems = []} = result.data || {};
+        const {table = {}, cartItems = [], activeOrder = {}} =
+          result.data || {};
         if (table && table.id) {
           setTableDetails(result.data);
           navigation.setParams({title: table.name});
           if (isFirstTime && !(cartItems && cartItems.length > 0)) {
             navigation.navigate('AddToCart', {table});
+          }
+          if (activeOrder && activeOrder.uid && activeOrder.uid > -1) {
+            fetchDiscount(activeOrder);
           }
         } else {
           setTableDetails('');
@@ -82,6 +88,46 @@ const TableCart = ({navigation, ...props}) => {
             },
           });
         }
+      }
+    } catch (error) {
+      dispatch({
+        type: actions.SET_ALERT_SETTINGS,
+        alertSettings: {
+          show: true,
+          type: 'error',
+          title: 'Error Occured',
+          message:
+            'This Operation Could Not Be Completed. Please Try Again Later.',
+          showConfirmButton: true,
+          confirmText: 'Ok',
+        },
+      });
+    } finally {
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: false,
+      });
+      setLoading(false);
+    }
+  };
+
+  const fetchDiscount = async (activeOrder) => {
+    try {
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: true,
+      });
+      setLoading(true);
+      let data = new FormData();
+      data.append('customer_id', activeOrder.uid);
+      data.append('order_amount', parseInt(activeOrder.subtotal));
+      data.append('cid', activeOrder.cid);
+      const result = await getCustomerDiscount(data);
+      const {success = false, discount_amount_applied = 0} = result || {};
+      if (success && discount_amount_applied) {
+        setDiscountAmountApplied(parseFloat(discount_amount_applied) * 100);
+      } else {
+        setDiscountAmountApplied(0);
       }
     } catch (error) {
       dispatch({
@@ -522,7 +568,12 @@ const TableCart = ({navigation, ...props}) => {
                     Credits Discounted
                   </Text>
                   <Text style={{...styles.rowText, color: '#f00'}}>
-                    {`- ${formatCurrency(summary.discount, true)}`}
+                    {`- ${formatCurrency(
+                      discountAmountApplied
+                        ? discountAmountApplied
+                        : summary.discount,
+                      true,
+                    )}`}
                   </Text>
                 </View>
                 <View style={styles.divider} />
@@ -531,7 +582,9 @@ const TableCart = ({navigation, ...props}) => {
                   <Text style={styles.rowText}>
                     {formatCurrency(
                       parseFloat(summary.subtotal) -
-                        parseFloat(summary.discount),
+                        (discountAmountApplied
+                          ? parseFloat(discountAmountApplied)
+                          : parseFloat(summary.discount)),
                       true,
                     )}
                   </Text>
@@ -556,7 +609,9 @@ const TableCart = ({navigation, ...props}) => {
                   <Text style={styles.rowText}>
                     {formatCurrency(
                       parseFloat(summary.subtotal) -
-                        parseFloat(summary.discount) +
+                        (discountAmountApplied
+                          ? parseFloat(discountAmountApplied)
+                          : parseFloat(summary.discount)) +
                         parseFloat(summary.tax) +
                         parseFloat(summary.tips),
                       true,

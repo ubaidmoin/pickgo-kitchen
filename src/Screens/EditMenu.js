@@ -96,81 +96,8 @@ const EditMenu = ({navigation, ...props}) => {
         show: true,
       });
       setLoading(true);
-      const {menu = {}, menuOptions = []} = menuItem || {};
-      const optionItems = [];
-      let isRequiredItemsNotSelected = false;
-      if (menuOptions && menuOptions.length > 0 && selectedMenuOptions) {
-        menuOptions.forEach((item, menuOptionIndex) => {
-          if (
-            selectedMenuOptions[menuOptionIndex] ||
-            selectedMenuOptions[menuOptionIndex] === 0
-          ) {
-            const optionItem =
-              item.option_items[selectedMenuOptions[menuOptionIndex]];
-            optionItems.push({
-              id: optionItem.id,
-              name: optionItem.name,
-              price: optionItem.price,
-            });
-          } else if (item.is_required) {
-            isRequiredItemsNotSelected = true;
-            return;
-          }
-        });
-      }
-      if (isRequiredItemsNotSelected) {
-        dispatch({
-          type: actions.SET_ALERT_SETTINGS,
-          alertSettings: {
-            show: true,
-            type: 'warn',
-            title: 'Attention',
-            message: 'Please select atleast one from required items.',
-            showConfirmButton: true,
-            confirmText: 'Ok',
-          },
-        });
-        return;
-      }
-      const reqObj = {
-        items: optionItems,
-        menu_id: menu.id,
-      };
-      const result = await addToTableCart(reqObj);
-      if (result) {
-        const {table = {}, cart = []} = result || {};
-        if (table && table.id && cart && cart.id) {
-          navigation.pop();
-          ToastAndroid.show(
-            'Menu item(s) are successfully added to table.',
-            ToastAndroid.LONG,
-          );
-        } else {
-          dispatch({
-            type: actions.SET_ALERT_SETTINGS,
-            alertSettings: {
-              show: true,
-              type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
-              showConfirmButton: true,
-              confirmText: 'Ok',
-            },
-          });
-        }
-      } else {
-        dispatch({
-          type: actions.SET_ALERT_SETTINGS,
-          alertSettings: {
-            show: true,
-            type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
-            showConfirmButton: true,
-            confirmText: 'Ok',
-          },
-        });
-      }
+      ToastAndroid.show('Menu Updated Successfully', ToastAndroid.LONG);
+      navigation.pop();
     } catch (error) {
       dispatch({
         type: actions.SET_ALERT_SETTINGS,

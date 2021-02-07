@@ -211,6 +211,16 @@ export const addCustomOrderAmount = async (data) => {
   }
 };
 
+export const getCustomerDiscount = async (data) => {
+  try {
+    const url = s.DISCOUNT.CUSTOMER_DISCOUNT;
+    const response = await postData(url, data, true);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
 export const adminSendToCustomer = async (orderId) => {
   try {
     const url = s.RESERVATIONS.ADMIN_SEND_TO_CUSTOMER.replace(

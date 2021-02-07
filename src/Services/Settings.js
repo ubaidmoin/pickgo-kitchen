@@ -39,5 +39,6 @@ export const settings = {
   },
   DISCOUNT: {
     CUSTOM_ORDER_AMOUNT: `${BASE_URLS.APP_BASEURL}/api/discount/customorderamount`,
+    CUSTOMER_DISCOUNT: `${BASE_URLS.APP_BASEURL}/api/discount/customerdiscount/`,
   },
 };
