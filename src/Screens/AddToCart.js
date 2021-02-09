@@ -677,75 +677,88 @@ const AddToCart = ({navigation, ...props}) => {
                                 : '2%'
                               : '1%',
                           borderRadius: 5,
-                          alignItems: 'center',
-                          flexDirection: 'row',
                         }}>
                         <View
-                          style={{
-                            width: '13%',
-                            alignItems: 'center',
-                            color: '#767676',
-                          }}>
-                          <Text style={{fontSize: 18}}>{`x ${item.qty}`}</Text>
-                        </View>
-                        <View
-                          style={{
-                            width: '50%',
-                            paddingLeft: '3%',
-                          }}>
-                          <Text
+                          style={{alignItems: 'center', flexDirection: 'row'}}>
+                          <View
                             style={{
-                              fontSize: 18,
-                              fontWeight: 'bold',
+                              width: '13%',
+                              alignItems: 'center',
                               color: '#767676',
                             }}>
-                            {item.menu_name}
-                          </Text>
-                          {item.options && item.options.length > 0
-                            ? item.options.map((item) => (
-                                <View
-                                  key={item.id}
-                                  style={{flexDirection: 'row'}}>
-                                  <FontAwesomeIcon
-                                    size={8}
-                                    name="circle-o"
-                                    color="#979797"
-                                    style={{marginTop: '4%'}}
-                                  />
-                                  <Text
-                                    style={{
-                                      marginLeft: '3%',
-                                      fontSize: 15,
-                                      color: '#979797',
-                                    }}>
-                                    {`${
-                                      item.menu_option_item_name
-                                    }  (+ ${formatCurrency(
-                                      item.price,
-                                      false,
-                                      true,
-                                    )})`}
-                                  </Text>
-                                </View>
-                              ))
-                            : null}
+                            <Text
+                              style={{fontSize: 18}}>{`x ${item.qty}`}</Text>
+                          </View>
+                          <View
+                            style={{
+                              width: '50%',
+                              paddingLeft: '3%',
+                            }}>
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                                color: '#767676',
+                              }}>
+                              {item.menu_name}
+                            </Text>
+                            {item.options && item.options.length > 0
+                              ? item.options.map((item) => (
+                                  <View
+                                    key={item.id}
+                                    style={{flexDirection: 'row'}}>
+                                    <FontAwesomeIcon
+                                      size={8}
+                                      name="circle-o"
+                                      color="#979797"
+                                      style={{marginTop: '4%'}}
+                                    />
+                                    <Text
+                                      style={{
+                                        marginLeft: '3%',
+                                        fontSize: 15,
+                                        color: '#979797',
+                                      }}>
+                                      {`${
+                                        item.menu_option_item_name
+                                      }  (+ ${formatCurrency(
+                                        item.price,
+                                        false,
+                                        true,
+                                      )})`}
+                                    </Text>
+                                  </View>
+                                ))
+                              : null}
+                          </View>
+                          <View style={{width: '27%', alignItems: 'flex-end'}}>
+                            <Text
+                              style={{color: '#767676', fontSize: 18}}
+                              numberOfLines={1}>
+                              {formatCurrency(item.total_amount)}
+                            </Text>
+                          </View>
+                          <Ripple
+                            style={{width: '10%', alignItems: 'center'}}
+                            onPress={() => onDeleteCartItem(item)}>
+                            <MaterialIcon
+                              name="delete-forever"
+                              size={25}
+                              color="#000"
+                            />
+                          </Ripple>
                         </View>
-                        <View style={{width: '27%', alignItems: 'flex-end'}}>
+                        {item.notes ? (
                           <Text
-                            style={{color: '#767676', fontSize: 18}}
-                            numberOfLines={1}>
-                            {formatCurrency(item.total_amount)}
+                            style={{
+                              fontSize: 15,
+                              color: '#979797',
+                              marginTop: 5,
+                              textAlign: 'justify',
+                            }}>
+                            {`Notes: ${item.notes}`}
                           </Text>
-                        </View>
-                        <Ripple
-                          style={{width: '10%', alignItems: 'center'}}
-                          onPress={() => onDeleteCartItem(item)}>
-                          <MaterialIcon
-                            name="delete-forever"
-                            size={25}
-                            color="#000"
-                          />
-                        </Ripple>
+                        ) : null}
                       </View>
                     )}
                   />
@@ -1002,73 +1015,86 @@ const AddToCart = ({navigation, ...props}) => {
                             : '2%'
                           : '1%',
                       borderRadius: 5,
-                      alignItems: 'center',
-                      flexDirection: 'row',
                     }}>
-                    <View
-                      style={{
-                        width: '13%',
-                        alignItems: 'center',
-                        color: '#767676',
-                      }}>
-                      <Text style={{fontSize: 18}}>{`x ${item.qty}`}</Text>
-                    </View>
-                    <View
-                      style={{
-                        width: '50%',
-                        paddingLeft: '3%',
-                      }}>
-                      <Text
+                    <View style={{alignItems: 'center', flexDirection: 'row'}}>
+                      <View
                         style={{
-                          fontSize: 18,
-                          fontWeight: 'bold',
+                          width: '13%',
+                          alignItems: 'center',
                           color: '#767676',
                         }}>
-                        {item.menu_name}
-                      </Text>
-                      {item.options && item.options.length > 0
-                        ? item.options.map((item) => (
-                            <View key={item.id} style={{flexDirection: 'row'}}>
-                              <FontAwesomeIcon
-                                size={8}
-                                name="circle-o"
-                                color="#979797"
-                                style={{marginTop: '4%'}}
-                              />
-                              <Text
-                                style={{
-                                  marginLeft: '3%',
-                                  fontSize: 15,
-                                  color: '#979797',
-                                }}>
-                                {`${
-                                  item.menu_option_item_name
-                                }  (+ ${formatCurrency(
-                                  item.price,
-                                  false,
-                                  true,
-                                )})`}
-                              </Text>
-                            </View>
-                          ))
-                        : null}
+                        <Text style={{fontSize: 18}}>{`x ${item.qty}`}</Text>
+                      </View>
+                      <View
+                        style={{
+                          width: '50%',
+                          paddingLeft: '3%',
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            fontWeight: 'bold',
+                            color: '#767676',
+                          }}>
+                          {item.menu_name}
+                        </Text>
+                        {item.options && item.options.length > 0
+                          ? item.options.map((item) => (
+                              <View
+                                key={item.id}
+                                style={{flexDirection: 'row'}}>
+                                <FontAwesomeIcon
+                                  size={8}
+                                  name="circle-o"
+                                  color="#979797"
+                                  style={{marginTop: '4%'}}
+                                />
+                                <Text
+                                  style={{
+                                    marginLeft: '3%',
+                                    fontSize: 15,
+                                    color: '#979797',
+                                  }}>
+                                  {`${
+                                    item.menu_option_item_name
+                                  }  (+ ${formatCurrency(
+                                    item.price,
+                                    false,
+                                    true,
+                                  )})`}
+                                </Text>
+                              </View>
+                            ))
+                          : null}
+                      </View>
+                      <View style={{width: '27%', alignItems: 'flex-end'}}>
+                        <Text
+                          style={{color: '#767676', fontSize: 18}}
+                          numberOfLines={1}>
+                          {formatCurrency(item.total_amount)}
+                        </Text>
+                      </View>
+                      <Ripple
+                        style={{width: '10%', alignItems: 'center'}}
+                        onPress={() => onDeleteCartItem(item)}>
+                        <MaterialIcon
+                          name="delete-forever"
+                          size={25}
+                          color="#000"
+                        />
+                      </Ripple>
                     </View>
-                    <View style={{width: '27%', alignItems: 'flex-end'}}>
+                    {item.notes ? (
                       <Text
-                        style={{color: '#767676', fontSize: 18}}
-                        numberOfLines={1}>
-                        {formatCurrency(item.total_amount)}
+                        style={{
+                          fontSize: 15,
+                          color: '#979797',
+                          marginTop: 5,
+                          textAlign: 'justify',
+                        }}>
+                        {`Notes: ${item.notes}`}
                       </Text>
-                    </View>
-                    <Ripple
-                      style={{width: '10%', alignItems: 'center'}}
-                      onPress={() => onDeleteCartItem(item)}>
-                      <MaterialIcon
-                        name="delete-forever"
-                        size={25}
-                        color="#000"
-                      />
-                    </Ripple>
+                    ) : null}
                   </View>
                 )}
               />
