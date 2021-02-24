@@ -6,8 +6,8 @@ import {actions} from '../Services/State/Reducer';
 import {getMenu} from '../Services/API/APIManager';
 import Dropdown from '../Components/Dropdown';
 import {formatCurrency} from '../Services/Common';
-
 import {getNotificationCount} from '../Services/DataManager';
+import Languages from '../Localization/translations';
 
 const ManageMenu = ({navigation}) => {
   useEffect(() => {
@@ -16,6 +16,13 @@ const ManageMenu = ({navigation}) => {
       refreshScreen();
     });
   }, []);
+
+  const [menu, setMenu] = useState('');
+  const [selectedCompanyHours, setSelectedCompanyHours] = useState('');
+  const [menuCourses, setMenuCourses] = useState([]);
+  const [selectedMenuCourse, setSelectedMenuCourse] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [{isWideScreen, selectedLanguage}, dispatch] = useStateValue();
 
   const refreshScreen = () => {
     getNotificationCount().then((notificationCount) =>
@@ -48,7 +55,7 @@ const ManageMenu = ({navigation}) => {
           ) {
             const companyHours = companyHoursToday[0];
             setSelectedCompanyHours({
-              label: `${companyHours.name} (from ${companyHours.time_from} to ${companyHours.time_to})`,
+              label: `${companyHours.name} (${Languages[selectedLanguage].manageMenu.from} ${companyHours.time_from} ${Languages[selectedLanguage].manageMenu.to} ${companyHours.time_to})`,
             });
             const {menuCourses = []} = companyHours || {};
             if (menuCourses && menuCourses.length > 0 && menuCourses[0]) {
@@ -62,10 +69,10 @@ const ManageMenu = ({navigation}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -75,10 +82,10 @@ const ManageMenu = ({navigation}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -88,11 +95,10 @@ const ManageMenu = ({navigation}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -104,18 +110,12 @@ const ManageMenu = ({navigation}) => {
     }
   };
 
-  const [menu, setMenu] = useState('');
-  const [selectedCompanyHours, setSelectedCompanyHours] = useState('');
-  const [menuCourses, setMenuCourses] = useState([]);
-  const [selectedMenuCourse, setSelectedMenuCourse] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [{isWideScreen}, dispatch] = useStateValue();
   const {companyHoursToday = []} = menu || {};
 
   const getCompanyHours = () => {
     if (companyHoursToday && companyHoursToday.length > 0) {
       return companyHoursToday.map((item) => ({
-        label: `${item.name} (from ${item.time_from} to ${item.time_to})`,
+        label: `${item.name} (${Languages[selectedLanguage].manageMenu.from} ${item.time_from} ${Languages[selectedLanguage].manageMenu.to} ${item.time_to})`,
       }));
     } else {
       return [];
@@ -141,7 +141,7 @@ const ManageMenu = ({navigation}) => {
   return (
     <View style={{flex: 1, paddingTop: '2%', marginHorizontal: '5%'}}>
       <Dropdown
-        label="Select One"
+        label={Languages[selectedLanguage].messages.selectOne}
         options={getCompanyHours()}
         selected={selectedCompanyHours}
         onSelect={onSelectCompanyHours}

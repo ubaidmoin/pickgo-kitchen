@@ -5,6 +5,7 @@ export const actions = {
   SET_TABLES: 'SET_TABLES',
   SET_NOTIFICATION_COUNT: 'SET_NOTIFICATION_COUNT',
   SET_IS_WIDE_SCREEN: 'SET_IS_WIDE_SCREEN',
+  SET_LANGUAGE: 'SET_LANGUAGE',
 };
 
 export const reducer = (state, action) => {
@@ -34,6 +35,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         isWideScreen: action.isWideScreen,
+      };
+    case actions.SET_LANGUAGE:
+      return {
+        ...state,
+        selectedLanguage: action.selectedLanguage,
       };
     default:
       return state;

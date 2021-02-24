@@ -1,20 +1,27 @@
 import React from 'react';
 import {Text, View, StyleSheet, ActivityIndicator, Modal} from 'react-native';
+import {useStateValue} from '../Services/State/State';
+import Languages from '../Localization/translations';
 
-const CustomActivityIndicator = ({visible}) => (
-  <Modal
-    animationType="fade"
-    transparent={true}
-    visible={visible}
-    statusBarTranslucent={true}>
-    <View style={styles.centeredView}>
-      <View style={styles.modalView}>
-        <ActivityIndicator size="large" color="green" />
-        <Text style={{fontSize: 15}}>Please wait...</Text>
+const CustomActivityIndicator = ({visible}) => {
+  const [{selectedLanguage}] = useStateValue();
+  return (
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={visible}
+      statusBarTranslucent={true}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <ActivityIndicator size="large" color="green" />
+          <Text style={{fontSize: 15}}>
+            {Languages[selectedLanguage].messages.pleaseWait}
+          </Text>
+        </View>
       </View>
-    </View>
-  </Modal>
-);
+    </Modal>
+  );
+};
 
 const styles = StyleSheet.create({
   centeredView: {

@@ -17,6 +17,7 @@ import {
 } from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
+import Languages from '../Localization/translations';
 
 const Payment = ({navigation, ...props}) => {
   useEffect(() => {
@@ -35,7 +36,7 @@ const Payment = ({navigation, ...props}) => {
     }
   }, []);
 
-  const [, dispatch] = useStateValue();
+  const [{selectedLanguage}, dispatch] = useStateValue();
   const [tableId, setTableId] = useState('');
   const [tableDetails, setTableDetails] = useState('');
   const [loading, setLoading] = useState(false);
@@ -68,10 +69,10 @@ const Payment = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -82,11 +83,10 @@ const Payment = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -107,9 +107,9 @@ const Payment = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'warn',
-            title: `Please enter split amount.`,
+            title: Languages[selectedLanguage].messages.enterSplitAmount,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
         return;
@@ -127,17 +127,20 @@ const Payment = ({navigation, ...props}) => {
           setSelected(0);
           setSplitByAmountVal('');
           setTableDetails(result);
-          ToastAndroid.show('Split Successfully.', ToastAndroid.LONG);
+          ToastAndroid.show(
+            Languages[selectedLanguage].messages.splitSuccessfully,
+            ToastAndroid.LONG,
+          );
         } else {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -147,10 +150,10 @@ const Payment = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -160,11 +163,10 @@ const Payment = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -191,17 +193,20 @@ const Payment = ({navigation, ...props}) => {
           setSelected(0);
           setSplitByAmountVal('');
           setTableDetails(result);
-          ToastAndroid.show('Split Successfully.', ToastAndroid.LONG);
+          ToastAndroid.show(
+            Languages[selectedLanguage].messages.splitSuccessfully,
+            ToastAndroid.LONG,
+          );
         } else {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -211,10 +216,10 @@ const Payment = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -224,11 +229,10 @@ const Payment = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -249,9 +253,9 @@ const Payment = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'warn',
-            title: `Please enter payment amount`,
+            title: Languages[selectedLanguage].messages.enterPaymentAmount,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
         return;
@@ -277,7 +281,10 @@ const Payment = ({navigation, ...props}) => {
         const {model = {}, transactions = [], transactions_paid = false} =
           result || {};
         if (transactions_paid) {
-          ToastAndroid.show('Payment success complete.', ToastAndroid.LONG);
+          ToastAndroid.show(
+            Languages[selectedLanguage].messages.paymentSuccess,
+            ToastAndroid.LONG,
+          );
           navigation.navigate('Tables');
         } else if (
           model &&
@@ -286,17 +293,20 @@ const Payment = ({navigation, ...props}) => {
           transactions.length > 0
         ) {
           setTableDetails(result);
-          ToastAndroid.show('Payment success complete.', ToastAndroid.LONG);
+          ToastAndroid.show(
+            Languages[selectedLanguage].messages.paymentSuccess,
+            ToastAndroid.LONG,
+          );
         } else {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -306,10 +316,10 @@ const Payment = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -319,11 +329,10 @@ const Payment = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -342,12 +351,15 @@ const Payment = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'warn',
-          title: 'Confirm Payment',
-          message: `Confirm cash payment: ${formatCurrency(item, true)}`,
+          title: Languages[selectedLanguage].messages.confirmPayment,
+          message: Languages[selectedLanguage].messages.confirmPayment.replace(
+            '${amount}',
+            formatCurrency(item, true),
+          ),
           showConfirmButton: true,
           showCancelButton: true,
-          confirmText: 'Confirm',
-          cancelText: 'Cancel',
+          confirmText: Languages[selectedLanguage].messages.confirm,
+          cancelText: Languages[selectedLanguage].messages.cancel,
           onConfirmPressed: () => {
             onMakeTransaction(item / 100);
           },
@@ -376,12 +388,14 @@ const Payment = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'warn',
-          title: 'Split Payment',
-          message: `Confirm split into ${item} equal payments.`,
+          title: Languages[selectedLanguage].messages.splitPaymentTitle,
+          message: Languages[
+            selectedLanguage
+          ].messages.splitPaymentMessage.replace('${item}', item),
           showConfirmButton: true,
           showCancelButton: true,
-          confirmText: 'Ok',
-          cancelText: 'Cancel',
+          confirmText: Languages[selectedLanguage].messages.ok,
+          cancelText: Languages[selectedLanguage].messages.cancel,
           onConfirmPressed: () => {
             onSplitEqual(item);
           },
@@ -396,15 +410,15 @@ const Payment = ({navigation, ...props}) => {
       alertSettings: {
         show: true,
         type: 'warn',
-        title: 'Charging from',
-        message: `Customer: ${customerName}\nPayment Type: ${cardType}\nTotal: ${formatCurrency(
-          getPayableAmount(),
-          true,
-        )}`,
+        title: Languages[selectedLanguage].messages.chargingFromTitle,
+        message: Languages[selectedLanguage].messages.chargingFromTitle
+          .replace('${customerName}', customerName)
+          .replace('${cardType}', cardType)
+          .replace('${amount}', formatCurrency(getPayableAmount(), true)),
         showConfirmButton: true,
         showCancelButton: true,
-        confirmText: 'Ok',
-        cancelText: 'Cancel',
+        confirmText: Languages[selectedLanguage].messages.ok,
+        cancelText: Languages[selectedLanguage].messages.cancel,
         onConfirmPressed: () => {
           payNow();
         },
@@ -430,7 +444,10 @@ const Payment = ({navigation, ...props}) => {
           order = {},
         } = result || {};
         if (transactions_paid) {
-          ToastAndroid.show('Paid Successfully.', ToastAndroid.LONG);
+          ToastAndroid.show(
+            Languages[selectedLanguage].messages.paidSuccessfully,
+            ToastAndroid.LONG,
+          );
           navigation.navigate('Tables');
         } else if (order && order.id) {
           dispatch({
@@ -438,10 +455,10 @@ const Payment = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
               onConfirmPressed: () => fetchTableDetails(tableId),
             },
           });
@@ -452,10 +469,10 @@ const Payment = ({navigation, ...props}) => {
               alertSettings: {
                 show: true,
                 type: 'error',
-                title: 'An Error Occured',
+                title: Languages[selectedLanguage].messages.errorOccured,
                 message: message,
                 showConfirmButton: true,
-                confirmText: 'Ok',
+                confirmText: Languages[selectedLanguage].messages.ok,
               },
             });
           } else {
@@ -464,10 +481,10 @@ const Payment = ({navigation, ...props}) => {
               alertSettings: {
                 show: true,
                 type: 'error',
-                title: 'An Error Occured',
-                message: 'Please try again later.',
+                title: Languages[selectedLanguage].messages.errorOccured,
+                message: Languages[selectedLanguage].messages.tryAgainLater,
                 showConfirmButton: true,
-                confirmText: 'Ok',
+                confirmText: Languages[selectedLanguage].messages.ok,
               },
             });
           }
@@ -477,9 +494,9 @@ const Payment = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'success',
-              title: 'An Error Occured',
+              title: Languages[selectedLanguage].messages.errorOccured,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -489,10 +506,10 @@ const Payment = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -502,11 +519,10 @@ const Payment = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -524,11 +540,11 @@ const Payment = ({navigation, ...props}) => {
       alertSettings: {
         show: true,
         type: 'warn',
-        title: 'Confirm',
+        title: Languages[selectedLanguage].messages.confirm,
         showConfirmButton: true,
         showCancelButton: true,
-        confirmText: 'Ok',
-        cancelText: 'Cancel',
+        confirmText: Languages[selectedLanguage].messages.ok,
+        cancelText: Languages[selectedLanguage].messages.cancel,
         onConfirmPressed: () => {
           sendBill();
         },
@@ -549,7 +565,10 @@ const Payment = ({navigation, ...props}) => {
       if (result) {
         const {status = '', message = '', order = {}} = result || {};
         if (order && order.id) {
-          ToastAndroid.show('Sent Successfully.', ToastAndroid.LONG);
+          ToastAndroid.show(
+            Languages[selectedLanguage].messages.sentSuccessfully,
+            ToastAndroid.LONG,
+          );
           fetchTableDetails(tableId);
         } else if (status === 401) {
           if (message) {
@@ -558,10 +577,10 @@ const Payment = ({navigation, ...props}) => {
               alertSettings: {
                 show: true,
                 type: 'error',
-                title: 'An Error Occured',
+                title: Languages[selectedLanguage].messages.errorOccured,
                 message: message,
                 showConfirmButton: true,
-                confirmText: 'Ok',
+                confirmText: Languages[selectedLanguage].messages.ok,
               },
             });
           } else {
@@ -570,10 +589,10 @@ const Payment = ({navigation, ...props}) => {
               alertSettings: {
                 show: true,
                 type: 'error',
-                title: 'An Error Occured',
-                message: 'Please try again later.',
+                title: Languages[selectedLanguage].messages.errorOccured,
+                message: Languages[selectedLanguage].messages.tryAgainLater,
                 showConfirmButton: true,
-                confirmText: 'Ok',
+                confirmText: Languages[selectedLanguage].messages.ok,
               },
             });
           }
@@ -583,10 +602,10 @@ const Payment = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -596,10 +615,10 @@ const Payment = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -609,11 +628,10 @@ const Payment = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -677,7 +695,7 @@ const Payment = ({navigation, ...props}) => {
               }}>
               <Text
                 style={{fontSize: 18, textAlign: 'center', fontWeight: 'bold'}}>
-                Confirm Cash
+                {Languages[selectedLanguage].payment.confirmCash}
               </Text>
               {dialogType === 'PayCashFixed' ? (
                 <View
@@ -758,7 +776,7 @@ const Payment = ({navigation, ...props}) => {
                 </View>
               ) : (
                 <Input
-                  label="Payment Amount"
+                  label={Languages[selectedLanguage].payment.paymentAmount}
                   value={paymentAmount}
                   onChangeText={(val) => setPaymentAmount(val)}
                 />
@@ -769,7 +787,9 @@ const Payment = ({navigation, ...props}) => {
                   justifyContent: 'space-between',
                   marginTop: '5%',
                 }}>
-                <Text style={{fontSize: 18}}>Change</Text>
+                <Text style={{fontSize: 18}}>
+                  {Languages[selectedLanguage].payment.change}
+                </Text>
                 <Text style={{fontSize: 18}}>
                   {dialogType === 'PayCashFixed'
                     ? getPayableAmount() -
@@ -802,7 +822,9 @@ const Payment = ({navigation, ...props}) => {
                     backgroundColor: '#ed3237',
                   }}
                   onPress={() => setDialogType('')}>
-                  <Text style={{color: '#fff', fontSize: 15}}>Cancel</Text>
+                  <Text style={{color: '#fff', fontSize: 15}}>
+                    {Languages[selectedLanguage].payment.cancel}
+                  </Text>
                 </Ripple>
                 <Ripple
                   style={{
@@ -823,7 +845,9 @@ const Payment = ({navigation, ...props}) => {
                       onMakeTransaction(paymentAmount);
                     }
                   }}>
-                  <Text style={{color: '#fff', fontSize: 15}}>Confirm</Text>
+                  <Text style={{color: '#fff', fontSize: 15}}>
+                    {Languages[selectedLanguage].payment.confirm}
+                  </Text>
                 </Ripple>
               </View>
             </View>
@@ -847,7 +871,7 @@ const Payment = ({navigation, ...props}) => {
               }}>
               <Text
                 style={{fontSize: 18, textAlign: 'center', fontWeight: 'bold'}}>
-                Custom Split
+                {Languages[selectedLanguage].payment.customSplit}
               </Text>
               <View
                 style={{
@@ -926,7 +950,9 @@ const Payment = ({navigation, ...props}) => {
                     backgroundColor: '#ed3237',
                   }}
                   onPress={() => setDialogType('')}>
-                  <Text style={{color: '#fff', fontSize: 15}}>Cancel</Text>
+                  <Text style={{color: '#fff', fontSize: 15}}>
+                    {Languages[selectedLanguage].payment.cancel}
+                  </Text>
                 </Ripple>
                 <Ripple
                   style={{
@@ -940,7 +966,9 @@ const Payment = ({navigation, ...props}) => {
                     setDialogType('');
                     onSplitEqual(customSplitQuantity);
                   }}>
-                  <Text style={{color: '#fff', fontSize: 15}}>Confirm</Text>
+                  <Text style={{color: '#fff', fontSize: 15}}>
+                    {Languages[selectedLanguage].payment.confirm}
+                  </Text>
                 </Ripple>
               </View>
             </View>
@@ -963,15 +991,16 @@ const Payment = ({navigation, ...props}) => {
               {formatCurrency(getPayableAmount(), true)}
             </Text>
             <Text numberOfLines={1} style={{fontSize: 16}}>
-              {`Out of ${formatCurrency(
-                summary.subtotal,
-                true,
-              )} Total. Payment ${
-                transactions &&
-                transactions.findIndex(
-                  (transaction) => transaction.status === 0,
-                ) + 1
-              } of ${transactions && transactions.length}`}
+              {Languages[selectedLanguage].payment.outOfTotal
+                .replace('${amount}', formatCurrency(summary.subtotal, true))
+                .replace(
+                  '${number}',
+                  transactions &&
+                    transactions.findIndex(
+                      (transaction) => transaction.status === 0,
+                    ) + 1,
+                )
+                .replace('${total}', transactions && transactions.length)}
             </Text>
             {transactions &&
             transactions.some(
@@ -979,8 +1008,8 @@ const Payment = ({navigation, ...props}) => {
             ) ? null : (
               <Switcher
                 options={[
-                  {title: 'Pay by Card/Cash'},
-                  {title: 'Split Payment'},
+                  {title: Languages[selectedLanguage].payment.payByCardCash},
+                  {title: Languages[selectedLanguage].payment.splitPayment},
                 ]}
                 selected={selected}
                 onChange={(val) => setSelected(val)}
@@ -989,16 +1018,20 @@ const Payment = ({navigation, ...props}) => {
             {selected === 0 ? (
               <View style={{width: '100%'}}>
                 <View style={{marginTop: '3%'}}>
-                  <Text style={{fontSize: 18}}>Card</Text>
+                  <Text style={{fontSize: 18}}>
+                    {Languages[selectedLanguage].payment.card}
+                  </Text>
                   <Button
-                    title="Terminal #Unknown"
+                    title={`${Languages[selectedLanguage].payment.terminal} #Unknown`}
                     loading={loading}
                     onPress={() => navigation.navigate('TerminalConnection')}
                     height={40}
                   />
                 </View>
                 <View style={{marginTop: '3%'}}>
-                  <Text style={{fontSize: 18}}>Cash</Text>
+                  <Text style={{fontSize: 18}}>
+                    {Languages[selectedLanguage].payment.cash}
+                  </Text>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -1009,7 +1042,7 @@ const Payment = ({navigation, ...props}) => {
                       2000000,
                       5000000,
                       10000000,
-                      'Custom',
+                      Languages[selectedLanguage].payment.custom,
                     ].map((item, index) => (
                       <Ripple
                         key={index}
@@ -1059,13 +1092,13 @@ const Payment = ({navigation, ...props}) => {
                             : ''
                         } ${
                           orderUserInfo.last_name ? orderUserInfo.last_name : ''
-                        }, Card: ${
+                        }, ${Languages[selectedLanguage].payment.card}: ${
                           orderUserCard.type ? orderUserCard.type : ''
                         }`}</Text>
                         {activeOrder ? (
                           parseInt(activeOrder.type) === 4 ? (
                             <Button
-                              title="Pay Now"
+                              title={Languages[selectedLanguage].payment.payNow}
                               onPress={() =>
                                 onPayNow(
                                   `${orderUserInfo.first_name} ${orderUserInfo.last_name}`,
@@ -1077,7 +1110,9 @@ const Payment = ({navigation, ...props}) => {
                             />
                           ) : (
                             <Button
-                              title="Send Bill"
+                              title={
+                                Languages[selectedLanguage].payment.sendBill
+                              }
                               onPress={onSendBill}
                               loading={loading}
                               height={40}
@@ -1093,12 +1128,12 @@ const Payment = ({navigation, ...props}) => {
               <View style={{width: '100%'}}>
                 <View style={{marginTop: '5%'}}>
                   <Input
-                    label="Split by amount"
+                    label={Languages[selectedLanguage].payment.splitByAmount}
                     value={splitByAmountVal}
                     onChangeText={(val) => setSplitByAmountVal(val)}
                   />
                   <Button
-                    title="Continue"
+                    title={Languages[selectedLanguage].payment.continue}
                     loading={loading}
                     onPress={onSplitByAmount}
                     height={40}
@@ -1110,18 +1145,24 @@ const Payment = ({navigation, ...props}) => {
                     textAlign: 'center',
                     fontSize: 18,
                   }}>
-                  OR
+                  {Languages[selectedLanguage].payment.or}
                 </Text>
                 <View>
                   <Text style={{fontSize: 16}}>
-                    Split into equal payments (two or more)
+                    {Languages[selectedLanguage].payment.splitIntoEqualPayments}
                   </Text>
                   <View
                     style={{
                       flexDirection: 'row',
                       flexWrap: 'wrap',
                     }}>
-                    {[2, 3, 4, 5, 'Custom'].map((item, index) => (
+                    {[
+                      2,
+                      3,
+                      4,
+                      5,
+                      Languages[selectedLanguage].payment.custom,
+                    ].map((item, index) => (
                       <Ripple
                         key={index}
                         style={{

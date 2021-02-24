@@ -15,6 +15,7 @@ import Payment from './Screens/Payment';
 import TerminalConnection from './Screens/TerminalConnection';
 import Reservations from './Screens/Reservations';
 import OrderSummary from './Screens/OrderSummary';
+import SalesReport from './Screens/SalesReport';
 import MenuOrders from './Screens/MenuOrders';
 import SearchUsers from './Screens/SearchUsers';
 import NotificationCenter from './Screens/NotificationCenter';
@@ -24,6 +25,8 @@ import ManageMenu from './Screens/ManageMenu';
 import EditMenu from './Screens/EditMenu';
 import DrawerComponent from './Components/DrawerComponent';
 import Ripple from './Components/Ripple';
+import {useStateValue} from './Services/State/State';
+import Languages from './Localization/translations';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -120,311 +123,333 @@ const LoggedOutStack = () => (
   </Stack.Navigator>
 );
 
-const SignedInStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="Tables"
-      component={Tables}
-      options={({navigation, route}) => {
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title: 'Tables',
-            showTitle: true,
-            showMenuButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="TableCart"
-      component={TableCart}
-      options={({navigation, route}) => {
-        const title =
-          route.params && route.params.title
-            ? route.params.title
-            : 'Table Cart';
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title,
-            showTitle: true,
-            showBackButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="AddToCart"
-      component={AddToCart}
-      options={({navigation, route}) => {
-        const title =
-          route.params && route.params.title
-            ? route.params.title
-            : 'Add To Cart';
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title,
-            showTitle: true,
-            showBackButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="AddCartItem"
-      component={AddCartItem}
-      options={({navigation, route}) => {
-        const title =
-          route.params && route.params.title
-            ? route.params.title
-            : 'Add Cart Item';
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title,
-            showTitle: true,
-            showBackButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="Payment"
-      component={Payment}
-      options={({navigation, route}) => {
-        const title =
-          route.params && route.params.title
-            ? `Payment - ${route.params.title}`
-            : 'Payment';
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title,
-            showTitle: true,
-            showBackButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="TerminalConnection"
-      component={TerminalConnection}
-      options={({navigation, route}) => {
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title: 'Terminal Connection',
-            showTitle: true,
-            showBackButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="Reservations"
-      component={Reservations}
-      options={({navigation, route}) => {
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title: 'Reservations',
-            showTitle: true,
-            showMenuButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="OrderSummary"
-      component={OrderSummary}
-      options={({navigation, route}) => {
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title: 'Order Summary',
-            showTitle: true,
-            showMenuButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="MenuOrders"
-      component={MenuOrders}
-      options={({navigation, route}) => {
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title: 'Menu Orders',
-            showTitle: true,
-            showMenuButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="SearchUsers"
-      component={SearchUsers}
-      options={({navigation, route}) => {
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title: 'Search Users',
-            showTitle: true,
-            showMenuButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="NotificationCenter"
-      component={NotificationCenter}
-      options={({navigation, route}) => {
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title: 'Notification Center',
-            showTitle: true,
-            showMenuButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="Settings"
-      component={Settings}
-      options={({navigation, route}) => {
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title: 'Settings',
-            showTitle: true,
-            showMenuButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="TestPush"
-      component={TestPush}
-      options={({navigation, route}) => {
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title: 'Test Push',
-            showTitle: true,
-            showBackButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="ManageMenu"
-      component={ManageMenu}
-      options={({navigation, route}) => {
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title: 'Manage Menu',
-            showTitle: true,
-            showBackButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-    <Stack.Screen
-      name="EditMenu"
-      component={EditMenu}
-      options={({navigation, route}) => {
-        const notificationCount =
-          route.params && route.params.notificationCount
-            ? route.params.notificationCount
-            : null;
-        return Header(
-          {
-            title: 'Edit Menu',
-            showTitle: true,
-            showBackButton: true,
-            notificationCount,
-          },
-          navigation,
-        );
-      }}
-    />
-  </Stack.Navigator>
-);
+const SignedInStack = () => {
+  const [{selectedLanguage}] = useStateValue();
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Tables"
+        component={Tables}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: Languages[selectedLanguage].tables.title,
+              showTitle: true,
+              showMenuButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="TableCart"
+        component={TableCart}
+        options={({navigation, route}) => {
+          const title =
+            route.params && route.params.title
+              ? route.params.title
+              : Languages[selectedLanguage].tableCart.title;
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title,
+              showTitle: true,
+              showBackButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="AddToCart"
+        component={AddToCart}
+        options={({navigation, route}) => {
+          const title =
+            route.params && route.params.title
+              ? route.params.title
+              : Languages[selectedLanguage].addToCart.title;
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title,
+              showTitle: true,
+              showBackButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="AddCartItem"
+        component={AddCartItem}
+        options={({navigation, route}) => {
+          const title =
+            route.params && route.params.title
+              ? route.params.title
+              : Languages[selectedLanguage].addCartItem.title;
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title,
+              showTitle: true,
+              showBackButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="Payment"
+        component={Payment}
+        options={({navigation, route}) => {
+          const title =
+            route.params && route.params.title
+              ? `${Languages[selectedLanguage].payment.title} - ${route.params.title}`
+              : Languages[selectedLanguage].payment.title;
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title,
+              showTitle: true,
+              showBackButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="TerminalConnection"
+        component={TerminalConnection}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: Languages[selectedLanguage].terminalConnection.title,
+              showTitle: true,
+              showBackButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="Reservations"
+        component={Reservations}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: Languages[selectedLanguage].reservations.title,
+              showTitle: true,
+              showMenuButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="OrderSummary"
+        component={OrderSummary}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: Languages[selectedLanguage].orderSummary.title,
+              showTitle: true,
+              showMenuButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="SalesReport"
+        component={SalesReport}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: Languages[selectedLanguage].salesReport.title,
+              showTitle: true,
+              showMenuButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="MenuOrders"
+        component={MenuOrders}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: Languages[selectedLanguage].menuOrders.title,
+              showTitle: true,
+              showMenuButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="SearchUsers"
+        component={SearchUsers}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: Languages[selectedLanguage].search.title,
+              showTitle: true,
+              showMenuButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="NotificationCenter"
+        component={NotificationCenter}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: Languages[selectedLanguage].notificationCenter.title,
+              showTitle: true,
+              showMenuButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: Languages[selectedLanguage].settings.title,
+              showTitle: true,
+              showMenuButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="TestPush"
+        component={TestPush}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: Languages[selectedLanguage].testPush.title,
+              showTitle: true,
+              showBackButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="ManageMenu"
+        component={ManageMenu}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: Languages[selectedLanguage].manageMenu.title,
+              showTitle: true,
+              showBackButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="EditMenu"
+        component={EditMenu}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: Languages[selectedLanguage].editMenu.title,
+              showTitle: true,
+              showBackButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const LoggedInDrawer = () => (
   <Drawer.Navigator

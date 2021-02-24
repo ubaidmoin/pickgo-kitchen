@@ -9,12 +9,22 @@ import RadioButton from '../Components/RadioButton';
 import {getMenuDetails, addToTableCart} from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
+import Languages from '../Localization/translations';
 
 const AddCartItem = ({navigation, ...props}) => {
+  const [menuItem, setMenuItem] = useState('');
+  const [table, setTable] = useState('');
+  const [quantity, setQuantity] = useState(1);
+  const [selectedOptionItems, setSelectedOptionItems] = useState('');
+  const [{selectedLanguage}, dispatch] = useStateValue();
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const {table, menuItem} = props.route.params || {};
     if (table && table.id && menuItem && menuItem.id) {
-      navigation.setParams({title: `Add to ${table.name}`});
+      navigation.setParams({
+        title: `${Languages[selectedLanguage].addCartItem.addTo} ${table.name}`,
+      });
       setTable(table);
       fetchMenuDetails(menuItem.id);
     }
@@ -50,10 +60,10 @@ const AddCartItem = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -64,11 +74,10 @@ const AddCartItem = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -115,10 +124,11 @@ const AddCartItem = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'warn',
-            title: 'Attention',
-            message: 'Please select atleast one from required items.',
+            title: Languages[selectedLanguage].addCartItem.attention,
+            message:
+              Languages[selectedLanguage].addCartItem.selectRequiredItems,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
         return;
@@ -135,7 +145,7 @@ const AddCartItem = ({navigation, ...props}) => {
         if (table && table.id && cart && cart.id) {
           navigation.pop();
           ToastAndroid.show(
-            'Menu item(s) are successfully added to table.',
+            Languages[selectedLanguage].addCartItem.menuItemsAdded,
             ToastAndroid.LONG,
           );
         } else {
@@ -144,10 +154,10 @@ const AddCartItem = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -157,10 +167,10 @@ const AddCartItem = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -170,11 +180,10 @@ const AddCartItem = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -185,13 +194,6 @@ const AddCartItem = ({navigation, ...props}) => {
       setLoading(false);
     }
   };
-
-  const [menuItem, setMenuItem] = useState('');
-  const [table, setTable] = useState('');
-  const [quantity, setQuantity] = useState(1);
-  const [selectedOptionItems, setSelectedOptionItems] = useState('');
-  const [, dispatch] = useStateValue();
-  const [loading, setLoading] = useState(false);
 
   const onSelectOptionItem = (val, menuOptionIndex, optionItemIndex) => {
     let allSelectedOptionItems = {...selectedOptionItems};
@@ -276,7 +278,7 @@ const AddCartItem = ({navigation, ...props}) => {
                   fontSize: 15,
                   marginVertical: '1.5%',
                 }}>
-                Sold Out
+                {Languages[selectedLanguage].addCartItem.soldOut}
               </Text>
             ) : (
               <View
@@ -370,7 +372,9 @@ const AddCartItem = ({navigation, ...props}) => {
                   <Text
                     style={{color: '#000', textAlign: 'center', fontSize: 18}}>
                     {`${item.title} (${
-                      item.is_required ? 'required' : 'optional'
+                      item.is_required
+                        ? Languages[selectedLanguage].addCartItem.required
+                        : Languages[selectedLanguage].addCartItem.optional
                     })`}
                   </Text>
                   <View style={{marginHorizontal: '2%', marginTop: '2%'}}>
@@ -411,7 +415,7 @@ const AddCartItem = ({navigation, ...props}) => {
             marginHorizontal: '5%',
           }}>
           <Button
-            title="Add"
+            title={Languages[selectedLanguage].addCartItem.add}
             loading={loading}
             onPress={onAddToTableCart}
             height={45}

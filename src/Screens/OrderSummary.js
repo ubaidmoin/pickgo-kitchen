@@ -11,6 +11,7 @@ import {
   sendOrderRequest,
 } from '../Services/API/APIManager';
 import {getNotificationCount} from '../Services/DataManager';
+import Languages from '../Localization/translations';
 
 const OrderSummary = ({navigation, ...props}) => {
   useEffect(() => {
@@ -37,7 +38,10 @@ const OrderSummary = ({navigation, ...props}) => {
     }
   }, []);
 
-  const [{tables = [], userInfo = {}}, dispatch] = useStateValue();
+  const [
+    {tables = [], userInfo = {}, selectedLanguage},
+    dispatch,
+  ] = useStateValue();
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState({});
   const [table, setTable] = useState(null);
@@ -56,8 +60,8 @@ const OrderSummary = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'warn',
-            title: `Field Required`,
-            message: 'Please select table',
+            title: Languages[selectedLanguage].messages.fieldRequired,
+            message: Languages[selectedLanguage].messages.pleaseSelectTable,
             showConfirmButton: true,
             confirmText: 'Ok',
           },
@@ -70,8 +74,8 @@ const OrderSummary = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'warn',
-            title: `Field Required`,
-            message: 'Please enter guests',
+            title: Languages[selectedLanguage].messages.fieldRequired,
+            message: Languages[selectedLanguage].messages.pleaseEnterGuests,
             showConfirmButton: true,
             confirmText: 'Ok',
           },
@@ -84,8 +88,8 @@ const OrderSummary = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'warn',
-            title: `Field Required`,
-            message: 'Please enter subtotal',
+            title: Languages[selectedLanguage].messages.fieldRequired,
+            message: Languages[selectedLanguage].messages.pleaseEnterSubtotal,
             showConfirmButton: true,
             confirmText: 'Ok',
           },
@@ -135,11 +139,10 @@ const OrderSummary = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -178,11 +181,10 @@ const OrderSummary = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -220,7 +222,7 @@ const OrderSummary = ({navigation, ...props}) => {
         parseInt(type) === 3 ? (
           <View style={{flex: 1}}>
             <Dropdown
-              label="Select Table"
+              label={Languages[selectedLanguage].orderSummary.selectTable}
               options={tables.filter(
                 (item) => !(item.activeOrder && item.activeOrder.id),
               )}
@@ -234,17 +236,21 @@ const OrderSummary = ({navigation, ...props}) => {
                 justifyContent: 'space-between',
               }}>
               <View style={{width: '47%'}}>
-                <Input label="Order #" value={c_oid} editable={false} />
+                <Input
+                  label={`${Languages[selectedLanguage].orderSummary.order} #`}
+                  value={c_oid}
+                  editable={false}
+                />
               </View>
               <View style={{width: '47%'}}>
                 <Input
-                  label="Order Status"
+                  label={Languages[selectedLanguage].orderSummary.orderStatus}
                   value={
                     tbl_id && parseInt(tbl_id) && parseInt(tbl_id) > 0
-                      ? 'Accepted'
+                      ? Languages[selectedLanguage].orderSummary.accepted
                       : type && parseInt(type) === 3
-                      ? 'New'
-                      : 'Unknown'
+                      ? Languages[selectedLanguage].orderSummary.new
+                      : Languages[selectedLanguage].orderSummary.unknown
                   }
                   editable={false}
                 />
@@ -258,7 +264,7 @@ const OrderSummary = ({navigation, ...props}) => {
               <View style={{width: '47%'}}>
                 <Input
                   type="number"
-                  label="Guests"
+                  label={Languages[selectedLanguage].orderSummary.guests}
                   value={guestsCount}
                   keyboardType="phone-pad"
                   onChangeText={(val) => setGuestsCount(val)}
@@ -266,7 +272,7 @@ const OrderSummary = ({navigation, ...props}) => {
               </View>
               <View style={{width: '47%'}}>
                 <Input
-                  label="Username"
+                  label={Languages[selectedLanguage].orderSummary.username}
                   editable={
                     !(tbl_id && parseInt(tbl_id) && parseInt(tbl_id) > 0)
                   }
@@ -277,7 +283,7 @@ const OrderSummary = ({navigation, ...props}) => {
             </View>
             <View style={{width: '100%'}}>
               <Input
-                label="Phone Number"
+                label={Languages[selectedLanguage].orderSummary.phoneNumber}
                 editable={!(tbl_id && parseInt(tbl_id) && parseInt(tbl_id) > 0)}
                 value={phoneNumber}
                 onChangeText={(val) => setPhoneNumber(val)}
@@ -286,7 +292,7 @@ const OrderSummary = ({navigation, ...props}) => {
             {tbl_id && parseInt(tbl_id) && parseInt(tbl_id) > 0 ? (
               <View style={{width: '100%'}}>
                 <Input
-                  label="Subtotal"
+                  label={Languages[selectedLanguage].orderSummary.subtotal}
                   value={subTotal}
                   onChangeText={(val) => setSubTotal(val)}
                 />
@@ -294,14 +300,14 @@ const OrderSummary = ({navigation, ...props}) => {
             ) : null}
             {tbl_id && parseInt(tbl_id) && parseInt(tbl_id) > 0 ? (
               <Button
-                title="Get Order Summary"
+                title={Languages[selectedLanguage].orderSummary.getOrderSummary}
                 loading={loading}
                 onPress={() => onSubmit(1)}
                 height={45}
               />
             ) : (
               <Button
-                title="Accept Order"
+                title={Languages[selectedLanguage].orderSummary.acceptOrder}
                 loading={loading}
                 onPress={() => onSubmit(0)}
                 height={45}
@@ -325,14 +331,19 @@ const OrderSummary = ({navigation, ...props}) => {
                     borderRadius: 5,
                   }}>
                   <View style={styles.row}>
-                    <Text style={styles.rowText}>Subtotal</Text>
+                    <Text style={styles.rowText}>
+                      {Languages[selectedLanguage].orderSummary.subtotal}
+                    </Text>
                     <Text style={styles.rowText}>
                       {formatCurrency(summary.subtotal)}
                     </Text>
                   </View>
                   <View style={styles.row}>
                     <Text style={{...styles.rowText, color: '#f00'}}>
-                      Credits Discounted
+                      {
+                        Languages[selectedLanguage].orderSummary
+                          .creditsDiscounted
+                      }
                     </Text>
                     <Text style={{...styles.rowText, color: '#f00'}}>
                       {`- ${formatCurrency(summary.discount)}`}
@@ -340,7 +351,9 @@ const OrderSummary = ({navigation, ...props}) => {
                   </View>
                   <View style={styles.divider} />
                   <View style={styles.row}>
-                    <Text style={styles.rowText}>New Subtotal</Text>
+                    <Text style={styles.rowText}>
+                      {Languages[selectedLanguage].orderSummary.newSubtotal}
+                    </Text>
                     <Text style={styles.rowText}>
                       {formatCurrency(
                         parseFloat(summary.subtotal) -
@@ -350,7 +363,7 @@ const OrderSummary = ({navigation, ...props}) => {
                   </View>
                   <View style={styles.row}>
                     <Text style={{...styles.rowText, color: '#27ae61'}}>
-                      Tax
+                      {Languages[selectedLanguage].orderSummary.tax}
                     </Text>
                     <Text style={{...styles.rowText, color: '#27ae61'}}>
                       {`+ ${formatCurrency(summary.tax)}`}
@@ -358,7 +371,7 @@ const OrderSummary = ({navigation, ...props}) => {
                   </View>
                   <View style={styles.row}>
                     <Text style={{...styles.rowText, color: '#27ae61'}}>
-                      Tips
+                      {Languages[selectedLanguage].orderSummary.tips}
                     </Text>
                     <Text style={{...styles.rowText, color: '#27ae61'}}>
                       {`+ ${formatCurrency(summary.tips)}`}
@@ -366,7 +379,9 @@ const OrderSummary = ({navigation, ...props}) => {
                   </View>
                   <View style={styles.divider} />
                   <View style={styles.row}>
-                    <Text style={styles.rowText}>Order Total</Text>
+                    <Text style={styles.rowText}>
+                      {Languages[selectedLanguage].orderSummary.orderTotal}
+                    </Text>
                     <Text style={styles.rowText}>
                       {formatCurrency(
                         parseFloat(summary.subtotal) -
@@ -379,7 +394,7 @@ const OrderSummary = ({navigation, ...props}) => {
                 </View>
                 <View style={{marginTop: '5%'}}>
                   <Button
-                    title="Send Request"
+                    title={Languages[selectedLanguage].orderSummary.sendRequest}
                     loading={loading}
                     onPress={onOrderRequest}
                     height={45}
@@ -409,11 +424,17 @@ const OrderSummary = ({navigation, ...props}) => {
                 width: '100%',
               }}>
               <View style={{width: '33.33%'}}>
-                <Text style={{fontSize: 12, color: '#a6a5a5'}}>ORDER #</Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: '#a6a5a5',
+                  }}>{`${Languages[selectedLanguage].orderSummary.orderCapital} #`}</Text>
                 <Text style={{fontSize: 16}}>{c_oid}</Text>
               </View>
               <View style={{width: '66.66%'}}>
-                <Text style={{fontSize: 12, color: '#a6a5a5'}}>CUSTOMER</Text>
+                <Text style={{fontSize: 12, color: '#a6a5a5'}}>
+                  {Languages[selectedLanguage].orderSummary.customer}
+                </Text>
                 <Text
                   style={{
                     fontSize: 16,
@@ -427,16 +448,24 @@ const OrderSummary = ({navigation, ...props}) => {
                 width: '100%',
               }}>
               <View style={{width: '33.33%'}}>
-                <Text style={{fontSize: 12, color: '#a6a5a5'}}>TABLE</Text>
+                <Text style={{fontSize: 12, color: '#a6a5a5'}}>
+                  {Languages[selectedLanguage].orderSummary.table}
+                </Text>
                 <Text style={{fontSize: 16}}>{table_name}</Text>
               </View>
               <View style={{width: '33.33%'}}>
-                <Text style={{fontSize: 12, color: '#a6a5a5'}}>GUESTS</Text>
+                <Text style={{fontSize: 12, color: '#a6a5a5'}}>
+                  {Languages[selectedLanguage].orderSummary.guestsCapital}
+                </Text>
                 <Text style={{fontSize: 16}}>{guests_count}</Text>
               </View>
               <View style={{width: '33.33%'}}>
-                <Text style={{fontSize: 12, color: '#a6a5a5'}}>STATUS</Text>
-                <Text style={{fontSize: 16}}>Paid</Text>
+                <Text style={{fontSize: 12, color: '#a6a5a5'}}>
+                  {Languages[selectedLanguage].orderSummary.status}
+                </Text>
+                <Text style={{fontSize: 16}}>
+                  {Languages[selectedLanguage].orderSummary.paid}
+                </Text>
               </View>
             </View>
             <View
@@ -455,12 +484,14 @@ const OrderSummary = ({navigation, ...props}) => {
                 borderRadius: 5,
               }}>
               <View style={styles.row}>
-                <Text style={styles.rowText}>Subtotal</Text>
+                <Text style={styles.rowText}>
+                  {Languages[selectedLanguage].orderSummary.subtotal}
+                </Text>
                 <Text style={styles.rowText}>{formatCurrency(subtotal)}</Text>
               </View>
               <View style={styles.row}>
                 <Text style={{...styles.rowText, color: '#f00'}}>
-                  Credits Discounted
+                  {Languages[selectedLanguage].orderSummary.creditsDiscounted}
                 </Text>
                 <Text style={{...styles.rowText, color: '#f00'}}>
                   {`- ${formatCurrency(discount)}`}
@@ -468,26 +499,34 @@ const OrderSummary = ({navigation, ...props}) => {
               </View>
               <View style={styles.divider} />
               <View style={styles.row}>
-                <Text style={styles.rowText}>New Subtotal</Text>
+                <Text style={styles.rowText}>
+                  {Languages[selectedLanguage].orderSummary.newSubtotal}
+                </Text>
                 <Text style={styles.rowText}>
                   {formatCurrency(parseFloat(subtotal) - parseFloat(discount))}
                 </Text>
               </View>
               <View style={styles.row}>
-                <Text style={{...styles.rowText, color: '#27ae61'}}>Tax</Text>
+                <Text style={{...styles.rowText, color: '#27ae61'}}>
+                  {Languages[selectedLanguage].orderSummary.tax}
+                </Text>
                 <Text style={{...styles.rowText, color: '#27ae61'}}>
                   {`+ ${formatCurrency(tax)}`}
                 </Text>
               </View>
               <View style={styles.row}>
-                <Text style={{...styles.rowText, color: '#27ae61'}}>Tips</Text>
+                <Text style={{...styles.rowText, color: '#27ae61'}}>
+                  {Languages[selectedLanguage].orderSummary.tips}
+                </Text>
                 <Text style={{...styles.rowText, color: '#27ae61'}}>
                   {`+ ${formatCurrency(tips)}`}
                 </Text>
               </View>
               <View style={styles.divider} />
               <View style={styles.row}>
-                <Text style={styles.rowText}>Order Total</Text>
+                <Text style={styles.rowText}>
+                  {Languages[selectedLanguage].orderSummary.orderTotal}
+                </Text>
                 <Text style={styles.rowText}>
                   {formatCurrency(
                     parseFloat(subtotal) -

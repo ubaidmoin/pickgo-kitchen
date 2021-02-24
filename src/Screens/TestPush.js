@@ -6,6 +6,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import {sendNotification} from '../Services/API/APIManager';
+import Languages from '../Localization/translations';
 
 const TestPush = ({navigation}) => {
   useEffect(() => {
@@ -16,97 +17,133 @@ const TestPush = ({navigation}) => {
     );
   }, []);
 
+  const [{selectedLanguage}, dispatch] = useStateValue();
+
   const typeNotifications = [
     {
-      name: 'CALL A SERVER', //Nothing
+      name: Languages[selectedLanguage].testPush.callAServer, //Nothing
       body: {
         data: [
           {key: 'type', value: 'call-a-server'},
-          {key: 'title', value: 'Title of notification'},
-          {key: 'body', value: 'Body of notification'},
+          {
+            key: 'title',
+            value: Languages[selectedLanguage].testPush.notificationTitle,
+          },
+          {
+            key: 'body',
+            value: Languages[selectedLanguage].testPush.notificationBody,
+          },
           {key: 'to_user_id', value: '123'},
         ],
         notification: {
-          title: 'Title of notification',
-          body: 'Body of notification',
+          title: Languages[selectedLanguage].testPush.notificationTitle,
+          body: Languages[selectedLanguage].testPush.notificationBody,
         },
       },
     },
     {
-      name: 'PAY BY CASH', //Open Payment Screen for table_id
+      name: Languages[selectedLanguage].testPush.payByCash, //Open Payment Screen for table_id
       body: {
         data: [
           {key: 'type', value: 'pay-by-cash'},
-          {key: 'title', value: 'Title of notification'},
-          {key: 'body', value: 'Body of notification'},
+          {
+            key: 'title',
+            value: Languages[selectedLanguage].testPush.notificationTitle,
+          },
+          {
+            key: 'body',
+            value: Languages[selectedLanguage].testPush.notificationBody,
+          },
           {key: 'table_id', value: '8'},
         ],
         notification: {
-          title: 'Title of notification',
-          body: 'Body of notification',
+          title: Languages[selectedLanguage].testPush.notificationTitle,
+          body: Languages[selectedLanguage].testPush.notificationBody,
         },
       },
     },
     {
-      name: 'RESERVATION', //Open Reservation Screen
+      name: Languages[selectedLanguage].testPush.reservation, //Open Reservation Screen
       body: {
         data: [
           {key: 'type', value: 'reservation'},
-          {key: 'title', value: 'Title of notification'},
-          {key: 'body', value: 'Body of notification'},
+          {
+            key: 'title',
+            value: Languages[selectedLanguage].testPush.notificationTitle,
+          },
+          {
+            key: 'body',
+            value: Languages[selectedLanguage].testPush.notificationBody,
+          },
         ],
         notification: {
-          title: 'Title of notification',
-          body: 'Body of notification',
+          title: Languages[selectedLanguage].testPush.notificationTitle,
+          body: Languages[selectedLanguage].testPush.notificationBody,
         },
       },
     },
     {
-      name: 'NEW ORDER', //Nothing
+      name: Languages[selectedLanguage].testPush.newOrder, //Nothing
       body: {
         data: [
           {key: 'type', value: 'new-order'},
-          {key: 'title', value: 'Title of notification'},
-          {key: 'body', value: 'Body of notification'},
+          {
+            key: 'title',
+            value: Languages[selectedLanguage].testPush.notificationTitle,
+          },
+          {
+            key: 'body',
+            value: Languages[selectedLanguage].testPush.notificationBody,
+          },
           {key: 'table_id', value: '8'},
         ],
         notification: {
-          title: 'Title of notification',
-          body: 'Body of notification',
+          title: Languages[selectedLanguage].testPush.notificationTitle,
+          body: Languages[selectedLanguage].testPush.notificationBody,
         },
       },
     },
     {
-      name: 'ORDER PAID', //Nothing
+      name: Languages[selectedLanguage].testPush.orderPaid, //Nothing
       body: {
         data: [
           {key: 'type', value: 'order-paid'},
-          {key: 'title', value: 'Title of notification'},
-          {key: 'body', value: 'Body of notification'},
+          {
+            key: 'title',
+            value: Languages[selectedLanguage].testPush.notificationTitle,
+          },
+          {
+            key: 'body',
+            value: Languages[selectedLanguage].testPush.notificationBody,
+          },
         ],
         notification: {
-          title: 'Title of notification',
-          body: 'Body of notification',
+          title: Languages[selectedLanguage].testPush.notificationTitle,
+          body: Languages[selectedLanguage].testPush.notificationBody,
         },
       },
     },
     {
-      name: 'CHECK IN', //Nothing
+      name: Languages[selectedLanguage].testPush.checkIn, //Nothing
       body: {
         data: [
           {key: 'type', value: 'check-in'},
-          {key: 'title', value: 'Title of notification'},
-          {key: 'body', value: 'Body of notification'},
+          {
+            key: 'title',
+            value: Languages[selectedLanguage].testPush.notificationTitle,
+          },
+          {
+            key: 'body',
+            value: Languages[selectedLanguage].testPush.notificationBody,
+          },
         ],
         notification: {
-          title: 'Title of notification',
-          body: 'Body of notification',
+          title: Languages[selectedLanguage].testPush.notificationTitle,
+          body: Languages[selectedLanguage].testPush.notificationBody,
         },
       },
     },
   ];
-
-  const [, dispatch] = useStateValue();
 
   const onSendNotification = async (notification) => {
     try {
@@ -116,17 +153,20 @@ const TestPush = ({navigation}) => {
       });
       const result = await sendNotification(notification.body);
       if (result && result.success && result.token_count > 0) {
-        ToastAndroid.show('Notification Sent Successfully.', ToastAndroid.LONG);
+        ToastAndroid.show(
+          Languages[selectedLanguage].messages.notificationSent,
+          ToastAndroid.LONG,
+        );
       } else {
         dispatch({
           type: actions.SET_ALERT_SETTINGS,
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -136,11 +176,10 @@ const TestPush = ({navigation}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {

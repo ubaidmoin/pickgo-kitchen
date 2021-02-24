@@ -4,9 +4,10 @@ import Button from '../Components/Button';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import CheckBox from '../Components/CheckBox';
-import {getMenuDetails, addToTableCart} from '../Services/API/APIManager';
+import {getMenuDetails} from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
+import Languages from '../Localization/translations';
 
 const EditMenu = ({navigation, ...props}) => {
   useEffect(() => {
@@ -20,6 +21,12 @@ const EditMenu = ({navigation, ...props}) => {
       ),
     );
   }, []);
+
+  const [menuItem, setMenuItem] = useState('');
+  const [isMenuItemSoldOut, setIsMenuItemSoldOut] = useState(false);
+  const [selectedMenuOptions, setSelectedMenuOptions] = useState('');
+  const [{selectedLanguage}, dispatch] = useStateValue();
+  const [loading, setLoading] = useState(false);
 
   const fetchMenuDetails = async (menuId) => {
     try {
@@ -59,10 +66,10 @@ const EditMenu = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -73,11 +80,10 @@ const EditMenu = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -96,7 +102,10 @@ const EditMenu = ({navigation, ...props}) => {
         show: true,
       });
       setLoading(true);
-      ToastAndroid.show('Menu Updated Successfully', ToastAndroid.LONG);
+      ToastAndroid.show(
+        Languages[selectedLanguage].messages.menuUpdated,
+        ToastAndroid.LONG,
+      );
       navigation.pop();
     } catch (error) {
       dispatch({
@@ -104,11 +113,10 @@ const EditMenu = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -119,12 +127,6 @@ const EditMenu = ({navigation, ...props}) => {
       setLoading(false);
     }
   };
-
-  const [menuItem, setMenuItem] = useState('');
-  const [isMenuItemSoldOut, setIsMenuItemSoldOut] = useState(false);
-  const [selectedMenuOptions, setSelectedMenuOptions] = useState('');
-  const [, dispatch] = useStateValue();
-  const [loading, setLoading] = useState(false);
 
   const onSelectOptionItem = (val, menuOptionIndex, optionItemIndex) => {
     let allSelectedMenuOptions = {...selectedMenuOptions};
@@ -209,7 +211,11 @@ const EditMenu = ({navigation, ...props}) => {
               }}>
               <CheckBox
                 size={20}
-                title={isMenuItemSoldOut ? 'Sold Out' : 'Sold Out?'}
+                title={
+                  isMenuItemSoldOut
+                    ? Languages[selectedLanguage].editMenu.soldOut
+                    : `${Languages[selectedLanguage].editMenu.soldOut}?`
+                }
                 isChecked={isMenuItemSoldOut}
                 onChange={(val) => setIsMenuItemSoldOut(val)}
               />
@@ -243,7 +249,9 @@ const EditMenu = ({navigation, ...props}) => {
                   <Text
                     style={{color: '#000', textAlign: 'center', fontSize: 18}}>
                     {`${item.title} (${
-                      item.is_required ? 'required' : 'optional'
+                      item.is_required
+                        ? Languages[selectedLanguage].editMenu.required
+                        : Languages[selectedLanguage].editMenu.optional
                     })`}
                   </Text>
                   <View style={{marginHorizontal: '2%', marginTop: '2%'}}>
@@ -263,7 +271,11 @@ const EditMenu = ({navigation, ...props}) => {
                               key={item.id}
                               title={`${item.name} (${formatCurrency(
                                 item.price,
-                              )}) ${isSoldOut ? '(Sold Out)' : ''}`}
+                              )}) ${
+                                isSoldOut
+                                  ? `(${Languages[selectedLanguage].editMenu.soldOut})`
+                                  : ''
+                              }`}
                               size={20}
                               isChecked={isSoldOut}
                               onChange={(val) =>
@@ -290,7 +302,7 @@ const EditMenu = ({navigation, ...props}) => {
           marginHorizontal: '5%',
         }}>
         <Button
-          title="Update"
+          title={Languages[selectedLanguage].editMenu.update}
           loading={loading}
           onPress={onUpdateMenu}
           height={45}

@@ -7,8 +7,11 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
+import {StateContext} from '../Services/State/State';
+import Languages from '../Localization/translations';
 
 class Dropdown extends Component {
+  static contextType = StateContext;
   state = {
     isFocused: false,
   };
@@ -38,7 +41,7 @@ class Dropdown extends Component {
       disabled = false,
       ...props
     } = this.props;
-
+    const [{selectedLanguage}] = this.context;
     const labelStyle = {
       position: 'absolute',
       left: 0,
@@ -69,8 +72,11 @@ class Dropdown extends Component {
             title={label}
             options={
               options && options.length > 0
-                ? [...options.map((option) => option[labelField]), 'Cancel']
-                : ['Cancel']
+                ? [
+                    ...options.map((option) => option[labelField]),
+                    Languages[selectedLanguage].messages.cancel,
+                  ]
+                : [Languages[selectedLanguage].messages.cancel]
             }
             cancelButtonIndex={options.length}
             destructiveButtonIndex={options.length}

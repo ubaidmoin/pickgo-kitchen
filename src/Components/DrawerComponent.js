@@ -2,54 +2,57 @@ import {Image, StatusBar, Text, View} from 'react-native';
 import React from 'react';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Button from './Button';
 import Ripple from './Ripple';
 import {useStateValue} from '../Services/State/State';
 import {setUserInfo} from '../Services/DataManager';
 import {actions} from '../Services/State/Reducer';
 import {settings as s} from '../Services/Settings';
+import Languages from '../Localization/translations';
 
 const Drawer = ({navigation}) => {
+  const [{userInfo, selectedLanguage}, dispatch] = useStateValue();
   const drawerMenu = [
     {
       icon: <MaterialIcon name="dinner-dining" color={'#fff'} size={20} />,
-      title: 'Tables',
-      subTitle: 'Manage Tables',
+      title: Languages[selectedLanguage].tables.drawerTitle,
       onPress: () => navigation.navigate('Tables'),
     },
     {
       icon: <MaterialIcon name="dinner-dining" color={'#fff'} size={20} />,
-      title: 'Reservations',
-      subTitle: 'See Reservations',
+      title: Languages[selectedLanguage].reservations.drawerTitle,
       onPress: () => navigation.navigate('Reservations'),
     },
     {
-      icon: <MaterialIcon name="fastfood" color={'#fff'} size={20} />,
-      title: 'Menu Orders',
-      subTitle: 'Manage Orders',
-      onPress: () => navigation.navigate('MenuOrders'),
+      icon: (
+        <FontAwesome5Icon name="file-invoice-dollar" color={'#fff'} size={20} />
+      ),
+      title: Languages[selectedLanguage].salesReport.drawerTitle,
+      onPress: () => navigation.navigate('SalesReport'),
     },
-    {
-      icon: <IonIcon name="search" color={'#fff'} size={20} />,
-      title: 'Search',
-      subTitle: 'Search Users',
-      onPress: () => navigation.navigate('SearchUsers'),
-    },
+    // {
+    //   icon: <MaterialIcon name="fastfood" color={'#fff'} size={20} />,
+    //   title: Languages[selectedLanguage].menuOrders.drawerTitle,
+    //   onPress: () => navigation.navigate('MenuOrders'),
+    // },
+    // {
+    //   icon: <IonIcon name="search" color={'#fff'} size={20} />,
+    //   title: Languages[selectedLanguage].search.drawerTitle,
+    //   subTitle: Languages[selectedLanguage].search.drawerSubTitle,
+    //   onPress: () => navigation.navigate('SearchUsers'),
+    // },
     {
       icon: <IonIcon name="notifications" color={'#fff'} size={20} />,
-      title: 'Notification Center',
-      subTitle: 'Manage Notifications',
+      title: Languages[selectedLanguage].notificationCenter.drawerTitle,
       onPress: () => navigation.navigate('NotificationCenter'),
     },
     {
       icon: <IonIcon name="settings-sharp" color={'#fff'} size={20} />,
-      title: 'Settings',
-      subTitle: 'Printer, Terminal, Test Push, Manage Menu',
+      title: Languages[selectedLanguage].settings.drawerTitle,
       onPress: () => navigation.navigate('Settings'),
     },
   ];
-
-  const [{userInfo}, dispatch] = useStateValue();
 
   const {first_name = '', last_name = '', email_address = '', picture = ''} =
     (userInfo && userInfo.user) || {};
@@ -119,12 +122,18 @@ const Drawer = ({navigation}) => {
               {menuItem.icon}
             </View>
             <View style={{flex: 0.8}}>
-              <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 12}}>
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  color: '#fff',
+                  fontSize: 14,
+                  paddingVertical: 5,
+                }}>
                 {menuItem.title}
               </Text>
-              <Text style={{color: '#fff', fontSize: 10, marginTop: 2}}>
+              {/* <Text style={{color: '#fff', fontSize: 10, marginTop: 2}}>
                 {menuItem.subTitle}
-              </Text>
+              </Text> */}
             </View>
             <View style={{flex: 0.05}}>
               <IonIcon
@@ -137,7 +146,7 @@ const Drawer = ({navigation}) => {
         ))}
         <View style={{marginHorizontal: '10%', marginVertical: '10%'}}>
           <Button
-            title="Logout"
+            title={Languages[selectedLanguage].messages.logout}
             color="#fff"
             textColor="#000"
             icon={<MaterialIcon size={20} color="#000" name="logout" />}

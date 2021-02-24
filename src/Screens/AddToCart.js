@@ -29,6 +29,7 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {getNotificationCount} from '../Services/DataManager';
+import Languages from '../Localization/translations';
 
 const AddToCart = ({navigation, ...props}) => {
   useEffect(() => {
@@ -38,6 +39,17 @@ const AddToCart = ({navigation, ...props}) => {
     });
   }, []);
 
+  const [menu, setMenu] = useState('');
+  const [selectedCompanyHours, setSelectedCompanyHours] = useState('');
+  const [menuCourses, setMenuCourses] = useState([]);
+  const [selectedMenuCourse, setSelectedMenuCourse] = useState('');
+  const [amount, setAmount] = useState('');
+  const [showMenu, setShowMenu] = useState(false);
+  const [tableDetails, setTableDetails] = useState('');
+  const [discountAmountApplied, setDiscountAmountApplied] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [{isWideScreen, selectedLanguage}, dispatch] = useStateValue();
+
   const refreshScreen = () => {
     getNotificationCount().then((notificationCount) =>
       navigation.setParams({notificationCount}),
@@ -45,7 +57,9 @@ const AddToCart = ({navigation, ...props}) => {
     fetchMenu();
     const {table = null} = props.route.params || {};
     if (table && table.id) {
-      navigation.setParams({title: `Add to ${table.name}`});
+      navigation.setParams({
+        title: `${Languages[selectedLanguage].addToCart.addTo} ${table.name}`,
+      });
       fetchTableDetails(table.id);
     }
   };
@@ -73,11 +87,10 @@ const AddToCart = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.1',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -113,11 +126,10 @@ const AddToCart = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -153,7 +165,7 @@ const AddToCart = ({navigation, ...props}) => {
           ) {
             const companyHours = companyHoursToday[0];
             setSelectedCompanyHours({
-              label: `${companyHours.name} (from ${companyHours.time_from} to ${companyHours.time_to})`,
+              label: `${companyHours.name} (${Languages[selectedLanguage].addToCart.from} ${companyHours.time_from} ${Languages[selectedLanguage].addToCart.to} ${companyHours.time_to})`,
             });
             const {menuCourses = []} = companyHours || {};
             if (menuCourses && menuCourses.length > 0 && menuCourses[0]) {
@@ -167,10 +179,10 @@ const AddToCart = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -180,10 +192,10 @@ const AddToCart = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -193,11 +205,10 @@ const AddToCart = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -218,10 +229,10 @@ const AddToCart = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'warn',
-            title: `Field Required`,
-            message: 'Please enter amount',
+            title: Languages[selectedLanguage].messages.fieldRequired,
+            message: Languages[selectedLanguage].messages.pleaseEnterAmount,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
         return;
@@ -245,7 +256,9 @@ const AddToCart = ({navigation, ...props}) => {
           refreshScreen();
           setAmount('');
           ToastAndroid.show(
-            message ? message : 'Custom Amount is added to order successfully.',
+            message
+              ? message
+              : Languages[selectedLanguage].messages.customerAmountAdded,
             ToastAndroid.LONG,
           );
         } else {
@@ -254,10 +267,10 @@ const AddToCart = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -267,10 +280,10 @@ const AddToCart = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -280,11 +293,10 @@ const AddToCart = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.1',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -308,7 +320,7 @@ const AddToCart = ({navigation, ...props}) => {
         const {table = {}, transactions = []} = result || {};
         if (table && table.id && transactions && transactions.length > 0) {
           ToastAndroid.show(
-            'Order sent to kitchen successfully.',
+            Languages[selectedLanguage].messages.orderSentToKitchen,
             ToastAndroid.LONG,
           );
           refreshScreen();
@@ -318,10 +330,10 @@ const AddToCart = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -331,10 +343,10 @@ const AddToCart = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -344,11 +356,10 @@ const AddToCart = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -366,12 +377,17 @@ const AddToCart = ({navigation, ...props}) => {
       alertSettings: {
         show: true,
         type: 'warn',
-        title: 'Remove Cart Item',
-        message: `Do you really want to remove ${cartItem.menu_name} from cart?`,
+        title: Languages[selectedLanguage].messages.removeCartItemTitle,
+        message: Languages[
+          selectedLanguage
+        ].messages.removeCartItemMessage.replace(
+          '${cartItem.menu_name}',
+          cartItem.menu_name,
+        ),
         showConfirmButton: true,
         showCancelButton: true,
-        confirmText: 'Ok',
-        cancelText: 'Cancel',
+        confirmText: Languages[selectedLanguage].messages.ok,
+        cancelText: Languages[selectedLanguage].messages.cancel,
         onConfirmPressed: () => {
           deleteCartItem(cartItem);
         },
@@ -392,7 +408,7 @@ const AddToCart = ({navigation, ...props}) => {
         if (success && model && model.id) {
           refreshScreen();
           ToastAndroid.show(
-            'Menu item deleted successfully.',
+            Languages[selectedLanguage].messages.menuItemDeleted,
             ToastAndroid.LONG,
           );
         } else {
@@ -401,10 +417,10 @@ const AddToCart = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -414,10 +430,10 @@ const AddToCart = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -427,11 +443,10 @@ const AddToCart = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -443,23 +458,12 @@ const AddToCart = ({navigation, ...props}) => {
     }
   };
 
-  const [menu, setMenu] = useState('');
-  const [selectedCompanyHours, setSelectedCompanyHours] = useState('');
-  const [menuCourses, setMenuCourses] = useState([]);
-  const [selectedMenuCourse, setSelectedMenuCourse] = useState('');
-  const [amount, setAmount] = useState('');
-  const [showMenu, setShowMenu] = useState(false);
-  const [tableDetails, setTableDetails] = useState('');
-  const [discountAmountApplied, setDiscountAmountApplied] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [{isWideScreen}, dispatch] = useStateValue();
-
   const {companyHoursToday = []} = menu || {};
 
   const getCompanyHours = () => {
     if (companyHoursToday && companyHoursToday.length > 0) {
       return companyHoursToday.map((item) => ({
-        label: `${item.name} (from ${item.time_from} to ${item.time_to})`,
+        label: `${item.name} (${Languages[selectedLanguage].addToCart.from} ${item.time_from} ${Languages[selectedLanguage].addToCart.to} ${item.time_to})`,
       }));
     } else {
       return [];
@@ -505,7 +509,7 @@ const AddToCart = ({navigation, ...props}) => {
           }}>
           <View style={{height: 0, width: 0, opacity: 0}}>
             <Dropdown
-              label="Select One"
+              label={Languages[selectedLanguage].messages.selectOne}
               options={getCompanyHours()}
               selected={selectedCompanyHours}
               onSelect={onSelectCompanyHours}
@@ -513,19 +517,25 @@ const AddToCart = ({navigation, ...props}) => {
             />
           </View>
           <AntIcon name="clockcircleo" size={20} color="#000" />
-          <Text style={{color: '#000', fontSize: 12}}>Menu</Text>
+          <Text style={{color: '#000', fontSize: 12}}>
+            {Languages[selectedLanguage].addToCart.menu}
+          </Text>
         </Ripple>
         <View style={{width: '65%', maxWidth: 190}}>
           <Input
             type="number"
             value={amount}
-            label="Enter Amount"
+            label={Languages[selectedLanguage].addToCart.enterAmount}
             keyboardType="phone-pad"
             onChangeText={(val) => setAmount(val)}
           />
         </View>
         <View style={{marginLeft: '2%', width: '20%', maxWidth: 60}}>
-          <Button title="Add" onPress={onAddAmount} height={40} />
+          <Button
+            title={Languages[selectedLanguage].addToCart.add}
+            onPress={onAddAmount}
+            height={40}
+          />
         </View>
       </View>
       {isWideScreen ? (
@@ -649,7 +659,8 @@ const AddToCart = ({navigation, ...props}) => {
                     }}>
                     <EntypoIcon name="chevron-right" size={18} />
                     <Text style={{fontWeight: 'bold'}}>
-                      Order Details: {table && table.name ? table.name : ''}
+                      {Languages[selectedLanguage].addToCart.orderDetails}:
+                      {table && table.name ? table.name : ''}
                     </Text>
                   </View>
                   <FlatList
@@ -756,7 +767,7 @@ const AddToCart = ({navigation, ...props}) => {
                               marginTop: 5,
                               textAlign: 'justify',
                             }}>
-                            {`Notes: ${item.notes}`}
+                            {`${Languages[selectedLanguage].addToCart.notes}: ${item.notes}`}
                           </Text>
                         ) : null}
                       </View>
@@ -778,16 +789,23 @@ const AddToCart = ({navigation, ...props}) => {
                         padding: '3%',
                         borderRadius: 5,
                       }}>
-                      <Text style={styles.header}>Summary</Text>
+                      <Text style={styles.header}>
+                        {Languages[selectedLanguage].addToCart.summary}
+                      </Text>
                       <View style={styles.row}>
-                        <Text style={styles.rowText}>Subtotal</Text>
+                        <Text style={styles.rowText}>
+                          {Languages[selectedLanguage].addToCart.subtotal}
+                        </Text>
                         <Text style={styles.rowText}>
                           {formatCurrency(summary.subtotal, true)}
                         </Text>
                       </View>
                       <View style={styles.row}>
                         <Text style={{...styles.rowText, color: '#f00'}}>
-                          Credits Discounted
+                          {
+                            Languages[selectedLanguage].addToCart
+                              .creditsDiscounted
+                          }
                         </Text>
                         <Text style={{...styles.rowText, color: '#f00'}}>
                           {`- ${formatCurrency(
@@ -800,7 +818,9 @@ const AddToCart = ({navigation, ...props}) => {
                       </View>
                       <View style={styles.divider} />
                       <View style={{...styles.row}}>
-                        <Text style={styles.rowText}>New Subtotal</Text>
+                        <Text style={styles.rowText}>
+                          {Languages[selectedLanguage].addToCart.newSubtotal}
+                        </Text>
                         <Text style={styles.rowText}>
                           {formatCurrency(
                             parseFloat(summary.subtotal) -
@@ -813,7 +833,7 @@ const AddToCart = ({navigation, ...props}) => {
                       </View>
                       <View style={styles.row}>
                         <Text style={{...styles.rowText, color: '#27ae61'}}>
-                          Tax
+                          {Languages[selectedLanguage].addToCart.tax}
                         </Text>
                         <Text style={{...styles.rowText, color: '#27ae61'}}>
                           {`+ ${formatCurrency(summary.tax, true)}`}
@@ -821,7 +841,7 @@ const AddToCart = ({navigation, ...props}) => {
                       </View>
                       <View style={styles.row}>
                         <Text style={{...styles.rowText, color: '#27ae61'}}>
-                          Tips
+                          {Languages[selectedLanguage].addToCart.tips}
                         </Text>
                         <Text style={{...styles.rowText, color: '#27ae61'}}>
                           {`+ ${formatCurrency(summary.tips, true)}`}
@@ -829,7 +849,9 @@ const AddToCart = ({navigation, ...props}) => {
                       </View>
                       <View style={styles.divider} />
                       <View style={{...styles.row}}>
-                        <Text style={styles.rowText}>Order Total</Text>
+                        <Text style={styles.rowText}>
+                          {Languages[selectedLanguage].addToCart.orderTotal}
+                        </Text>
                         <Text style={styles.rowText}>
                           {formatCurrency(
                             parseFloat(summary.subtotal) -
@@ -853,7 +875,7 @@ const AddToCart = ({navigation, ...props}) => {
                     }}>
                     <View style={{width: '49%'}}>
                       <Button
-                        title="Send"
+                        title={Languages[selectedLanguage].addToCart.send}
                         loading={loading}
                         onPress={onSendToKitchen}
                         height={45}
@@ -861,7 +883,9 @@ const AddToCart = ({navigation, ...props}) => {
                     </View>
                     <View style={{width: '49%'}}>
                       <Button
-                        title="Make Payment"
+                        title={
+                          Languages[selectedLanguage].addToCart.makePayment
+                        }
                         disabled={!(summary && summary.subtotal)}
                         loading={loading}
                         onPress={() =>
@@ -987,7 +1011,8 @@ const AddToCart = ({navigation, ...props}) => {
                 }}>
                 <EntypoIcon name="chevron-right" size={18} />
                 <Text style={{fontWeight: 'bold'}}>
-                  Order Details: {table && table.name ? table.name : ''}
+                  {Languages[selectedLanguage].addToCart.orderDetails}:{' '}
+                  {table && table.name ? table.name : ''}
                 </Text>
               </View>
               <FlatList
@@ -1092,7 +1117,7 @@ const AddToCart = ({navigation, ...props}) => {
                           marginTop: 5,
                           textAlign: 'justify',
                         }}>
-                        {`Notes: ${item.notes}`}
+                        {`${Languages[selectedLanguage].addToCart.notes}: ${item.notes}`}
                       </Text>
                     ) : null}
                   </View>
@@ -1114,16 +1139,20 @@ const AddToCart = ({navigation, ...props}) => {
                     padding: '3%',
                     borderRadius: 5,
                   }}>
-                  <Text style={styles.header}>Summary</Text>
+                  <Text style={styles.header}>
+                    {Languages[selectedLanguage].addToCart.summary}
+                  </Text>
                   <View style={styles.row}>
-                    <Text style={styles.rowText}>Subtotal</Text>
+                    <Text style={styles.rowText}>
+                      {Languages[selectedLanguage].addToCart.subtotal}
+                    </Text>
                     <Text style={styles.rowText}>
                       {formatCurrency(summary.subtotal, true)}
                     </Text>
                   </View>
                   <View style={styles.row}>
                     <Text style={{...styles.rowText, color: '#f00'}}>
-                      Credits Discounted
+                      {Languages[selectedLanguage].addToCart.creditsDiscounted}
                     </Text>
                     <Text style={{...styles.rowText, color: '#f00'}}>
                       {`- ${formatCurrency(
@@ -1136,7 +1165,9 @@ const AddToCart = ({navigation, ...props}) => {
                   </View>
                   <View style={styles.divider} />
                   <View style={{...styles.row}}>
-                    <Text style={styles.rowText}>New Subtotal</Text>
+                    <Text style={styles.rowText}>
+                      {Languages[selectedLanguage].addToCart.newSubtotal}
+                    </Text>
                     <Text style={styles.rowText}>
                       {formatCurrency(
                         parseFloat(summary.subtotal) -
@@ -1149,7 +1180,7 @@ const AddToCart = ({navigation, ...props}) => {
                   </View>
                   <View style={styles.row}>
                     <Text style={{...styles.rowText, color: '#27ae61'}}>
-                      Tax
+                      {Languages[selectedLanguage].addToCart.tax}
                     </Text>
                     <Text style={{...styles.rowText, color: '#27ae61'}}>
                       {`+ ${formatCurrency(summary.tax, true)}`}
@@ -1157,7 +1188,7 @@ const AddToCart = ({navigation, ...props}) => {
                   </View>
                   <View style={styles.row}>
                     <Text style={{...styles.rowText, color: '#27ae61'}}>
-                      Tips
+                      {Languages[selectedLanguage].addToCart.tips}
                     </Text>
                     <Text style={{...styles.rowText, color: '#27ae61'}}>
                       {`+ ${formatCurrency(summary.tips, true)}`}
@@ -1165,7 +1196,9 @@ const AddToCart = ({navigation, ...props}) => {
                   </View>
                   <View style={styles.divider} />
                   <View style={{...styles.row}}>
-                    <Text style={styles.rowText}>Order Total</Text>
+                    <Text style={styles.rowText}>
+                      {Languages[selectedLanguage].addToCart.orderTotal}
+                    </Text>
                     <Text style={styles.rowText}>
                       {formatCurrency(
                         parseFloat(summary.subtotal) -
@@ -1189,7 +1222,7 @@ const AddToCart = ({navigation, ...props}) => {
                 }}>
                 <View style={{width: '49%'}}>
                   <Button
-                    title="Send"
+                    title={Languages[selectedLanguage].addToCart.send}
                     loading={loading}
                     onPress={onSendToKitchen}
                     height={45}
@@ -1197,7 +1230,7 @@ const AddToCart = ({navigation, ...props}) => {
                 </View>
                 <View style={{width: '49%'}}>
                   <Button
-                    title="Make Payment"
+                    title={Languages[selectedLanguage].addToCart.makePayment}
                     disabled={!(summary && summary.subtotal)}
                     loading={loading}
                     onPress={() =>

@@ -6,6 +6,7 @@ import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import {getReservations} from '../Services/API/APIManager';
 import {getNotificationCount} from '../Services/DataManager';
+import Languages from '../Localization/translations';
 
 const Reservations = ({navigation}) => {
   useEffect(() => {
@@ -13,7 +14,7 @@ const Reservations = ({navigation}) => {
     return navigation.addListener('focus', () => fetchReservations);
   }, []);
 
-  const [, dispatch] = useStateValue();
+  const [{selectedLanguage}, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
   const [reservations, setReservations] = useState([]);
   const [selected, setSelected] = useState(0);
@@ -41,11 +42,10 @@ const Reservations = ({navigation}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -67,7 +67,10 @@ const Reservations = ({navigation}) => {
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <View style={{marginHorizontal: '3%', marginBottom: '1%', zIndex: 1}}>
         <Switcher
-          options={[{title: 'Pending'}, {title: 'Past'}]}
+          options={[
+            {title: Languages[selectedLanguage].reservations.pending},
+            {title: Languages[selectedLanguage].reservations.past},
+          ]}
           selected={selected}
           onChange={(val) => setSelected(val)}
         />
@@ -93,7 +96,9 @@ const Reservations = ({navigation}) => {
                 ...styles.itemTitle,
                 color: item.type && parseInt(item.type) === 3 ? '#fff' : '#000',
               }}
-              numberOfLines={1}>{`Order #${item.c_oid}`}</Text>
+              numberOfLines={
+                1
+              }>{`${Languages[selectedLanguage].reservations.order} #${item.c_oid}`}</Text>
             <Text
               style={{
                 ...styles.itemTitle,
@@ -113,7 +118,9 @@ const Reservations = ({navigation}) => {
                 ...styles.itemTitle,
                 color: item.type && parseInt(item.type) === 3 ? '#fff' : '#000',
               }}>
-              {`Total Orders ${formatCurrency(item.subtotal)}`}
+              {`${
+                Languages[selectedLanguage].reservations.totalOrders
+              } ${formatCurrency(item.subtotal)}`}
             </Text>
           </Ripple>
         )}

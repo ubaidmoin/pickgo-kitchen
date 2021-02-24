@@ -26,6 +26,7 @@ import {
 } from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
+import Languages from '../Localization/translations';
 
 const TableCart = ({navigation, ...props}) => {
   useEffect(() => {
@@ -43,6 +44,8 @@ const TableCart = ({navigation, ...props}) => {
   const [tableDetails, setTableDetails] = useState('');
   const [amount, setAmount] = useState('');
   const [discountAmountApplied, setDiscountAmountApplied] = useState(0);
+  const [{selectedLanguage}, dispatch] = useStateValue();
+  const [loading, setLoading] = useState(false);
 
   const refreshScreen = (table_id = tableId) => {
     getNotificationCount().then((notificationCount) =>
@@ -81,10 +84,10 @@ const TableCart = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -95,11 +98,10 @@ const TableCart = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -135,11 +137,10 @@ const TableCart = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -151,9 +152,6 @@ const TableCart = ({navigation, ...props}) => {
     }
   };
 
-  const [, dispatch] = useStateValue();
-  const [loading, setLoading] = useState(false);
-
   const addItems = () =>
     navigation.navigate('AddToCart', {table: tableDetails.table});
 
@@ -163,12 +161,17 @@ const TableCart = ({navigation, ...props}) => {
       alertSettings: {
         show: true,
         type: 'warn',
-        title: 'Remove Cart Item',
-        message: `Do you really want to remove ${cartItem.menu_name} from cart?`,
+        title: Languages[selectedLanguage].messages.removeCartItemTitle,
+        message: Languages[
+          selectedLanguage
+        ].messages.removeCartItemMessage.replace(
+          '${cartItem.menu_name}',
+          cartItem.menu_name,
+        ),
         showConfirmButton: true,
         showCancelButton: true,
-        confirmText: 'Ok',
-        cancelText: 'Cancel',
+        confirmText: Languages[selectedLanguage].messages.ok,
+        cancelText: Languages[selectedLanguage].messages.cancel,
         onConfirmPressed: () => {
           deleteCartItem(cartItem);
         },
@@ -188,7 +191,7 @@ const TableCart = ({navigation, ...props}) => {
         const {success = false, model = {}} = result.data || {};
         if (success && model && model.id) {
           ToastAndroid.show(
-            'Menu item deleted successfully.',
+            Languages[selectedLanguage].messages.menuItemDeleted,
             ToastAndroid.LONG,
           );
           refreshScreen();
@@ -198,10 +201,10 @@ const TableCart = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -211,10 +214,10 @@ const TableCart = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -224,11 +227,10 @@ const TableCart = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -252,7 +254,7 @@ const TableCart = ({navigation, ...props}) => {
         const {table = {}, transactions = []} = result || {};
         if (table && table.id && transactions && transactions.length > 0) {
           ToastAndroid.show(
-            'Order sent to kitchen successfully.',
+            Languages[selectedLanguage].messages.orderSentToKitchen,
             ToastAndroid.LONG,
           );
           refreshScreen();
@@ -262,10 +264,10 @@ const TableCart = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -275,10 +277,10 @@ const TableCart = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -288,11 +290,10 @@ const TableCart = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -313,10 +314,10 @@ const TableCart = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'warn',
-            title: `Field Required`,
-            message: 'Please enter amount',
+            title: Languages[selectedLanguage].messages.fieldRequired,
+            message: Languages[selectedLanguage].messages.pleaseEnterAmount,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
         return;
@@ -339,7 +340,9 @@ const TableCart = ({navigation, ...props}) => {
         if (success) {
           setAmount('');
           ToastAndroid.show(
-            message ? message : 'Custom Amount is added to order successfully.',
+            message
+              ? message
+              : Languages[selectedLanguage].messages.customerAmountAdded,
             ToastAndroid.LONG,
           );
           refreshScreen(tableId);
@@ -349,10 +352,10 @@ const TableCart = ({navigation, ...props}) => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
-              message: 'Please try again later.',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -362,10 +365,10 @@ const TableCart = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'error',
-            title: 'An Error Occured',
-            message: 'Please try again later.',
+            title: Languages[selectedLanguage].messages.errorOccured,
+            message: Languages[selectedLanguage].messages.tryAgainLater,
             showConfirmButton: true,
-            confirmText: 'Ok',
+            confirmText: Languages[selectedLanguage].messages.ok,
           },
         });
       }
@@ -375,11 +378,10 @@ const TableCart = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -410,16 +412,22 @@ const TableCart = ({navigation, ...props}) => {
           <Input
             type="number"
             value={amount}
-            label="Enter Amount"
+            label={Languages[selectedLanguage].tableCart.enterAmount}
             keyboardType="phone-pad"
             onChangeText={(val) => setAmount(val)}
           />
         </View>
         <View style={{width: '18%', marginLeft: '2%'}}>
-          <Button title="Add" onPress={onAddAmount} height={40} />
+          <Button
+            title={Languages[selectedLanguage].tableCart.add}
+            onPress={onAddAmount}
+            height={40}
+          />
         </View>
         <View style={{width: '15%'}}>
-          <Text style={{textAlign: 'center'}}>OR</Text>
+          <Text style={{textAlign: 'center'}}>
+            {Languages[selectedLanguage].tableCart.or}
+          </Text>
         </View>
         <Ripple
           onPress={addItems}
@@ -548,7 +556,7 @@ const TableCart = ({navigation, ...props}) => {
                         marginTop: 5,
                         textAlign: 'justify',
                       }}>
-                      {`Notes: ${item.notes}`}
+                      {`${Languages[selectedLanguage].tableCart.notes}: ${item.notes}`}
                     </Text>
                   ) : null}
                 </View>
@@ -571,16 +579,20 @@ const TableCart = ({navigation, ...props}) => {
                   padding: '3%',
                   borderRadius: 5,
                 }}>
-                <Text style={styles.header}>Summary</Text>
+                <Text style={styles.header}>
+                  {Languages[selectedLanguage].tableCart.summary}
+                </Text>
                 <View style={styles.row}>
-                  <Text style={styles.rowText}>Subtotal</Text>
+                  <Text style={styles.rowText}>
+                    {Languages[selectedLanguage].tableCart.subtotal}
+                  </Text>
                   <Text style={styles.rowText}>
                     {formatCurrency(summary.subtotal, true)}
                   </Text>
                 </View>
                 <View style={styles.row}>
                   <Text style={{...styles.rowText, color: '#f00'}}>
-                    Credits Discounted
+                    {Languages[selectedLanguage].tableCart.creditsDiscounted}
                   </Text>
                   <Text style={{...styles.rowText, color: '#f00'}}>
                     {`- ${formatCurrency(
@@ -593,7 +605,9 @@ const TableCart = ({navigation, ...props}) => {
                 </View>
                 <View style={styles.divider} />
                 <View style={{...styles.row}}>
-                  <Text style={styles.rowText}>New Subtotal</Text>
+                  <Text style={styles.rowText}>
+                    {Languages[selectedLanguage].tableCart.newSubtotal}
+                  </Text>
                   <Text style={styles.rowText}>
                     {formatCurrency(
                       parseFloat(summary.subtotal) -
@@ -605,14 +619,16 @@ const TableCart = ({navigation, ...props}) => {
                   </Text>
                 </View>
                 <View style={styles.row}>
-                  <Text style={{...styles.rowText, color: '#27ae61'}}>Tax</Text>
+                  <Text style={{...styles.rowText, color: '#27ae61'}}>
+                    {Languages[selectedLanguage].tableCart.tax}
+                  </Text>
                   <Text style={{...styles.rowText, color: '#27ae61'}}>
                     {`+ ${formatCurrency(summary.tax, true)}`}
                   </Text>
                 </View>
                 <View style={styles.row}>
                   <Text style={{...styles.rowText, color: '#27ae61'}}>
-                    Tips
+                    {Languages[selectedLanguage].tableCart.tips}
                   </Text>
                   <Text style={{...styles.rowText, color: '#27ae61'}}>
                     {`+ ${formatCurrency(summary.tips, true)}`}
@@ -620,7 +636,9 @@ const TableCart = ({navigation, ...props}) => {
                 </View>
                 <View style={styles.divider} />
                 <View style={{...styles.row}}>
-                  <Text style={styles.rowText}>Order Total</Text>
+                  <Text style={styles.rowText}>
+                    {Languages[selectedLanguage].tableCart.orderTotal}
+                  </Text>
                   <Text style={styles.rowText}>
                     {formatCurrency(
                       parseFloat(summary.subtotal) -
@@ -648,7 +666,7 @@ const TableCart = ({navigation, ...props}) => {
             }}>
             <View style={{width: '49%'}}>
               <Button
-                title="Send"
+                title={Languages[selectedLanguage].tableCart.send}
                 loading={loading}
                 onPress={onSendToKitchen}
                 height={45}
@@ -656,7 +674,7 @@ const TableCart = ({navigation, ...props}) => {
             </View>
             <View style={{width: '49%'}}>
               <Button
-                title="Make Payment"
+                title={Languages[selectedLanguage].tableCart.makePayment}
                 disabled={!(summary && summary.subtotal)}
                 loading={loading}
                 onPress={() => navigation.navigate('Payment', {tableId})}

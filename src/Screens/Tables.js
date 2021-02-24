@@ -12,6 +12,7 @@ import {
 } from '../Services/DataManager';
 import PushNotification from 'react-native-push-notification';
 import moment from 'moment';
+import Languages from '../Localization/translations';
 
 PushNotification.configure({
   onRegister: async (info) => {
@@ -87,7 +88,7 @@ const Tables = ({navigation}) => {
     return navigation.addListener('focus', () => fetchTables());
   }, []);
 
-  const [{tables = []}, dispatch] = useStateValue();
+  const [{tables = [], selectedLanguage}, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
 
   const fetchTables = async () => {
@@ -121,11 +122,10 @@ const Tables = ({navigation}) => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {

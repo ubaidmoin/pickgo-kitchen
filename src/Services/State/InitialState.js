@@ -4,4 +4,5 @@ export const initialState = {
   alertSettings: {settings: {}, promise: null},
   tables: [],
   isWideScreen: false,
+  selectedLanguage: 'en',
 };

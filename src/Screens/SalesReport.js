@@ -4,7 +4,7 @@ import {getNotificationCount} from '../Services/DataManager';
 import Languages from '../Localization/translations';
 import {useStateValue} from '../Services/State/State';
 
-const SearchUsers = ({navigation}) => {
+const SalesReport = ({navigation}) => {
   useEffect(() => {
     return navigation.addListener('focus', () =>
       getNotificationCount().then((notificationCount) =>
@@ -17,9 +17,9 @@ const SearchUsers = ({navigation}) => {
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>{Languages[selectedLanguage].search.title}</Text>
+      <Text>{Languages[selectedLanguage].salesReport.title}</Text>
     </View>
   );
 };
 
-export default SearchUsers;
+export default SalesReport;
