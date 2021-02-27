@@ -1,5 +1,11 @@
 export default {
   en: {
+    login: {
+      appName: 'PickEat Admin',
+      email: 'Email',
+      password: 'Password',
+      login: 'Login',
+    },
     tables: {
       title: 'Tables',
       drawerTitle: 'Tables',
@@ -116,6 +122,21 @@ export default {
     salesReport: {
       title: 'Sales Report',
       drawerTitle: 'Sales Report',
+      todaySale: 'Today Sale',
+      all: 'All',
+      showDetails: 'Show Details?',
+      orderItemDetails: 'Order Item Details',
+      payment: 'Payment',
+      card: 'Card',
+      Cash: 'Cash',
+      onePay: 'OnePay',
+      tax: 'Tax',
+      tips: 'Tips',
+      discount: 'Discount',
+      fees: 'Fees',
+      availableBalance: 'Available Balance',
+      deposited: 'Deposited',
+      subtotal: 'Subtotal',
     },
     menuOrders: {
       title: 'Menu Orders',
@@ -160,6 +181,9 @@ export default {
       update: 'Update',
     },
     messages: {
+      emailRequired: 'Email Required',
+      passwordRequired: 'Password Required',
+      invalidEmail: 'Invalid Email',
       pleaseWait: 'Please Wait',
       logout: 'Logout',
       errorOccured: 'Error Occured',
@@ -199,6 +223,12 @@ export default {
     },
   },
   lo: {
+    login: {
+      appName: 'ເລືອກກິນ ບໍລິຫານ',
+      email: 'ອີເມວ',
+      password: 'ລະຫັດຜ່ານ',
+      login: 'ເຂົ້າ​ສູ່​ລະ​ບົບ',
+    },
     tables: {
       title: 'ໂຕະ',
       drawerTitle: 'ໂຕະ',
@@ -315,6 +345,21 @@ export default {
     salesReport: {
       title: 'ບົດລາຍງານການຂາຍ',
       drawerTitle: 'ບົດລາຍງານການຂາຍ',
+      todaySale: 'ຂາຍມື້ນີ້',
+      all: 'ທັງ ໝົດ',
+      showDetails: 'ສະ​ແດງ​ລາຍ​ລະ​ອຽດ?',
+      orderItemDetails: 'ລາຍລະອຽດສິນຄ້າສັ່ງ',
+      payment: 'ການຈ່າຍເງິນ',
+      card: 'ບັດ',
+      Cash: 'ເງິນສົດ',
+      onePay: 'ໜຶ່ງ ຈ່າຍ',
+      tax: 'ພາສີ',
+      tips: 'ຄຳ ແນະ ນຳ',
+      discount: 'ຫຼຸດລາຄາ',
+      fees: 'ຄ່າ ທຳ ນຽມ',
+      availableBalance: 'ຍອດຍັງເຫຼືອ',
+      deposited: 'ຝາກ',
+      subtotal: 'ທັງ ໝົດ',
     },
     menuOrders: {
       title: 'ຄຳ ສັ່ງເມນູ',
@@ -359,6 +404,9 @@ export default {
       update: 'ປັບປຸງໃຫ້ທັນ',
     },
     messages: {
+      emailRequired: 'ຕ້ອງການອີເມວ',
+      passwordRequired: 'ຕ້ອງການລະຫັດຜ່ານ',
+      invalidEmail: 'ອີເມວທີ່ບໍ່ຖືກຕ້ອງ',
       pleaseWait: 'ກະ​ລຸ​ນາ​ລໍ​ຖ້າ',
       logout: 'ອອກ​ຈາກ​ລະ​ບົບ',
       errorOccured: 'ເກີດຄວາມຜິດພາດ',
@@ -394,6 +442,12 @@ export default {
     },
   },
   th: {
+    login: {
+      appName: 'เลือกกินแอดมิน',
+      email: 'อีเมล์',
+      password: 'รหัสผ่าน',
+      login: 'เข้าสู่ระบบ',
+    },
     tables: {
       title: 'โต๊ะ',
       drawerTitle: 'โต๊ะ',
@@ -510,6 +564,21 @@ export default {
     salesReport: {
       title: 'รายงานการขาย',
       drawerTitle: 'รายงานการขาย',
+      todaySale: 'ขายวันนี้',
+      all: 'ทั้งหมด',
+      showDetails: 'แสดงรายละเอียด?',
+      orderItemDetails: 'รายละเอียดรายการสั่งซื้อ',
+      payment: 'การชำระเงิน',
+      card: 'การ์ด',
+      Cash: 'เงินสด',
+      onePay: 'จ่ายครั้งเดียว',
+      tax: 'ภาษี',
+      tips: 'เคล็ดลับ',
+      discount: 'ส่วนลด',
+      fees: 'ค่าธรรมเนียม',
+      availableBalance: 'ยอดเงินคงเหลือ',
+      deposited: 'ฝาก',
+      subtotal: 'ผลรวมย่อย',
     },
     menuOrders: {
       title: 'คำสั่งเมนู',
@@ -554,6 +623,9 @@ export default {
       update: 'อัพเดต',
     },
     messages: {
+      emailRequired: 'ต้องระบุอีเมล',
+      passwordRequired: 'ต้องใช้รหัสผ่าน',
+      invalidEmail: 'อีเมลไม่ถูกต้อง',
       pleaseWait: 'โปรดรอ',
       logout: 'ออกจากระบบ',
       errorOccured: 'เกิดข้อผิดพลาด',
@@ -589,6 +661,12 @@ export default {
     },
   },
   ch: {
+    login: {
+      appName: '选择吃管理员',
+      email: '电子邮件',
+      password: '密码',
+      login: '登录',
+    },
     tables: {
       title: '桌子',
       drawerTitle: '桌子',
@@ -705,6 +783,21 @@ export default {
     salesReport: {
       title: '销售报告',
       drawerTitle: '销售报告',
+      todaySale: '今日特卖',
+      all: '全部',
+      showDetails: '显示详细资料?',
+      orderItemDetails: '订单项详细信息',
+      payment: '支付',
+      card: '卡片',
+      Cash: '现金',
+      onePay: '一付',
+      tax: '税',
+      tips: '尖端',
+      discount: '折扣',
+      fees: '费用',
+      availableBalance: '可用余额',
+      deposited: '存入',
+      subtotal: '小计',
     },
     menuOrders: {
       title: '菜单顺序',
@@ -749,6 +842,9 @@ export default {
       update: '更新',
     },
     messages: {
+      emailRequired: '需要电子邮件',
+      passwordRequired: '要求输入密码',
+      invalidEmail: '不合规电邮',
       pleaseWait: '请耐心等待',
       logout: '登出',
       errorOccured: '错误发生',

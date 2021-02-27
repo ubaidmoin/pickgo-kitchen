@@ -7,16 +7,16 @@ import {actions} from '../Services/State/Reducer';
 import {getReservations} from '../Services/API/APIManager';
 import {getNotificationCount} from '../Services/DataManager';
 import Languages from '../Localization/translations';
+import {formatCurrency} from '../Services/Common';
 
 const Reservations = ({navigation}) => {
   useEffect(() => {
     fetchReservations();
-    return navigation.addListener('focus', () => fetchReservations);
+    return navigation.addListener('focus', () => fetchReservations());
   }, []);
 
-  const [{selectedLanguage}, dispatch] = useStateValue();
+  const [{reservations, selectedLanguage}, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
-  const [reservations, setReservations] = useState([]);
   const [selected, setSelected] = useState(0);
 
   const fetchReservations = async () => {
@@ -24,16 +24,26 @@ const Reservations = ({navigation}) => {
       navigation.setParams({notificationCount}),
     );
     try {
-      dispatch({
-        type: actions.SET_PROGRESS_SETTINGS,
-        show: true,
-      });
-      setLoading(true);
+      if (!(reservations && reservations.length > 0)) {
+        dispatch({
+          type: actions.SET_PROGRESS_SETTINGS,
+          show: true,
+        });
+        setLoading(true);
+      }
       const result = await getReservations();
       if (result.data) {
         const {order = []} = result.data || {};
         if (order && order.length > 0) {
-          setReservations(order);
+          dispatch({
+            type: actions.SET_RESERVATIONS,
+            reservations: order,
+          });
+        } else {
+          dispatch({
+            type: actions.SET_RESERVATIONS,
+            reservations: [],
+          });
         }
       }
     } catch (error) {
@@ -55,12 +65,6 @@ const Reservations = ({navigation}) => {
       });
       setLoading(false);
     }
-  };
-
-  const formatCurrency = (value) => {
-    return `₭ ${parseFloat(value)
-      .toFixed(1)
-      .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
   };
 
   return (
@@ -120,7 +124,7 @@ const Reservations = ({navigation}) => {
               }}>
               {`${
                 Languages[selectedLanguage].reservations.totalOrders
-              } ${formatCurrency(item.subtotal)}`}
+              } ${formatCurrency(item.subtotal, false, true)}`}
             </Text>
           </Ripple>
         )}

@@ -24,7 +24,13 @@ class CheckBox extends React.Component {
   };
 
   render() {
-    const {title = '', size = 20, isChecked = false} = this.props || {};
+    const {
+      title = '',
+      size = 20,
+      isChecked = false,
+      titleStyles = {},
+      checkedColor = '#2bae6a',
+    } = this.props || {};
     const {springValue} = this.state;
 
     return (
@@ -40,12 +46,20 @@ class CheckBox extends React.Component {
             width: size,
             height: size,
             borderWidth: 1,
-            borderColor: isChecked ? '#ed3237' : '#949aa2',
             borderRadius: 5,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: isChecked ? '#ed3237' : 'transparent',
             transform: [{scale: springValue}],
+            borderColor: isChecked
+              ? checkedColor
+                ? checkedColor
+                : '#2bae6a'
+              : '#949aa2',
+            backgroundColor: isChecked
+              ? checkedColor
+                ? checkedColor
+                : '#2bae6a'
+              : 'transparent',
           }}>
           {isChecked ? (
             <EntypoIcon name="check" color="#fff" size={size - 5} />
@@ -53,13 +67,12 @@ class CheckBox extends React.Component {
         </Animated.View>
         <Text
           style={{
-            textDecorationLine: isChecked ? 'line-through' : 'none',
-            color: isChecked ? '#ed3237' : '#000',
             marginLeft: 5,
             paddingRight: 10,
             fontSize: 16,
             textAlign: 'left',
             marginTop: -2,
+            ...titleStyles,
           }}>
           {title}
         </Text>

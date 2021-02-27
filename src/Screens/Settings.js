@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import Ripple from '../Components/Ripple';
-import {getNotificationCount} from '../Services/DataManager';
+import {getNotificationCount, setLanguage} from '../Services/DataManager';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import {FlatList} from 'react-native-gesture-handler';
@@ -77,6 +77,7 @@ const Settings = ({navigation}) => {
 
   const onSelectLanguage = (language) => {
     if (language && language.value) {
+      setLanguage(language.value);
       dispatch({
         type: actions.SET_LANGUAGE,
         selectedLanguage: language.value,

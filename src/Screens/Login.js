@@ -1,24 +1,36 @@
 import React, {useState} from 'react';
 import {View, Keyboard, Image, Text} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 import Input from '../Components/Input';
 import Button from '../Components/Button';
 import {authService} from '../Services/API/CoreAPICalls';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import {validateEmail} from '../Services/Common';
-import {setUserInfo} from '../Services/DataManager';
+import {setUserInfo, setLanguage} from '../Services/DataManager';
+import Languages from '../Localization/translations';
+import Dropdown from '../Components/Dropdown';
+import Ripple from '../Components/Ripple';
 
 const Login = () => {
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   // const [email, setEmail] = useState('sam1@pickgo.la');
   // const [password, setPassword] = useState('sam123');
-  const [email, setEmail] = useState('pickgrocery@gmail.com');
-  const [password, setPassword] = useState('123456');
+  // const [email, setEmail] = useState('pickgrocery@gmail.com');
+  // const [password, setPassword] = useState('123456');
 
   const [loading, setLoading] = useState(false);
-  const [, dispatch] = useStateValue();
+  const [showMenu, setShowMenu] = useState(false);
+  const [{selectedLanguage}, dispatch] = useStateValue();
+
+  const languages = [
+    {label: 'English', value: 'en'},
+    {label: 'ພາສາລາວ', value: 'lo'},
+    {label: 'ไทย', value: 'th'},
+    {label: '中文', value: 'ch'},
+  ];
 
   const login = async () => {
     try {
@@ -29,7 +41,7 @@ const Login = () => {
           alertSettings: {
             show: true,
             type: 'warn',
-            title: `Email Required`,
+            title: Languages[selectedLanguage].messages.emailRequired,
             showConfirmButton: true,
             confirmText: 'Ok',
           },
@@ -42,7 +54,7 @@ const Login = () => {
           alertSettings: {
             show: true,
             type: 'warn',
-            title: `Password Required`,
+            title: Languages[selectedLanguage].messages.passwordRequired,
             showConfirmButton: true,
             confirmText: 'Ok',
           },
@@ -55,7 +67,7 @@ const Login = () => {
           alertSettings: {
             show: true,
             type: 'warn',
-            title: `Invalid Email`,
+            title: Languages[selectedLanguage].messages.invalidEmail,
             showConfirmButton: true,
             confirmText: 'Ok',
           },
@@ -86,10 +98,10 @@ const Login = () => {
             alertSettings: {
               show: true,
               type: 'error',
-              title: 'An Error Occured',
+              title: Languages[selectedLanguage].messages.errorOccured,
               message: message,
               showConfirmButton: true,
-              confirmText: 'Ok',
+              confirmText: Languages[selectedLanguage].messages.ok,
             },
           });
         }
@@ -100,11 +112,10 @@ const Login = () => {
         alertSettings: {
           show: true,
           type: 'error',
-          title: 'Error Occured',
-          message:
-            'This Operation Could Not Be Completed. Please Try Again Later.',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
           showConfirmButton: true,
-          confirmText: 'Ok',
+          confirmText: Languages[selectedLanguage].messages.ok,
         },
       });
     } finally {
@@ -116,8 +127,40 @@ const Login = () => {
     }
   };
 
+  const onSelectLanguage = (language) => {
+    if (language && language.value) {
+      setLanguage(language.value);
+      dispatch({
+        type: actions.SET_LANGUAGE,
+        selectedLanguage: language.value,
+      });
+    }
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
+      <View style={{height: 0, width: 0, opacity: 0}}>
+        <Dropdown
+          label={Languages[selectedLanguage].messages.selectLanguage}
+          options={languages}
+          onSelect={onSelectLanguage}
+          show={showMenu}
+        />
+      </View>
+      <View style={{position: 'absolute', top: '2%', right: '2%', zIndex: 1}}>
+        <Ripple
+          onPress={() => {
+            setShowMenu(true);
+            setShowMenu(false);
+          }}>
+          <EntypoIcon
+            style={{marginRight: 10}}
+            name="language"
+            size={25}
+            color={'#757575'}
+          />
+        </Ripple>
+      </View>
       <KeyboardAwareScrollView
         enableOnAndroid={false}
         contentContainerStyle={{
@@ -137,22 +180,27 @@ const Login = () => {
             color: '#2bae6a',
             marginBottom: '2%',
           }}>
-          PickEat Admin
+          {Languages[selectedLanguage].login.appName}
         </Text>
         <Input
-          label="Email"
+          label={Languages[selectedLanguage].login.email}
           value={email}
           keyboardType="email-address"
           onChangeText={(val) => setEmail(val)}
         />
         <Input
-          label="Password"
+          label={Languages[selectedLanguage].login.password}
           secureTextEntry={true}
           value={password}
           onChangeText={(val) => setPassword(val)}
         />
         <View style={{height: '1.5%'}} />
-        <Button title="Login" loading={loading} onPress={login} height={40} />
+        <Button
+          title={Languages[selectedLanguage].login.login}
+          loading={loading}
+          onPress={login}
+          height={40}
+        />
       </KeyboardAwareScrollView>
     </View>
   );

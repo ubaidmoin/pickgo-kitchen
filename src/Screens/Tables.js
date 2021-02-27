@@ -96,11 +96,13 @@ const Tables = ({navigation}) => {
       navigation.setParams({notificationCount}),
     );
     try {
-      dispatch({
-        type: actions.SET_PROGRESS_SETTINGS,
-        show: true,
-      });
-      setLoading(true);
+      if (!(tables && tables.length > 0)) {
+        dispatch({
+          type: actions.SET_PROGRESS_SETTINGS,
+          show: true,
+        });
+        setLoading(true);
+      }
       const result = await getTables();
       if (result.data) {
         const {models = []} = result.data || {};

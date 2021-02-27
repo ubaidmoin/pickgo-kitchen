@@ -218,6 +218,13 @@ const EditMenu = ({navigation, ...props}) => {
                 }
                 isChecked={isMenuItemSoldOut}
                 onChange={(val) => setIsMenuItemSoldOut(val)}
+                checkedColor="#ed3237"
+                titleStyles={{
+                  textDecorationLine: isMenuItemSoldOut
+                    ? 'line-through'
+                    : 'none',
+                  color: isMenuItemSoldOut ? '#ed3237' : '#000',
+                }}
               />
             </View>
           </View>
@@ -281,6 +288,13 @@ const EditMenu = ({navigation, ...props}) => {
                               onChange={(val) =>
                                 onSelectOptionItem(val, menuOptionIndex, index)
                               }
+                              checkedColor="#ed3237"
+                              titleStyles={{
+                                textDecorationLine: isSoldOut
+                                  ? 'line-through'
+                                  : 'none',
+                                color: isSoldOut ? '#ed3237' : '#000',
+                              }}
                             />
                           );
                         })

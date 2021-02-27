@@ -16,7 +16,7 @@ import {useStateValue} from './src/Services/State/State';
 import AppActivityIndicator from './src/Components/ActivityIndicator';
 import AppAlert from './src/Components/AppAlert';
 import VersionCheck from 'react-native-version-check';
-import {getUserInfo} from './src/Services/DataManager';
+import {getLanguage, getUserInfo} from './src/Services/DataManager';
 
 const RootNavigator = () => {
   useEffect(() => {
@@ -35,6 +35,13 @@ const RootNavigator = () => {
   const checkAuth = async () => {
     try {
       setLoading(true);
+      const language = await getLanguage();
+      if (language) {
+        dispatch({
+          type: actions.SET_LANGUAGE,
+          selectedLanguage: language,
+        });
+      }
       const userInfo = await getUserInfo();
       if (
         userInfo &&

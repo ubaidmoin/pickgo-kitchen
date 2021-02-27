@@ -3,6 +3,7 @@ export const initialState = {
   progressSettings: {show: false, promise: null},
   alertSettings: {settings: {}, promise: null},
   tables: [],
+  reservations: [],
   isWideScreen: false,
   selectedLanguage: 'en',
 };

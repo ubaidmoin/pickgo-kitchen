@@ -4,6 +4,7 @@ const KEYS = {
   USER_INFO: 'USER_INFO',
   NOTIFICATIONS: 'NOTIFICATIONS',
   FCM_TOKEN: 'FCM_TOKEN',
+  LANGUAGE: 'LANGUAGE',
 };
 
 export const setUserInfo = async (userDetails) => {
@@ -124,5 +125,26 @@ export const isFcmTokenExists = async (fcmToken) => {
     }
   } catch (err) {
     return false;
+  }
+};
+
+export const setLanguage = async (language) => {
+  try {
+    await AsyncStorage.setItem(KEYS.LANGUAGE, JSON.stringify(language));
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getLanguage = async () => {
+  try {
+    const response = await AsyncStorage.getItem(KEYS.LANGUAGE);
+    if (response) {
+      const language = JSON.parse(response);
+      return language ? language : 'en';
+    }
+    return 'en';
+  } catch (err) {
+    return 'en';
   }
 };

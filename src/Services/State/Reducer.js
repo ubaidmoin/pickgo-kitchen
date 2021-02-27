@@ -3,6 +3,7 @@ export const actions = {
   SET_ALERT_SETTINGS: 'SET_ALERT_SETTINGS',
   SET_PROGRESS_SETTINGS: 'SET_PROGRESS_SETTINGS',
   SET_TABLES: 'SET_TABLES',
+  SET_RESERVATIONS: 'SET_RESERVATIONS',
   SET_NOTIFICATION_COUNT: 'SET_NOTIFICATION_COUNT',
   SET_IS_WIDE_SCREEN: 'SET_IS_WIDE_SCREEN',
   SET_LANGUAGE: 'SET_LANGUAGE',
@@ -30,6 +31,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         tables: action.tables,
+      };
+    case actions.SET_RESERVATIONS:
+      return {
+        ...state,
+        reservations: action.reservations,
       };
     case actions.SET_IS_WIDE_SCREEN:
       return {
