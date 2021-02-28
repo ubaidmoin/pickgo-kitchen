@@ -502,7 +502,13 @@ const TableCart = ({navigation, ...props}) => {
                           fontWeight: 'bold',
                           color: '#767676',
                         }}>
-                        {item.menu_name}
+                        {item.menu_name &&
+                        item.menu_name
+                          .toLowerCase()
+                          .includes('custom amount added')
+                          ? Languages[selectedLanguage].tableCart
+                              .customAmountAdded
+                          : item.menu_name}
                       </Text>
                       {item.options && item.options.length > 0
                         ? item.options.map((item) => (

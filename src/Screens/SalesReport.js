@@ -9,15 +9,14 @@ import Languages from '../Localization/translations';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import {formatCurrency} from '../Services/Common';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
 
 const SalesReport = ({navigation}) => {
   const [{reservations, selectedLanguage}, dispatch] = useStateValue();
   const [report, setReport] = useState(null);
   const [selected, setSelected] = useState(0);
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [showDetails, setShowDetails] = useState(false);
@@ -102,14 +101,17 @@ const SalesReport = ({navigation}) => {
             ),
           );
         }
-        const report = filteredReservations.reduce((a, b) => {
-          return {
-            subtotal: parseFloat(a.subtotal) + parseFloat(b.subtotal),
-            tax: parseFloat(a.tax) + parseFloat(b.tax),
-            tips: parseFloat(a.tips) + parseFloat(b.tips),
-            discount: parseFloat(a.discount) + parseFloat(b.discount),
-          };
-        });
+        const report =
+          filteredReservations && filteredReservations.length > 0
+            ? filteredReservations.reduce((a, b) => {
+                return {
+                  subtotal: parseFloat(a.subtotal) + parseFloat(b.subtotal),
+                  tax: parseFloat(a.tax) + parseFloat(b.tax),
+                  tips: parseFloat(a.tips) + parseFloat(b.tips),
+                  discount: parseFloat(a.discount) + parseFloat(b.discount),
+                };
+              })
+            : null;
         setReport(report);
       }
     } catch (error) {
@@ -130,21 +132,21 @@ const SalesReport = ({navigation}) => {
     if (val === 0) {
       calculate();
     } else {
-      setStartDate(null);
-      setEndDate(null);
-      setShowDatePicker(true);
+      calculate(startDate, endDate);
     }
   };
 
-  const onChange = (e, date) => {
+  const onStartDateChange = (date) => {
     if (date) {
-      if (startDate) {
-        setEndDate(date);
-        setShowDatePicker(false);
-        calculate(startDate, date);
-      } else {
-        setStartDate(date);
-      }
+      setStartDate(date);
+      calculate(date, endDate);
+    }
+  };
+
+  const onEndDateChange = (date) => {
+    if (date) {
+      setEndDate(date);
+      calculate(startDate, date);
     }
   };
 
@@ -171,15 +173,6 @@ const SalesReport = ({navigation}) => {
         selected={selected}
         onChange={onSelect}
       />
-      {showDatePicker ? (
-        <DateTimePicker
-          mode="date"
-          value={new Date()}
-          display="spinner"
-          onChange={onChange}
-          maximumDate={new Date()}
-        />
-      ) : null}
       <View style={{marginVertical: 2}}>
         <CheckBox
           size={20}
@@ -189,17 +182,67 @@ const SalesReport = ({navigation}) => {
         />
       </View>
       {selected === 1 ? (
-        <Ripple
-          style={{...styles.box, alignItems: 'center', flexDirection: 'row'}}
-          onPress={() => onSelect(1)}>
-          <Text style={{fontSize: 18}}>
-            {moment(startDate ? startDate : new Date()).format('MMM DD, YYYY')}
-          </Text>
-          <FontAwesomeIcon name="arrow-right" color="#000" size={18} />
-          <Text style={{fontSize: 18}}>
-            {moment(endDate ? endDate : new Date()).format('MMM DD, YYYY')}
-          </Text>
-        </Ripple>
+        <View
+          style={{
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexDirection: 'row',
+          }}>
+          <View
+            style={{
+              ...styles.box,
+              paddingVertical: '2%',
+              paddingHorizontal: '1%',
+            }}>
+            <DatePicker
+              date={startDate}
+              format="MMM DD, YYYY"
+              maxDate={new Date()}
+              placeholder="Start Date"
+              showIcon={false}
+              TouchableComponent={Ripple}
+              customStyles={{
+                placeholderText: {color: '#000'},
+                dateInput: {borderWidth: 0},
+                dateText: {fontSize: 18},
+              }}
+              onDateChange={onStartDateChange}
+            />
+            <Text style={{position: 'absolute', top: '-2.5%', left: '3%'}}>
+              {Languages[selectedLanguage].salesReport.from}
+            </Text>
+          </View>
+          <FontAwesomeIcon
+            name="arrow-right"
+            color="#000"
+            size={20}
+            style={{marginHorizontal: '3%'}}
+          />
+          <View
+            style={{
+              ...styles.box,
+              paddingVertical: '2%',
+              paddingHorizontal: '1%',
+            }}>
+            <DatePicker
+              date={endDate}
+              format="MMM DD, YYYY"
+              maxDate={new Date()}
+              placeholder="Start Date"
+              showIcon={false}
+              TouchableComponent={Ripple}
+              customStyles={{
+                placeholderText: {color: '#000'},
+                dateInput: {borderWidth: 0},
+                dateText: {fontSize: 18},
+              }}
+              onDateChange={onEndDateChange}
+            />
+            <Text style={{position: 'absolute', top: '-2.5%', left: '3%'}}>
+              {Languages[selectedLanguage].salesReport.to}
+            </Text>
+          </View>
+        </View>
       ) : null}
       {showDetails ? (
         <View style={styles.box}>
