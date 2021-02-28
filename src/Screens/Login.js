@@ -14,12 +14,12 @@ import Dropdown from '../Components/Dropdown';
 import Ripple from '../Components/Ripple';
 
 const Login = () => {
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   // const [email, setEmail] = useState('sam1@pickgo.la');
   // const [password, setPassword] = useState('sam123');
-  const [email, setEmail] = useState('pickgrocery@gmail.com');
-  const [password, setPassword] = useState('123456');
+  // const [email, setEmail] = useState('pickgrocery@gmail.com');
+  // const [password, setPassword] = useState('123456');
 
   const [loading, setLoading] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
