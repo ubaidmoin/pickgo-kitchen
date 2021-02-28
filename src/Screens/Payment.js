@@ -351,8 +351,10 @@ const Payment = ({navigation, ...props}) => {
         alertSettings: {
           show: true,
           type: 'warn',
-          title: Languages[selectedLanguage].messages.confirmPayment,
-          message: Languages[selectedLanguage].messages.confirmPayment.replace(
+          title: Languages[selectedLanguage].messages.confirmPaymentTitle,
+          message: Languages[
+            selectedLanguage
+          ].messages.confirmPaymentMessage.replace(
             '${amount}',
             formatCurrency(item, true),
           ),
