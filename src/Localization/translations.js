@@ -77,7 +77,6 @@ export default {
     addCartItem: {
       title: 'Add Cart Item',
       addTo: 'Add to',
-      attention: 'Attention',
       selectRequiredItems: 'Please select atleast one from required items.',
       menuItemsAdded: 'Menu item(s) are successfully added to table.',
       soldOut: 'Sold Out',
@@ -304,7 +303,6 @@ export default {
     addCartItem: {
       title: 'ເພີ່ມສິນຄ້າໃສ່ລົດເຂັນ',
       addTo: 'ຕື່ມໃສ່',
-      attention: 'ເອົາໃຈໃສ່',
       selectRequiredItems: 'ກະລຸນາເລືອກອັນໃດອັນ ໜຶ່ງ ຈາກລາຍການທີ່ຕ້ອງການ.',
       menuItemsAdded: 'ເມນູເພີ່ມໃສ່ລາຍການສຳເລັດແລ້ວ',
       soldOut: 'ຂາຍໝົດແລ້ວ',
@@ -528,7 +526,6 @@ export default {
     addCartItem: {
       title: 'เพิ่มรายการในรถเข็น',
       addTo: 'เพิ่ม',
-      attention: 'ความสนใจ',
       selectRequiredItems: 'โปรดเลือกอย่างน้อยหนึ่งรายการจากรายการที่ต้องการ',
       menuItemsAdded: 'เพิ่มเมนูในรายการเสร็จสมบูรณ์',
       soldOut: 'ขายหมดแล้ว',
@@ -752,7 +749,6 @@ export default {
     addCartItem: {
       title: '添加购物车项目',
       addTo: '添加',
-      attention: '注意力',
       selectRequiredItems: '请从必填项中选择至少一项。',
       menuItemsAdded: '项目成功添加到表格',
       soldOut: '售罄',

@@ -124,9 +124,7 @@ const AddCartItem = ({navigation, ...props}) => {
           alertSettings: {
             show: true,
             type: 'warn',
-            title: Languages[selectedLanguage].addCartItem.attention,
-            message:
-              Languages[selectedLanguage].addCartItem.selectRequiredItems,
+            title: Languages[selectedLanguage].addCartItem.selectRequiredItems,
             showConfirmButton: true,
             confirmText: Languages[selectedLanguage].messages.ok,
           },

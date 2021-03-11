@@ -74,7 +74,7 @@ const RootNavigator = () => {
 
   const isUpdateAvailable = async () => {
     let updateNeeded = await VersionCheck.needUpdate({
-      // packageName: 'com.callinurgentcare',
+      packageName: 'com.pickgo.eat.pickeatadmin',
     });
     if (updateNeeded.isNeeded) {
       dispatch({
