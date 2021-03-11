@@ -14,6 +14,7 @@ import {
   makeTransaction,
   adminSendToCustomer,
   adminPay,
+  getCustomerDiscount,
 } from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
@@ -46,6 +47,7 @@ const Payment = ({navigation, ...props}) => {
   const [confirmCashAmount, setConfirmCashAmount] = useState(0);
   const [confirmCashQuantity, setConfirmCashQuantity] = useState(1);
   const [customSplitQuantity, setCustomSplitQuantity] = useState(1);
+  const [discountAmountApplied, setDiscountAmountApplied] = useState(0);
   const [dialogType, setDialogType] = useState('');
 
   const fetchTableDetails = async (tableID = tableId) => {
@@ -57,10 +59,13 @@ const Payment = ({navigation, ...props}) => {
       setLoading(true);
       const result = await getTableDetails(tableID);
       if (result.data) {
-        const {table} = result.data || {};
+        const {table = {}, activeOrder = {}} = result.data || {};
         if (table && table.id) {
           navigation.setParams({title: table.name});
           setTableDetails(result.data);
+          if (activeOrder && activeOrder.uid && activeOrder.uid > -1) {
+            fetchDiscount(activeOrder);
+          }
         } else {
           navigation.setParams({title: null});
           setTableDetails('');
@@ -645,9 +650,50 @@ const Payment = ({navigation, ...props}) => {
     }
   };
 
+  const fetchDiscount = async (activeOrder) => {
+    try {
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: true,
+      });
+      setLoading(true);
+      let data = new FormData();
+      data.append('customer_id', activeOrder.uid);
+      data.append('order_amount', parseInt(activeOrder.subtotal));
+      data.append('cid', activeOrder.cid);
+      const result = await getCustomerDiscount(data);
+      const {success = false, discount_amount_applied = 0} = result || {};
+      if (success && discount_amount_applied) {
+        setDiscountAmountApplied(parseFloat(discount_amount_applied) * 100);
+      } else {
+        setDiscountAmountApplied(0);
+      }
+    } catch (error) {
+      dispatch({
+        type: actions.SET_ALERT_SETTINGS,
+        alertSettings: {
+          show: true,
+          type: 'error',
+          title: Languages[selectedLanguage].messages.errorOccured,
+          message: Languages[selectedLanguage].messages.tryAgainLater,
+          showConfirmButton: true,
+          confirmText: Languages[selectedLanguage].messages.ok,
+        },
+      });
+    } finally {
+      dispatch({
+        type: actions.SET_PROGRESS_SETTINGS,
+        show: false,
+      });
+      setLoading(false);
+    }
+  };
+
   const getPayableAmount = () => {
-    return transactions.find((transaction) => transaction.status === 0)
-      .amount_cents;
+    return (
+      transactions.find((transaction) => transaction.status === 0)
+        .amount_cents - discountAmountApplied
+    );
   };
 
   const {
