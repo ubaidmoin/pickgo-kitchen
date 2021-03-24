@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, FlatList, StyleSheet, RefreshControl} from 'react-native';
+import {Text, FlatList, StyleSheet, View, RefreshControl} from 'react-native';
 import Ripple from '../Components/Ripple';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
@@ -140,9 +140,7 @@ const Tables = ({navigation}) => {
   };
 
   return (
-    <RefreshControl
-      refreshing={loading}
-      onRefresh={fetchTables}
+    <View
       style={{
         flex: 1,
         justifyContent: 'center',
@@ -152,6 +150,9 @@ const Tables = ({navigation}) => {
         style={{flex: 1, paddingTop: '3%'}}
         showsVerticalScrollIndicator={false}
         data={tables}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={fetchTables} />
+        }
         renderItem={({item}) => (
           <Ripple
             onPress={() => navigation.navigate('TableCart', {tableId: item.id})}
@@ -171,7 +172,7 @@ const Tables = ({navigation}) => {
         )}
         numColumns={2}
       />
-    </RefreshControl>
+    </View>
   );
 };
 
@@ -180,12 +181,10 @@ export default Tables;
 const styles = StyleSheet.create({
   item: {
     width: '45.9%',
-    shadowOpacity: 0.7,
-    shadowRadius: 5,
-    shadowOffset: {
-      height: 5,
-      width: 2,
-    },
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    shadowOffset: {width: 0, height: 4},
     elevation: 5,
     padding: '9%',
     margin: '2%',

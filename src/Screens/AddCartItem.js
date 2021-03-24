@@ -222,13 +222,9 @@ const AddCartItem = ({navigation, ...props}) => {
         <>
           <View
             style={{
-              shadowColor: '#cc0001',
               shadowOpacity: 0.3,
-              shadowRadius: 5,
-              shadowOffset: {
-                height: 5,
-                width: 2,
-              },
+              shadowRadius: 4.65,
+              shadowOffset: {width: 0, height: 4},
               elevation: 5,
               padding: 10,
               marginHorizontal: '1%',
@@ -289,12 +285,9 @@ const AddCartItem = ({navigation, ...props}) => {
                 <Ripple
                   style={{
                     elevation: 5,
-                    shadowRadius: 2,
                     shadowOpacity: 0.3,
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
+                    shadowRadius: 4.65,
+                    shadowOffset: {width: 0, height: 4},
                     width: '42%',
                     backgroundColor: quantity === 1 ? '#999' : '#2bae6a',
                     justifyContent: 'center',
@@ -321,12 +314,9 @@ const AddCartItem = ({navigation, ...props}) => {
                 <Ripple
                   style={{
                     elevation: 5,
-                    shadowRadius: 2,
                     shadowOpacity: 0.3,
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
+                    shadowRadius: 4.65,
+                    shadowOffset: {width: 0, height: 4},
                     width: '42%',
                     backgroundColor: '#2bae6a',
                     justifyContent: 'center',
@@ -351,13 +341,9 @@ const AddCartItem = ({navigation, ...props}) => {
                 <View
                   key={item.id}
                   style={{
-                    shadowColor: '#cc0001',
                     shadowOpacity: 0.3,
-                    shadowRadius: 5,
-                    shadowOffset: {
-                      height: 5,
-                      width: 2,
-                    },
+                    shadowRadius: 4.65,
+                    shadowOffset: {width: 0, height: 4},
                     elevation: 5,
                     padding: 10,
                     marginHorizontal: '1%',

@@ -156,13 +156,9 @@ const EditMenu = ({navigation, ...props}) => {
         <>
           <View
             style={{
-              shadowColor: '#cc0001',
               shadowOpacity: 0.3,
-              shadowRadius: 5,
-              shadowOffset: {
-                height: 5,
-                width: 2,
-              },
+              shadowRadius: 4.65,
+              shadowOffset: {width: 0, height: 4},
               elevation: 5,
               padding: 10,
               marginHorizontal: '1%',
@@ -237,13 +233,9 @@ const EditMenu = ({navigation, ...props}) => {
                 <View
                   key={item.id}
                   style={{
-                    shadowColor: '#cc0001',
                     shadowOpacity: 0.3,
-                    shadowRadius: 5,
-                    shadowOffset: {
-                      height: 5,
-                      width: 2,
-                    },
+                    shadowRadius: 4.65,
+                    shadowOffset: {width: 0, height: 4},
                     elevation: 5,
                     padding: 10,
                     marginHorizontal: '1%',

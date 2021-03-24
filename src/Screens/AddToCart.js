@@ -555,13 +555,9 @@ const AddToCart = ({navigation, ...props}) => {
                   onPress={() => setSelectedMenuCourse(item)}
                   key={item.id}
                   style={{
-                    shadowColor: '#cc0001',
                     shadowOpacity: 0.3,
-                    shadowRadius: 5,
-                    shadowOffset: {
-                      height: 5,
-                      width: 2,
-                    },
+                    shadowRadius: 4.65,
+                    shadowOffset: {width: 0, height: 4},
                     elevation: 5,
                     padding: 15,
                     marginHorizontal: 5,
@@ -605,13 +601,9 @@ const AddToCart = ({navigation, ...props}) => {
                     }
                     key={item.id}
                     style={{
-                      shadowColor: '#cc0001',
                       shadowOpacity: 0.3,
-                      shadowRadius: 5,
-                      shadowOffset: {
-                        height: 5,
-                        width: 2,
-                      },
+                      shadowRadius: 4.65,
+                      shadowOffset: {width: 0, height: 4},
                       elevation: 5,
                       padding: 10,
                       marginHorizontal: '1%',
@@ -669,14 +661,10 @@ const AddToCart = ({navigation, ...props}) => {
                       <View
                         key={item.id}
                         style={{
-                          shadowColor: '#cc0001',
                           backgroundColor: '#fff',
                           shadowOpacity: 0.3,
-                          shadowRadius: 5,
-                          shadowOffset: {
-                            height: 5,
-                            width: 2,
-                          },
+                          shadowRadius: 4.65,
+                          shadowOffset: {width: 0, height: 4},
                           elevation: 5,
                           padding: '3%',
                           marginHorizontal: '1%',
@@ -786,11 +774,8 @@ const AddToCart = ({navigation, ...props}) => {
                         marginVertical: '2%',
                         backgroundColor: '#fff',
                         shadowOpacity: 0.3,
-                        shadowRadius: 5,
-                        shadowOffset: {
-                          height: 5,
-                          width: 2,
-                        },
+                        shadowRadius: 4.65,
+                        shadowOffset: {width: 0, height: 4},
                         elevation: 5,
                         padding: '3%',
                         borderRadius: 5,
@@ -920,13 +905,9 @@ const AddToCart = ({navigation, ...props}) => {
                 onPress={() => setSelectedMenuCourse(item)}
                 key={item.id}
                 style={{
-                  shadowColor: '#cc0001',
                   shadowOpacity: 0.3,
-                  shadowRadius: 5,
-                  shadowOffset: {
-                    height: 5,
-                    width: 2,
-                  },
+                  shadowRadius: 4.65,
+                  shadowOffset: {width: 0, height: 4},
                   elevation: 5,
                   padding: 15,
                   marginHorizontal: 5,
@@ -963,13 +944,9 @@ const AddToCart = ({navigation, ...props}) => {
                 }
                 key={item.id}
                 style={{
-                  shadowColor: '#cc0001',
                   shadowOpacity: 0.3,
-                  shadowRadius: 5,
-                  shadowOffset: {
-                    height: 5,
-                    width: 2,
-                  },
+                  shadowRadius: 4.65,
+                  shadowOffset: {width: 0, height: 4},
                   elevation: 5,
                   padding: 10,
                   marginHorizontal: '1%',
@@ -1027,14 +1004,10 @@ const AddToCart = ({navigation, ...props}) => {
                   <View
                     key={item.id}
                     style={{
-                      shadowColor: '#cc0001',
                       backgroundColor: '#fff',
                       shadowOpacity: 0.3,
-                      shadowRadius: 5,
-                      shadowOffset: {
-                        height: 5,
-                        width: 2,
-                      },
+                      shadowRadius: 4.65,
+                      shadowOffset: {width: 0, height: 4},
                       elevation: 5,
                       padding: '3%',
                       marginHorizontal: '1%',
@@ -1142,11 +1115,8 @@ const AddToCart = ({navigation, ...props}) => {
                     marginVertical: '2%',
                     backgroundColor: '#fff',
                     shadowOpacity: 0.3,
-                    shadowRadius: 5,
-                    shadowOffset: {
-                      height: 5,
-                      width: 2,
-                    },
+                    shadowRadius: 4.65,
+                    shadowOffset: {width: 0, height: 4},
                     elevation: 5,
                     padding: '3%',
                     borderRadius: 5,

@@ -16,12 +16,9 @@ const Switcher = (props) => {
         borderRadius: 5,
         height: 55,
         elevation: 5,
-        shadowRadius: 2,
         shadowOpacity: 0.3,
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
+        shadowRadius: 4.65,
+        shadowOffset: {width: 0, height: 4},
         paddingVertical: '1%',
         marginVertical: 5,
       }}>

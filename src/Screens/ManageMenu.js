@@ -163,13 +163,9 @@ const ManageMenu = ({navigation}) => {
                   onPress={() => setSelectedMenuCourse(item)}
                   key={item.id}
                   style={{
-                    shadowColor: '#cc0001',
                     shadowOpacity: 0.3,
-                    shadowRadius: 5,
-                    shadowOffset: {
-                      height: 5,
-                      width: 2,
-                    },
+                    shadowRadius: 4.65,
+                    shadowOffset: {width: 0, height: 4},
                     elevation: 5,
                     padding: 15,
                     marginHorizontal: 5,
@@ -212,13 +208,9 @@ const ManageMenu = ({navigation}) => {
                     }
                     key={item.id}
                     style={{
-                      shadowColor: '#cc0001',
                       shadowOpacity: 0.3,
-                      shadowRadius: 5,
-                      shadowOffset: {
-                        height: 5,
-                        width: 2,
-                      },
+                      shadowRadius: 4.65,
+                      shadowOffset: {width: 0, height: 4},
                       elevation: 5,
                       padding: 10,
                       marginHorizontal: '1%',
@@ -271,13 +263,9 @@ const ManageMenu = ({navigation}) => {
                 onPress={() => setSelectedMenuCourse(item)}
                 key={item.id}
                 style={{
-                  shadowColor: '#cc0001',
                   shadowOpacity: 0.3,
-                  shadowRadius: 5,
-                  shadowOffset: {
-                    height: 5,
-                    width: 2,
-                  },
+                  shadowRadius: 4.65,
+                  shadowOffset: {width: 0, height: 4},
                   elevation: 5,
                   padding: 15,
                   marginHorizontal: 5,
@@ -314,13 +302,9 @@ const ManageMenu = ({navigation}) => {
                 }
                 key={item.id}
                 style={{
-                  shadowColor: '#cc0001',
                   shadowOpacity: 0.3,
-                  shadowRadius: 5,
-                  shadowOffset: {
-                    height: 5,
-                    width: 2,
-                  },
+                  shadowRadius: 4.65,
+                  shadowOffset: {width: 0, height: 4},
                   elevation: 5,
                   padding: 10,
                   marginHorizontal: '1%',

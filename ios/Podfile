@@ -8,18 +8,7 @@ target 'PickEatAdmin' do
 
   use_react_native!(:path => config["reactNativePath"])
   permissions_path = '../node_modules/react-native-permissions/ios'
-  
-  pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
-  pod 'Permission-Contacts', :path => "#{permissions_path}/Contacts.podspec"
-  pod 'Permission-MediaLibrary', :path => "#{permissions_path}/MediaLibrary.podspec"
-  pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone.podspec"
   pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications.podspec"
-  pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary.podspec"
-  pod 'Permission-SpeechRecognition', :path => "#{permissions_path}/SpeechRecognition.podspec"
-  target 'PickEatAdminTests' do
-    inherit! :complete
-    # Pods for testing
-  end
 
   # Enables Flipper.
   #
@@ -28,14 +17,5 @@ target 'PickEatAdmin' do
   use_flipper!
   post_install do |installer|
     flipper_post_install(installer)
-  end
-end
-
-target 'PickEatAdmin-tvOS' do
-  # Pods for PickEatAdmin-tvOS
-
-  target 'PickEatAdmin-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
   end
 end

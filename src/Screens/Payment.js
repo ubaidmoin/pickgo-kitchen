@@ -761,12 +761,9 @@ const Payment = ({navigation, ...props}) => {
                     <Ripple
                       style={{
                         elevation: 5,
-                        shadowRadius: 2,
                         shadowOpacity: 0.3,
-                        shadowOffset: {
-                          width: 0,
-                          height: 2,
-                        },
+                        shadowRadius: 4.65,
+                        shadowOffset: {width: 0, height: 4},
                         backgroundColor:
                           confirmCashQuantity === 1 ? '#999' : '#2bae6a',
                         justifyContent: 'center',
@@ -795,12 +792,9 @@ const Payment = ({navigation, ...props}) => {
                     <Ripple
                       style={{
                         elevation: 5,
-                        shadowRadius: 2,
                         shadowOpacity: 0.3,
-                        shadowOffset: {
-                          width: 0,
-                          height: 2,
-                        },
+                        shadowRadius: 4.65,
+                        shadowOffset: {width: 0, height: 4},
                         backgroundColor: '#2bae6a',
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -930,12 +924,9 @@ const Payment = ({navigation, ...props}) => {
                 <Ripple
                   style={{
                     elevation: 5,
-                    shadowRadius: 2,
                     shadowOpacity: 0.3,
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
+                    shadowRadius: 4.65,
+                    shadowOffset: {width: 0, height: 4},
                     backgroundColor:
                       customSplitQuantity === 1 ? '#999' : '#2bae6a',
                     justifyContent: 'center',
@@ -964,12 +955,9 @@ const Payment = ({navigation, ...props}) => {
                 <Ripple
                   style={{
                     elevation: 5,
-                    shadowRadius: 2,
                     shadowOpacity: 0.3,
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
+                    shadowRadius: 4.65,
+                    shadowOffset: {width: 0, height: 4},
                     backgroundColor: '#2bae6a',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -1096,12 +1084,9 @@ const Payment = ({navigation, ...props}) => {
                         key={index}
                         style={{
                           elevation: 5,
-                          shadowRadius: 2,
                           shadowOpacity: 0.3,
-                          shadowOffset: {
-                            width: 0,
-                            height: 2,
-                          },
+                          shadowRadius: 4.65,
+                          shadowOffset: {width: 0, height: 4},
                           backgroundColor: '#2bae6a',
                           justifyContent: 'center',
                           alignItems: 'center',
@@ -1215,12 +1200,9 @@ const Payment = ({navigation, ...props}) => {
                         key={index}
                         style={{
                           elevation: 5,
-                          shadowRadius: 2,
                           shadowOpacity: 0.3,
-                          shadowOffset: {
-                            width: 0,
-                            height: 2,
-                          },
+                          shadowRadius: 4.65,
+                          shadowOffset: {width: 0, height: 4},
                           backgroundColor: '#2bae6a',
                           justifyContent: 'center',
                           alignItems: 'center',

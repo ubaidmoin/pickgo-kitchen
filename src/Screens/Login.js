@@ -170,7 +170,7 @@ const Login = () => {
           marginHorizontal: '5%',
         }}>
         <Image
-          style={{height: 120, width: 120, borderWidth: 1}}
+          style={{height: 120, width: 120}}
           source={require('../Assets/logo.png')}
         />
         <Text

@@ -84,7 +84,7 @@ const RootNavigator = () => {
           type: 'info',
           title: 'An Update Available',
           message:
-            'A new version of Medical Services App is available. Would you like to update?',
+            'A new version of PickEat Admin app is available. Would you like to update?',
           showConfirmButton: true,
           confirmText: 'Update',
           showCancelButton: true,
@@ -167,21 +167,22 @@ const RootNavigator = () => {
       <ActivityIndicator size={30} color="#27ae61" />
     </View>
   ) : (
-    <SafeAreaView
-      style={{flex: 1, backgroundColor: '#fff'}}
-      onLayout={() => checkDevice()}>
+    <View style={{flex: 1}} onLayout={() => checkDevice()}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-      <AppAlert {...getAlertSettings()} />
-      <AppActivityIndicator visible={show} />
-      <CreateRootNavigator
-        isLoggedIn={
-          userInfo &&
-          userInfo.access_token &&
-          userInfo.user &&
-          userInfo.user.uid
-        }
-      />
-    </SafeAreaView>
+      <SafeAreaView style={{flex: 0, backgroundColor: '#27ae61'}} />
+      <SafeAreaView style={{flex: 1}}>
+        <AppAlert {...getAlertSettings()} />
+        <AppActivityIndicator visible={show} />
+        <CreateRootNavigator
+          isLoggedIn={
+            userInfo &&
+            userInfo.access_token &&
+            userInfo.user &&
+            userInfo.user.uid
+          }
+        />
+      </SafeAreaView>
+    </View>
   );
 };
 
