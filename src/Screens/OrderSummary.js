@@ -29,9 +29,7 @@ const OrderSummary = ({navigation, ...props}) => {
       const {guests_count = '', subtotal = '', tbl_id = ''} = order || {};
       setGuestsCount(guests_count ? guests_count : 0);
       const table = tables.find(
-        (table) =>
-          parseInt(table.id) === parseInt(tbl_id) &&
-          !(table.activeOrder && table.activeOrder.id),
+        (table) => parseInt(table.id) === parseInt(tbl_id),
       );
       setTable(table);
       setSubTotal(subtotal);
@@ -298,14 +296,13 @@ const OrderSummary = ({navigation, ...props}) => {
                 />
               </View>
             ) : null}
-            {tbl_id && parseInt(tbl_id) && parseInt(tbl_id) > 0 ? (
-              <Button
-                title={Languages[selectedLanguage].orderSummary.getOrderSummary}
-                loading={loading}
-                onPress={() => onSubmit(1)}
-                height={45}
-              />
-            ) : (
+            {tbl_id && parseInt(tbl_id) && parseInt(tbl_id) > 0 ? null : (
+              // <Button
+              //   title={Languages[selectedLanguage].orderSummary.getOrderSummary}
+              //   loading={loading}
+              //   onPress={() => onSubmit(1)}
+              //   height={45}
+              // />
               <Button
                 title={Languages[selectedLanguage].orderSummary.acceptOrder}
                 loading={loading}
@@ -400,7 +397,7 @@ const OrderSummary = ({navigation, ...props}) => {
               </>
             ) : null}
           </View>
-        ) : parseInt(type) === 7 ? (
+        ) : [2, 5, 6, 7].includes(parseInt(type)) ? (
           <View
             style={{
               backgroundColor: '#fff',
@@ -432,7 +429,9 @@ const OrderSummary = ({navigation, ...props}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                  }}>{`${customer_first_name} ${customer_last_name}`}</Text>
+                  }}>{`${customer_first_name ? customer_first_name : ''} ${
+                  customer_last_name ? customer_last_name : ''
+                }`}</Text>
               </View>
             </View>
             <View

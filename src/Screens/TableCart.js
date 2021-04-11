@@ -44,7 +44,7 @@ const TableCart = ({navigation, ...props}) => {
   const [tableDetails, setTableDetails] = useState('');
   const [amount, setAmount] = useState('');
   const [discountAmountApplied, setDiscountAmountApplied] = useState(0);
-  const [{selectedLanguage}, dispatch] = useStateValue();
+  const [{isWideScreen, selectedLanguage}, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
 
   const refreshScreen = (table_id = tableId) => {
@@ -513,12 +513,15 @@ const TableCart = ({navigation, ...props}) => {
                                 size={8}
                                 name="circle-o"
                                 color="#979797"
-                                style={{marginTop: '4%'}}
+                                style={{
+                                  marginTop: isWideScreen ? '2.5%' : '4%',
+                                }}
                               />
                               <Text
                                 style={{
                                   marginLeft: '3%',
-                                  fontSize: 15,
+                                  fontSize: isWideScreen ? 16 : 15,
+                                  fontWeight: isWideScreen ? 'bold' : 'normal',
                                   color: '#979797',
                                 }}>
                                 {`${

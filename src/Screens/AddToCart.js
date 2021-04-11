@@ -721,7 +721,8 @@ const AddToCart = ({navigation, ...props}) => {
                                     <Text
                                       style={{
                                         marginLeft: '3%',
-                                        fontSize: 15,
+                                        fontSize: 16,
+                                        fontWeight: 'bold',
                                         color: '#979797',
                                       }}>
                                       {`${

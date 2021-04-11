@@ -84,12 +84,19 @@ const Reservations = ({navigation}) => {
         showsVerticalScrollIndicator={false}
         data={
           selected === 0
-            ? reservations.filter((item) => parseInt(item.type) !== 7)
-            : reservations.filter((item) => parseInt(item.type) === 7)
+            ? reservations.filter(
+                (item) => ![2, 5, 6, 7].includes(parseInt(item.type)),
+              )
+            : reservations.filter((item) =>
+                [2, 5, 6, 7].includes(parseInt(item.type)),
+              )
         }
         renderItem={({item}) => (
           <Ripple
-            onPress={() => navigation.navigate('OrderSummary', {order: item})}
+            onPress={() => {
+              console.log(item);
+              navigation.navigate('OrderSummary', {order: item});
+            }}
             style={{
               ...styles.item,
               backgroundColor:
