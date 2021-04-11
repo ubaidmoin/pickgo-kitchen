@@ -90,6 +90,7 @@ export default {
       pending: 'Pending',
       past: 'Past',
       order: 'Order',
+      noTableYet: 'No Table Yet',
       totalOrders: 'Total Orders',
     },
     orderSummary: {
@@ -316,6 +317,7 @@ export default {
       pending: 'ຂາເຂົ້າ ໃໝ່',
       past: 'ລາຍການເກົ່າ',
       order: 'ລະຫັດສັ່ງຊື້',
+      noTableYet: 'ຍັງບໍ່ມີຕາຕະລາງ',
       totalOrders: 'ລວມທັງ ໝົດ',
     },
     orderSummary: {
@@ -539,6 +541,7 @@ export default {
       pending: 'เข้ามาใหม่',
       past: 'รายการเก่า',
       order: 'หมายเลขสั่งซื้อ',
+      noTableYet: 'ยังไม่มีโต๊ะ',
       totalOrders: 'ยอดรวมทั้งหมด',
     },
     orderSummary: {
@@ -762,6 +765,7 @@ export default {
       pending: '新来的',
       past: '老的',
       order: '命令',
+      noTableYet: '还没有桌子',
       totalOrders: '合计订单',
     },
     orderSummary: {

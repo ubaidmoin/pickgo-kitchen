@@ -85,55 +85,71 @@ const Reservations = ({navigation}) => {
         data={
           selected === 0
             ? reservations.filter(
-                (item) => ![2, 5, 6, 7].includes(parseInt(item.type)),
+                (item) => item.type && ![2, 5, 7].includes(parseInt(item.type)),
               )
-            : reservations.filter((item) =>
-                [2, 5, 6, 7].includes(parseInt(item.type)),
+            : reservations.filter(
+                (item) => item.type && [2, 5, 7].includes(parseInt(item.type)),
               )
         }
-        renderItem={({item}) => (
-          <Ripple
-            onPress={() => {
-              navigation.navigate('OrderSummary', {order: item});
-            }}
-            style={{
-              ...styles.item,
-              backgroundColor:
-                item.type && parseInt(item.type) === 3 ? '#27ae61' : '#999',
-            }}>
-            <Text
-              style={{
-                ...styles.itemTitle,
-                color: item.type && parseInt(item.type) === 3 ? '#fff' : '#000',
+        renderItem={({item}) => {
+          const isPending =
+            item.type && ![2, 5, 7].includes(parseInt(item.type));
+          const isNewOrder = !(
+            item.tbl_id &&
+            parseInt(item.tbl_id) &&
+            parseInt(item.tbl_id) > 0
+          );
+          return (
+            <Ripple
+              onPress={() => {
+                navigation.navigate('OrderSummary', {order: item});
               }}
-              numberOfLines={
-                1
-              }>{`${Languages[selectedLanguage].reservations.order} #${item.c_oid}`}</Text>
-            <Text
               style={{
-                ...styles.itemTitle,
-                fontWeight: 'bold',
-                color: item.type && parseInt(item.type) === 3 ? '#fff' : '#000',
-              }}
-              numberOfLines={1}>
-              {item.table_name
-                ? item.table_name
-                : `${
-                    item.customer_first_name ? item.customer_first_name : ''
-                  } ${item.customer_last_name ? item.customer_last_name : ''}`}
-            </Text>
-            <Text
-              numberOfLines={1}
-              style={{
-                ...styles.itemTitle,
-                color: item.type && parseInt(item.type) === 3 ? '#fff' : '#000',
+                ...styles.item,
+                backgroundColor: isNewOrder
+                  ? '#fe0000'
+                  : isPending
+                  ? '#27ae61'
+                  : '#999',
               }}>
-              {`${
-                Languages[selectedLanguage].reservations.totalOrders
-              } ${formatCurrency(item.subtotal, false, true)}`}
-            </Text>
-          </Ripple>
-        )}
+              <Text
+                style={{
+                  ...styles.itemTitle,
+                  color: isPending ? '#fff' : '#000',
+                }}
+                numberOfLines={
+                  1
+                }>{`${Languages[selectedLanguage].reservations.order} #${item.c_oid}`}</Text>
+              <Text
+                style={{
+                  ...styles.itemTitle,
+                  fontWeight: 'bold',
+                  color: isPending ? '#fff' : '#000',
+                }}
+                numberOfLines={1}>
+                {isNewOrder
+                  ? Languages[selectedLanguage].reservations.noTableYet
+                  : item.table_name
+                  ? item.table_name
+                  : `${
+                      item.customer_first_name ? item.customer_first_name : ''
+                    } ${
+                      item.customer_last_name ? item.customer_last_name : ''
+                    }`}
+              </Text>
+              <Text
+                numberOfLines={1}
+                style={{
+                  ...styles.itemTitle,
+                  color: isPending ? '#fff' : '#000',
+                }}>
+                {`${
+                  Languages[selectedLanguage].reservations.totalOrders
+                } ${formatCurrency(item.subtotal, false, true)}`}
+              </Text>
+            </Ripple>
+          );
+        }}
         numColumns={2}
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={fetchReservations} />

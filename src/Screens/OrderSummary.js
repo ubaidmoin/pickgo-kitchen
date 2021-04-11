@@ -160,7 +160,7 @@ const OrderSummary = ({navigation, ...props}) => {
       });
       setLoading(true);
       const result = await sendOrderRequest(order.id);
-      console.log('data7: ', result);
+      console.log('Result: ', result);
       // if (result.data) {
       //   const {order_id = '', order: orderInfo = {}} = result.data || {};
       //   if (order_id && orderInfo && orderInfo.id) {
@@ -217,7 +217,7 @@ const OrderSummary = ({navigation, ...props}) => {
   return (
     <View style={{flex: 1, marginVertical: '5%', marginHorizontal: '5%'}}>
       {type ? (
-        parseInt(type) === 3 ? (
+        ![2, 5, 7].includes(parseInt(type)) ? (
           <View style={{flex: 1}}>
             <Dropdown
               label={Languages[selectedLanguage].orderSummary.selectTable}
@@ -397,7 +397,7 @@ const OrderSummary = ({navigation, ...props}) => {
               </>
             ) : null}
           </View>
-        ) : [2, 5, 6, 7].includes(parseInt(type)) ? (
+        ) : [2, 5, 7].includes(parseInt(type)) ? (
           <View
             style={{
               backgroundColor: '#fff',
