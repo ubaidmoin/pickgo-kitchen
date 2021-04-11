@@ -94,7 +94,6 @@ const Reservations = ({navigation}) => {
         renderItem={({item}) => (
           <Ripple
             onPress={() => {
-              console.log(item);
               navigation.navigate('OrderSummary', {order: item});
             }}
             style={{
