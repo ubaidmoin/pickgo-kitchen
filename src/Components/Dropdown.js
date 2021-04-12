@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {
   View,
   Animated,
-  TextInput,
   Keyboard,
+  Text,
   TouchableWithoutFeedback,
 } from 'react-native';
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
@@ -39,7 +39,6 @@ class Dropdown extends Component {
       onSelect = () => {},
       labelField = 'label',
       disabled = false,
-      ...props
     } = this.props;
     const [{selectedLanguage}] = this.context;
     const labelStyle = {
@@ -47,7 +46,7 @@ class Dropdown extends Component {
       left: 0,
       top: this._animatedIsFocused.interpolate({
         inputRange: [0, 1],
-        outputRange: [28, 5],
+        outputRange: [25, 5],
       }),
       fontSize: this._animatedIsFocused.interpolate({
         inputRange: [0, 1],
@@ -100,22 +99,21 @@ class Dropdown extends Component {
             }}
           />
           <Animated.Text style={labelStyle}>{label}</Animated.Text>
-          <TextInput
-            {...props}
-            value={selected && selected[labelField]}
+          <Text
             style={{
               paddingHorizontal: 0,
               width: '100%',
               height: 45,
               fontSize: 20,
               color: '#000',
-              borderBottomWidth: 1,
-              borderBottomColor: '#000',
               paddingBottom: this.props.selected ? -20 : 0,
-            }}
-            selection={{start: 0}}
-            editable={false}
-          />
+              marginBottom: -5,
+              paddingTop: 12,
+              marginLeft: 5,
+            }}>
+            {selected && selected[labelField]}
+          </Text>
+          <View style={{borderBottomWidth: 1, borderBottomColor: '#000'}} />
         </View>
       </TouchableWithoutFeedback>
     );

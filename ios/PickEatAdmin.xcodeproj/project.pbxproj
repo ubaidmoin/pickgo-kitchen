@@ -18,6 +18,7 @@
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* PickEatAdminTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PickEatAdminTests.m; sourceTree = "<group>"; };
+		041D02372623D42100C72AC3 /* PickEatAdmin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = PickEatAdmin.entitlements; path = PickEatAdmin/PickEatAdmin.entitlements; sourceTree = "<group>"; };
 		046318BF25961E1E00AC430B /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		046318C025961E1E00AC430B /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		046318C125961E1E00AC430B /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
@@ -113,6 +114,7 @@
 		13B07FAE1A68108700A75B9A /* PickEatAdmin */ = {
 			isa = PBXGroup;
 			children = (
+				041D02372623D42100C72AC3 /* PickEatAdmin.entitlements */,
 				046318BE25961E1E00AC430B /* Fonts */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -378,7 +380,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CODE_SIGN_ENTITLEMENTS = PickEatAdmin/PickEatAdmin.entitlements;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = HK596WP67W;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = PickEatAdmin/Info.plist;
@@ -392,6 +395,7 @@
 				PRODUCT_NAME = PickEatAdmin;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -402,7 +406,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CODE_SIGN_ENTITLEMENTS = PickEatAdmin/PickEatAdmin.entitlements;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = HK596WP67W;
 				INFOPLIST_FILE = PickEatAdmin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -414,6 +419,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.pickgo.eat.pickeatadmin;
 				PRODUCT_NAME = PickEatAdmin;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
