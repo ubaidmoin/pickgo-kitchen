@@ -275,33 +275,53 @@ const Payment = ({navigation, ...props}) => {
         type: actions.SET_PROGRESS_SETTINGS,
         show: true,
       });
-      setLoading(true);
+      // setLoading(true);
       const transaction =
         transactions &&
         transactions.find((transaction) => transaction.status === 0);
-      const result = await makeTransaction(transaction.id, {
-        confirmed_amount: transaction_amount,
-      });
-      if (result) {
-        const {model = {}, transactions = [], transactions_paid = false} =
-          result || {};
-        if (transactions_paid) {
-          ToastAndroid.show(
-            Languages[selectedLanguage].messages.paymentSuccess,
-            ToastAndroid.LONG,
-          );
-          navigation.navigate('Tables');
-        } else if (
-          model &&
-          model.id &&
-          transactions &&
-          transactions.length > 0
-        ) {
-          setTableDetails(result);
-          ToastAndroid.show(
-            Languages[selectedLanguage].messages.paymentSuccess,
-            ToastAndroid.LONG,
-          );
+      console.log(transaction_amount, getPayableAmount() / 100);
+      if (transaction_amount < getPayableAmount() / 100) {
+        const result = await splitByAmount(transaction.order_id, {
+          amount: amount,
+        });
+        setTableDetails(result);
+        const result1 = await makeTransaction(result.transactions[0].id, {
+          confirmed_amount: transaction_amount,
+        });
+        console.log(result1);
+        if (result1) {
+          const {model = {}, transactions = [], transactions_paid = false} =
+            result1 || {};
+          if (transactions_paid) {
+            ToastAndroid.show(
+              Languages[selectedLanguage].messages.paymentSuccess,
+              ToastAndroid.LONG,
+            );
+            navigation.navigate('Tables');
+          } else if (
+            model &&
+            model.id &&
+            transactions &&
+            transactions.length > 0
+          ) {
+            setTableDetails(result1);
+            ToastAndroid.show(
+              Languages[selectedLanguage].messages.paymentSuccess,
+              ToastAndroid.LONG,
+            );
+          } else {
+            dispatch({
+              type: actions.SET_ALERT_SETTINGS,
+              alertSettings: {
+                show: true,
+                type: 'error',
+                title: Languages[selectedLanguage].messages.errorOccured,
+                message: Languages[selectedLanguage].messages.tryAgainLater,
+                showConfirmButton: true,
+                confirmText: Languages[selectedLanguage].messages.ok,
+              },
+            });
+          }
         } else {
           dispatch({
             type: actions.SET_ALERT_SETTINGS,
@@ -316,17 +336,56 @@ const Payment = ({navigation, ...props}) => {
           });
         }
       } else {
-        dispatch({
-          type: actions.SET_ALERT_SETTINGS,
-          alertSettings: {
-            show: true,
-            type: 'error',
-            title: Languages[selectedLanguage].messages.errorOccured,
-            message: Languages[selectedLanguage].messages.tryAgainLater,
-            showConfirmButton: true,
-            confirmText: Languages[selectedLanguage].messages.ok,
-          },
+        const result = await makeTransaction(transaction.id, {
+          confirmed_amount: transaction_amount,
         });
+        console.log(result);
+        if (result) {
+          const {model = {}, transactions = [], transactions_paid = false} =
+            result || {};
+          if (transactions_paid) {
+            ToastAndroid.show(
+              Languages[selectedLanguage].messages.paymentSuccess,
+              ToastAndroid.LONG,
+            );
+            navigation.navigate('Tables');
+          } else if (
+            model &&
+            model.id &&
+            transactions &&
+            transactions.length > 0
+          ) {
+            setTableDetails(result);
+            ToastAndroid.show(
+              Languages[selectedLanguage].messages.paymentSuccess,
+              ToastAndroid.LONG,
+            );
+          } else {
+            dispatch({
+              type: actions.SET_ALERT_SETTINGS,
+              alertSettings: {
+                show: true,
+                type: 'error',
+                title: Languages[selectedLanguage].messages.errorOccured,
+                message: Languages[selectedLanguage].messages.tryAgainLater,
+                showConfirmButton: true,
+                confirmText: Languages[selectedLanguage].messages.ok,
+              },
+            });
+          }
+        } else {
+          dispatch({
+            type: actions.SET_ALERT_SETTINGS,
+            alertSettings: {
+              show: true,
+              type: 'error',
+              title: Languages[selectedLanguage].messages.errorOccured,
+              message: Languages[selectedLanguage].messages.tryAgainLater,
+              showConfirmButton: true,
+              confirmText: Languages[selectedLanguage].messages.ok,
+            },
+          });
+        }
       }
     } catch (error) {
       dispatch({

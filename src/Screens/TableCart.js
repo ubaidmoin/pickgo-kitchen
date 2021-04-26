@@ -8,6 +8,10 @@ import {
   ScrollView,
   Keyboard,
   ToastAndroid,
+  PixelRatio,
+  Platform,
+  Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import Button from '../Components/Button';
 import Ripple from '../Components/Ripple';
@@ -27,6 +31,18 @@ import {
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
 import Languages from '../Localization/translations';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const TableCart = ({navigation, ...props}) => {
   useEffect(() => {
@@ -393,7 +409,7 @@ const TableCart = ({navigation, ...props}) => {
     }
   };
 
-  const {summary = {}, cartItems = []} = tableDetails || {};
+  const {summary = {}, cartItems = [], transactions = []} = tableDetails || {};
 
   return (
     <View
@@ -455,10 +471,28 @@ const TableCart = ({navigation, ...props}) => {
             <FlatList
               data={cartItems}
               renderItem={({item, index}) => (
-                <View
+                <TouchableOpacity
                   key={item.id}
+                  onPress={() => {
+                    const newDetails = {...tableDetails};
+                    const items = [...cartItems];
+                    if (items.length > 0) {
+                      const newItem = items.find((i) => i.id === item.id);
+                      const itemIndex = items.findIndex(
+                        (i) => i.id === item.id,
+                      );
+                      if (newItem && newItem.clicked) {
+                        newItem.clicked = false;
+                      } else {
+                        newItem.clicked = true;
+                      }
+                      items[itemIndex] = newItem;
+                      newDetails.cartItems = items;
+                      setTableDetails(newDetails);
+                    }
+                  }}
                   style={{
-                    backgroundColor: '#fff',
+                    backgroundColor: item.clicked ? '#2bae6a' : '#fff',
                     shadowOpacity: 0.3,
                     shadowRadius: 4.65,
                     shadowOffset: {width: 0, height: 4},
@@ -483,9 +517,13 @@ const TableCart = ({navigation, ...props}) => {
                       style={{
                         width: '13%',
                         alignItems: 'center',
-                        color: '#767676',
+                        color: '#000',
                       }}>
-                      <Text style={{fontSize: 18}}>{`x ${item.qty}`}</Text>
+                      <Text
+                        style={{
+                          fontSize: normalize(18),
+                          color: item.clicked ? '#fff' : '#000',
+                        }}>{`x ${item.qty}`}</Text>
                     </View>
                     <View
                       style={{
@@ -494,9 +532,9 @@ const TableCart = ({navigation, ...props}) => {
                       }}>
                       <Text
                         style={{
-                          fontSize: 18,
+                          fontSize: normalize(18),
                           fontWeight: 'bold',
-                          color: '#767676',
+                          color: item.clicked ? '#fff' : '#000',
                         }}>
                         {item.menu_name &&
                         item.menu_name
@@ -507,12 +545,14 @@ const TableCart = ({navigation, ...props}) => {
                           : item.menu_name}
                       </Text>
                       {item.options && item.options.length > 0
-                        ? item.options.map((item) => (
-                            <View key={item.id} style={{flexDirection: 'row'}}>
+                        ? item.options.map((childItem) => (
+                            <View
+                              key={childItem.id}
+                              style={{flexDirection: 'row'}}>
                               <FontAwesomeIcon
                                 size={8}
                                 name="circle-o"
-                                color="#979797"
+                                color={item.clicked ? '#fff' : '#000'}
                                 style={{
                                   marginTop: isWideScreen ? '2.5%' : '4%',
                                 }}
@@ -520,14 +560,16 @@ const TableCart = ({navigation, ...props}) => {
                               <Text
                                 style={{
                                   marginLeft: '3%',
-                                  fontSize: isWideScreen ? 16 : 15,
-                                  fontWeight: isWideScreen ? 'bold' : 'normal',
-                                  color: '#979797',
+                                  fontSize: isWideScreen
+                                    ? normalize(16)
+                                    : normalize(15),
+                                  fontWeight: '600',
+                                  color: item.clicked ? '#fff' : '#000',
                                 }}>
                                 {`${
-                                  item.menu_option_item_name
+                                  childItem.menu_option_item_name
                                 }  (+ ${formatCurrency(
-                                  item.price,
+                                  childItem.price,
                                   false,
                                   true,
                                 )})`}
@@ -538,7 +580,11 @@ const TableCart = ({navigation, ...props}) => {
                     </View>
                     <View style={{width: '27%', alignItems: 'flex-end'}}>
                       <Text
-                        style={{color: '#767676', fontSize: 18}}
+                        style={{
+                          color: item.clicked ? '#fff' : '#000',
+                          fontWeight: 'bold',
+                          fontSize: normalize(18),
+                        }}
                         numberOfLines={1}>
                         {formatCurrency(item.total_amount)}
                       </Text>
@@ -549,22 +595,23 @@ const TableCart = ({navigation, ...props}) => {
                       <MaterialIcon
                         name="delete-forever"
                         size={25}
-                        color="#000"
+                        color="red"
                       />
                     </Ripple>
                   </View>
                   {item.notes ? (
                     <Text
                       style={{
-                        fontSize: 15,
-                        color: '#979797',
+                        fontSize: normalize(15),
                         marginTop: 5,
                         textAlign: 'justify',
+                        fontWeight: '600',
+                        color: item.clicked ? '#fff' : '#000',
                       }}>
                       {`${Languages[selectedLanguage].tableCart.notes}: ${item.notes}`}
                     </Text>
                   ) : null}
-                </View>
+                </TouchableOpacity>
               )}
             />
             {summary && summary.subtotal ? (
@@ -637,6 +684,23 @@ const TableCart = ({navigation, ...props}) => {
                   </Text>
                 </View>
                 <View style={styles.divider} />
+                {transactions &&
+                  transactions.length > 0 &&
+                  transactions.map((transaction) => (
+                    <View style={{...styles.row}} key={transaction.id}>
+                      <Text style={styles.rowText}>
+                        {transaction.status === 1
+                          ? Languages[selectedLanguage].orderSummary.paid
+                          : 'Due'}
+                      </Text>
+                      <Text style={styles.rowText}>
+                        {formatCurrency(
+                          parseFloat(transaction.amount_cents),
+                          true,
+                        )}
+                      </Text>
+                    </View>
+                  ))}
                 <View style={{...styles.row}}>
                   <Text style={styles.rowText}>
                     {Languages[selectedLanguage].tableCart.orderTotal}

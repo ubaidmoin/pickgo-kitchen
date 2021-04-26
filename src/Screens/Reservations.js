@@ -18,7 +18,7 @@ const Reservations = ({navigation}) => {
   const [{reservations, selectedLanguage}, dispatch] = useStateValue();
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(0);
-
+  console.log(reservations);
   const fetchReservations = async () => {
     getNotificationCount().then((notificationCount) =>
       navigation.setParams({notificationCount}),
@@ -131,11 +131,18 @@ const Reservations = ({navigation}) => {
                   ? Languages[selectedLanguage].reservations.noTableYet
                   : item.table_name
                   ? item.table_name
-                  : `${
-                      item.customer_first_name ? item.customer_first_name : ''
-                    } ${
-                      item.customer_last_name ? item.customer_last_name : ''
-                    }`}
+                  : ''}
+              </Text>
+              <Text
+                style={{
+                  ...styles.itemTitle,
+                  fontWeight: 'bold',
+                  color: isPending ? '#fff' : '#000',
+                }}
+                numberOfLines={1}>
+                {`${item.customer_first_name ? item.customer_first_name : ''} ${
+                  item.customer_last_name ? item.customer_last_name : ''
+                }`}
               </Text>
               <Text
                 numberOfLines={1}

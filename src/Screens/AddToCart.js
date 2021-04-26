@@ -8,6 +8,9 @@ import {
   ToastAndroid,
   Keyboard,
   StyleSheet,
+  PixelRatio,
+  Platform,
+  Dimensions,
 } from 'react-native';
 import Ripple from '../Components/Ripple';
 import Button from '../Components/Button';
@@ -30,6 +33,18 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {getNotificationCount} from '../Services/DataManager';
 import Languages from '../Localization/translations';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const AddToCart = ({navigation, ...props}) => {
   useEffect(() => {
@@ -622,7 +637,7 @@ const AddToCart = ({navigation, ...props}) => {
                       style={{
                         color: '#000',
                         textAlign: 'left',
-                        fontSize: 18,
+                        fontSize: normalize(18),
                         width: '70%',
                       }}>
                       {item.name}
@@ -632,7 +647,7 @@ const AddToCart = ({navigation, ...props}) => {
                         color: '#000',
                         alignSelf: 'center',
                         textAlign: 'right',
-                        fontSize: 18,
+                        fontSize: normalize(18),
                         width: '30%',
                       }}>
                       {formatCurrency(item.price)}
@@ -650,7 +665,7 @@ const AddToCart = ({navigation, ...props}) => {
                       marginBottom: '3%',
                     }}>
                     <EntypoIcon name="chevron-right" size={18} />
-                    <Text style={{fontWeight: 'bold'}}>
+                    <Text style={{fontWeight: 'bold', fontSize: normalize(18)}}>
                       {Languages[selectedLanguage].addToCart.orderDetails}:
                       {table && table.name ? table.name : ''}
                     </Text>
@@ -686,7 +701,9 @@ const AddToCart = ({navigation, ...props}) => {
                               color: '#767676',
                             }}>
                             <Text
-                              style={{fontSize: 18}}>{`x ${item.qty}`}</Text>
+                              style={{
+                                fontSize: normalize(18),
+                              }}>{`x ${item.qty}`}</Text>
                           </View>
                           <View
                             style={{
@@ -695,7 +712,7 @@ const AddToCart = ({navigation, ...props}) => {
                             }}>
                             <Text
                               style={{
-                                fontSize: 18,
+                                fontSize: normalize(18),
                                 fontWeight: 'bold',
                                 color: '#767676',
                               }}>
@@ -721,7 +738,7 @@ const AddToCart = ({navigation, ...props}) => {
                                     <Text
                                       style={{
                                         marginLeft: '3%',
-                                        fontSize: 16,
+                                        fontSize: normalize(16),
                                         fontWeight: 'bold',
                                         color: '#979797',
                                       }}>
@@ -966,7 +983,7 @@ const AddToCart = ({navigation, ...props}) => {
                   style={{
                     color: '#000',
                     textAlign: 'left',
-                    fontSize: 18,
+                    fontSize: normalize(18),
                     width: '70%',
                   }}>
                   {item.name}
@@ -976,7 +993,7 @@ const AddToCart = ({navigation, ...props}) => {
                     color: '#000',
                     alignSelf: 'center',
                     textAlign: 'right',
-                    fontSize: 18,
+                    fontSize: normalize(18),
                     width: '30%',
                   }}>
                   {formatCurrency(item.price)}
@@ -1028,7 +1045,10 @@ const AddToCart = ({navigation, ...props}) => {
                           alignItems: 'center',
                           color: '#767676',
                         }}>
-                        <Text style={{fontSize: 18}}>{`x ${item.qty}`}</Text>
+                        <Text
+                          style={{
+                            fontSize: normalize(18),
+                          }}>{`x ${item.qty}`}</Text>
                       </View>
                       <View
                         style={{
@@ -1037,7 +1057,7 @@ const AddToCart = ({navigation, ...props}) => {
                         }}>
                         <Text
                           style={{
-                            fontSize: 18,
+                            fontSize: normalize(18),
                             fontWeight: 'bold',
                             color: '#767676',
                           }}>
@@ -1063,7 +1083,7 @@ const AddToCart = ({navigation, ...props}) => {
                                 <Text
                                   style={{
                                     marginLeft: '3%',
-                                    fontSize: 15,
+                                    fontSize: normalize(15),
                                     color: '#979797',
                                   }}>
                                   {`${
@@ -1080,7 +1100,7 @@ const AddToCart = ({navigation, ...props}) => {
                       </View>
                       <View style={{width: '27%', alignItems: 'flex-end'}}>
                         <Text
-                          style={{color: '#767676', fontSize: 18}}
+                          style={{color: '#767676', fontSize: normalize(18)}}
                           numberOfLines={1}>
                           {formatCurrency(item.total_amount)}
                         </Text>
@@ -1098,7 +1118,7 @@ const AddToCart = ({navigation, ...props}) => {
                     {item.notes ? (
                       <Text
                         style={{
-                          fontSize: 15,
+                          fontSize: normalize(15),
                           color: '#979797',
                           marginTop: 5,
                           textAlign: 'justify',
