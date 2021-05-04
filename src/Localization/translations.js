@@ -92,6 +92,7 @@ export default {
       order: 'Order',
       noTableYet: 'No Table Yet',
       totalOrders: 'Total Orders',
+      new: 'New',
     },
     orderSummary: {
       title: 'Order Summary',
@@ -120,6 +121,7 @@ export default {
       guestsCapital: 'GUESTS',
       status: 'STATUS',
       paid: 'Paid',
+      due: 'Due',
     },
     salesReport: {
       title: 'Sales Report',
@@ -319,6 +321,7 @@ export default {
       order: 'ລະຫັດສັ່ງຊື້',
       noTableYet: 'ຍັງບໍ່ມີຕາຕະລາງ',
       totalOrders: 'ລວມທັງ ໝົດ',
+      new: 'มาใหม่',
     },
     orderSummary: {
       title: 'ບົດສະຫຼຸບການສັ່ງຊື້',
@@ -347,6 +350,7 @@ export default {
       guestsCapital: 'ແຂກ',
       status: 'ສະຖານະພາບ',
       paid: 'ຈ່າຍແລ້ວ',
+      due: 'ຍັງຄ້າງຢູ່',
     },
     salesReport: {
       title: 'ບົດລາຍງານການຂາຍ',
@@ -543,6 +547,7 @@ export default {
       order: 'หมายเลขสั่งซื้อ',
       noTableYet: 'ยังไม่มีโต๊ะ',
       totalOrders: 'ยอดรวมทั้งหมด',
+      new: 'มาใหม่',
     },
     orderSummary: {
       title: 'สรุปคำสั่งซื้อ',
@@ -571,6 +576,7 @@ export default {
       guestsCapital: 'แขก',
       status: 'สถานะ',
       paid: 'จ่าย',
+      due: 'ต้องชำระ',
     },
     salesReport: {
       title: 'รายงานการขาย',
@@ -767,6 +773,7 @@ export default {
       order: '命令',
       noTableYet: '还没有桌子',
       totalOrders: '合计订单',
+      new: '来新',
     },
     orderSummary: {
       title: '订单摘要',
@@ -795,6 +802,7 @@ export default {
       guestsCapital: '来宾',
       status: '状态',
       paid: '有薪酬的',
+      due: '其余的',
     },
     salesReport: {
       title: '销售报告',

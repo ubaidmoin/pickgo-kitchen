@@ -5,10 +5,25 @@ import {
   Keyboard,
   Text,
   TouchableWithoutFeedback,
+  Platform,
+  Dimensions,
+  PixelRatio,
 } from 'react-native';
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
 import {StateContext} from '../Services/State/State';
 import Languages from '../Localization/translations';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 class Dropdown extends Component {
   static contextType = StateContext;
@@ -86,7 +101,7 @@ class Dropdown extends Component {
             }}
             styles={{
               titleText: {
-                fontSize: 14,
+                fontSize: normalize(14),
                 color: 'black',
               },
               cancelButtonBox: {
@@ -94,7 +109,7 @@ class Dropdown extends Component {
                 height: 55,
               },
               optionsTextStyle: {
-                fontSize: 5,
+                fontSize: normalize(5),
               },
             }}
           />
@@ -104,7 +119,7 @@ class Dropdown extends Component {
               paddingHorizontal: 0,
               width: '100%',
               height: 45,
-              fontSize: 20,
+              fontSize: normalize(20),
               color: '#000',
               paddingBottom: this.props.selected ? -20 : 0,
               marginBottom: -5,

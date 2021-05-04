@@ -1,6 +1,24 @@
 import React, {Component} from 'react';
-import {View, Animated, TextInput} from 'react-native';
+import {
+  View,
+  Animated,
+  TextInput,
+  Dimensions,
+  Platform,
+  PixelRatio,
+} from 'react-native';
 
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 class Input extends Component {
   state = {
     isFocused: false,
@@ -52,7 +70,7 @@ class Input extends Component {
           style={{
             paddingHorizontal: 0,
             height: 45,
-            fontSize: 20,
+            fontSize: normalize(16),
             color: '#000',
             borderBottomWidth: this.state.isFocused ? 2 : 1,
             borderBottomColor: '#000',

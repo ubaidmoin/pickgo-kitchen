@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Dimensions, Platform, PixelRatio} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -28,6 +28,18 @@ import Ripple from './Components/Ripple';
 import {useStateValue} from './Services/State/State';
 import Languages from './Localization/translations';
 
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
+
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -46,6 +58,7 @@ const Header = (
   title: showTitle ? title : null,
   headerTitleStyle: {
     color: '#fff',
+    fontSize: normalize(16),
   },
   headerTransparent: isTransparent,
   headerStyle: {
@@ -100,7 +113,7 @@ const Header = (
                 <Text
                   style={{
                     color: '#fff',
-                    fontSize: 10,
+                    fontSize: normalize(10),
                     textAlign: 'center',
                   }}>
                   {notificationCount}

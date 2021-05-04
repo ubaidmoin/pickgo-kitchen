@@ -8,10 +8,24 @@ import {
   StyleSheet,
   Text,
   View,
+  Dimensions,
+  PixelRatio
 } from 'react-native';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import Ripple from './Ripple';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const HwBackHandler = BackHandler || BackAndroid;
 const HW_BACK_EVENT = 'hardwareBackPress';
@@ -264,12 +278,12 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     maxWidth: '90%',
     color: '#000',
-    fontSize: 18,
+    fontSize: normalize(18),
   },
   message: {
     paddingTop: 5,
     color: '#000',
-    fontSize: 16,
+    fontSize: normalize(16),
   },
   button: {
     paddingHorizontal: 25,
@@ -279,7 +293,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 15,
+    fontSize: normalize(15),
   },
 });
 

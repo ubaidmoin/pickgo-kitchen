@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList, ToastAndroid} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  ToastAndroid,
+  PixelRatio,
+  Platform,
+  Dimensions,
+} from 'react-native';
 import Button from '../Components/Button';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
@@ -8,6 +16,18 @@ import {getMenuDetails} from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
 import Languages from '../Localization/translations';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const EditMenu = ({navigation, ...props}) => {
   useEffect(() => {
@@ -172,7 +192,7 @@ const EditMenu = ({navigation, ...props}) => {
                 style={{
                   color: '#000',
                   textAlign: 'left',
-                  fontSize: 20,
+                  fontSize: normalize(20),
                   width: '70%',
                 }}>
                 {menu && menu.name ? menu.name : ''}
@@ -181,7 +201,7 @@ const EditMenu = ({navigation, ...props}) => {
                 style={{
                   color: '#000',
                   textAlign: 'right',
-                  fontSize: 20,
+                  fontSize: normalize(20),
                   width: '30%',
                 }}>
                 {formatCurrency(menu.price)}
@@ -193,7 +213,7 @@ const EditMenu = ({navigation, ...props}) => {
                   color: '#000',
                   textAlign: 'justify',
                   marginVertical: '1.5%',
-                  fontSize: 18,
+                  fontSize: normalize(18),
                 }}>
                 {menu.description}
               </Text>
@@ -246,7 +266,11 @@ const EditMenu = ({navigation, ...props}) => {
                       index === menuOptions.length - 1 ? '20%' : '1.5%',
                   }}>
                   <Text
-                    style={{color: '#000', textAlign: 'center', fontSize: 18}}>
+                    style={{
+                      color: '#000',
+                      textAlign: 'center',
+                      fontSize: normalize(18),
+                    }}>
                     {`${item.title} (${
                       item.is_required
                         ? Languages[selectedLanguage].editMenu.required

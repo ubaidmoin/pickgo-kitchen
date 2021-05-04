@@ -1,5 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList, StyleSheet, RefreshControl} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  RefreshControl,
+  PixelRatio,
+  Platform,
+  Dimensions,
+} from 'react-native';
 import Ripple from '../Components/Ripple';
 import Switcher from '../Components/Switcher';
 import {useStateValue} from '../Services/State/State';
@@ -8,6 +17,18 @@ import {getReservations} from '../Services/API/APIManager';
 import {getNotificationCount} from '../Services/DataManager';
 import Languages from '../Localization/translations';
 import {formatCurrency} from '../Services/Common';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const Reservations = ({navigation}) => {
   useEffect(() => {
@@ -115,27 +136,6 @@ const Reservations = ({navigation}) => {
               <Text
                 style={{
                   ...styles.itemTitle,
-                  color: isPending ? '#fff' : '#000',
-                }}
-                numberOfLines={
-                  1
-                }>{`${Languages[selectedLanguage].reservations.order} #${item.c_oid}`}</Text>
-              <Text
-                style={{
-                  ...styles.itemTitle,
-                  fontWeight: 'bold',
-                  color: isPending ? '#fff' : '#000',
-                }}
-                numberOfLines={1}>
-                {isNewOrder
-                  ? Languages[selectedLanguage].reservations.noTableYet
-                  : item.table_name
-                  ? item.table_name
-                  : ''}
-              </Text>
-              <Text
-                style={{
-                  ...styles.itemTitle,
                   fontWeight: 'bold',
                   color: isPending ? '#fff' : '#000',
                 }}
@@ -145,14 +145,34 @@ const Reservations = ({navigation}) => {
                 }`}
               </Text>
               <Text
+                style={{
+                  ...styles.itemTitle,
+                  color: isPending ? '#fff' : '#000',
+                }}
+                numberOfLines={
+                  1
+                }>{`${Languages[selectedLanguage].reservations.order} #${item.c_oid}`}</Text>
+              <Text
+                style={{
+                  ...styles.itemTitle,
+                  fontWeight: 'bold',
+                  fontSize: normalize(20),
+                  color: isPending ? '#fff' : '#000',
+                }}
+                numberOfLines={1}>
+                {isNewOrder
+                  ? Languages[selectedLanguage].reservations.new
+                  : item.table_name
+                  ? item.table_name
+                  : ''}
+              </Text>
+              <Text
                 numberOfLines={1}
                 style={{
                   ...styles.itemTitle,
                   color: isPending ? '#fff' : '#000',
                 }}>
-                {`${
-                  Languages[selectedLanguage].reservations.totalOrders
-                } ${formatCurrency(item.subtotal, false, true)}`}
+                {`${formatCurrency(item.subtotal, false, true)}`}
               </Text>
             </Ripple>
           );
@@ -185,7 +205,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   itemTitle: {
-    fontSize: 18,
+    fontSize: normalize(18),
     color: '#fff',
   },
 });

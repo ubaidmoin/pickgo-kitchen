@@ -587,7 +587,7 @@ const AddToCart = ({navigation, ...props}) => {
                     style={{
                       color:
                         selectedMenuCourse.id === item.id ? '#fff' : '#000',
-                      fontSize: 18,
+                      fontSize: normalize(18),
                     }}>
                     {item.name}
                   </Text>
@@ -774,7 +774,7 @@ const AddToCart = ({navigation, ...props}) => {
                         {item.notes ? (
                           <Text
                             style={{
-                              fontSize: 15,
+                              fontSize: normalize(15),
                               color: '#979797',
                               marginTop: 5,
                               textAlign: 'justify',
@@ -939,7 +939,7 @@ const AddToCart = ({navigation, ...props}) => {
                 <Text
                   style={{
                     color: selectedMenuCourse.id === item.id ? '#fff' : '#000',
-                    fontSize: 18,
+                    fontSize: normalize(18),
                   }}>
                   {item.name}
                 </Text>
@@ -985,6 +985,7 @@ const AddToCart = ({navigation, ...props}) => {
                     textAlign: 'left',
                     fontSize: normalize(18),
                     width: '70%',
+                    fontWeight: 'bold',
                   }}>
                   {item.name}
                 </Text>
@@ -1259,14 +1260,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#000',
     marginBottom: '3%',
-    fontSize: 18,
+    fontSize: normalize(18),
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   rowText: {
-    fontSize: 16,
+    fontSize: normalize(16),
     color: '#000',
   },
   divider: {

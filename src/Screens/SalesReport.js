@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  Dimensions,
+  PixelRatio,
+} from 'react-native';
 import Switcher from '../Components/Switcher';
 import Ripple from '../Components/Ripple';
 import CheckBox from '../Components/CheckBox';
@@ -12,6 +19,18 @@ import {formatCurrency} from '../Services/Common';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const SalesReport = ({navigation}) => {
   const [{reservations, selectedLanguage}, dispatch] = useStateValue();
@@ -204,7 +223,7 @@ const SalesReport = ({navigation}) => {
               customStyles={{
                 placeholderText: {color: '#000'},
                 dateInput: {borderWidth: 0},
-                dateText: {fontSize: 18},
+                dateText: {fontSize: normalize(18)},
               }}
               onDateChange={onStartDateChange}
             />
@@ -234,7 +253,7 @@ const SalesReport = ({navigation}) => {
               customStyles={{
                 placeholderText: {color: '#000'},
                 dateInput: {borderWidth: 0},
-                dateText: {fontSize: 18},
+                dateText: {fontSize: normalize(18)},
               }}
               onDateChange={onEndDateChange}
             />
@@ -364,14 +383,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#000',
     marginBottom: '3%',
-    fontSize: 18,
+    fontSize: normalize(18),
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   rowText: {
-    fontSize: 16,
+    fontSize: normalize(16),
     color: '#000',
   },
   divider: {

@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList, ToastAndroid} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  ToastAndroid,
+  Dimensions,
+  Platform,
+  PixelRatio,
+} from 'react-native';
 import Button from '../Components/Button';
 import Ripple from '../Components/Ripple';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
@@ -10,6 +18,18 @@ import {getMenuDetails, addToTableCart} from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
 import Languages from '../Localization/translations';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const AddCartItem = ({navigation, ...props}) => {
   const [menuItem, setMenuItem] = useState('');
@@ -238,7 +258,7 @@ const AddCartItem = ({navigation, ...props}) => {
                 style={{
                   color: '#000',
                   textAlign: 'left',
-                  fontSize: 20,
+                  fontSize: normalize(20),
                   width: '70%',
                 }}>
                 {menu && menu.name ? menu.name : ''}
@@ -247,7 +267,7 @@ const AddCartItem = ({navigation, ...props}) => {
                 style={{
                   color: '#000',
                   textAlign: 'right',
-                  fontSize: 20,
+                  fontSize: normalize(20),
                   width: '30%',
                 }}>
                 {formatCurrency(menu.price)}
@@ -259,7 +279,7 @@ const AddCartItem = ({navigation, ...props}) => {
                   color: '#000',
                   textAlign: 'justify',
                   marginVertical: '1.5%',
-                  fontSize: 18,
+                  fontSize: normalize(18),
                 }}>
                 {menu.description}
               </Text>
@@ -269,7 +289,7 @@ const AddCartItem = ({navigation, ...props}) => {
                 style={{
                   color: '#ed3237',
                   textAlign: 'center',
-                  fontSize: 15,
+                  fontSize: normalize(15),
                   marginVertical: '1.5%',
                 }}>
                 {Languages[selectedLanguage].addCartItem.soldOut}
@@ -307,7 +327,7 @@ const AddCartItem = ({navigation, ...props}) => {
                     textAlign: 'center',
                     marginVertical: '1.5%',
                     marginHorizontal: '1.5%',
-                    fontSize: 18,
+                    fontSize: normalize(18),
                   }}>
                   {quantity}
                 </Text>
@@ -354,7 +374,11 @@ const AddCartItem = ({navigation, ...props}) => {
                       index === menuOptions.length - 1 ? '20%' : '1.5%',
                   }}>
                   <Text
-                    style={{color: '#000', textAlign: 'center', fontSize: 18}}>
+                    style={{
+                      color: '#000',
+                      textAlign: 'center',
+                      fontSize: normalize(18),
+                    }}>
                     {`${item.title} (${
                       item.is_required
                         ? Languages[selectedLanguage].addCartItem.required

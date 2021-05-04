@@ -1,6 +1,18 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, Dimensions, PixelRatio, Platform} from 'react-native';
 import Ripple from './Ripple';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const Switcher = (props) => {
   const {options = [], selected = 0, onChange = () => {}} = props || {};
@@ -41,7 +53,7 @@ const Switcher = (props) => {
             : null}
           <Text
             style={{
-              fontSize: 18,
+              fontSize: normalize(16),
               marginLeft: option.icon ? '10%' : 0,
               color: index === selected ? '#fff' : '#000',
             }}>

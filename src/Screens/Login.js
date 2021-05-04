@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {View, Keyboard, Image, Text} from 'react-native';
+import {
+  View,
+  Keyboard,
+  Image,
+  Text,
+  Dimensions,
+  PixelRatio,
+  Platform,
+} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import Input from '../Components/Input';
@@ -12,6 +20,18 @@ import {setUserInfo, setLanguage} from '../Services/DataManager';
 import Languages from '../Localization/translations';
 import Dropdown from '../Components/Dropdown';
 import Ripple from '../Components/Ripple';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -176,7 +196,7 @@ const Login = () => {
         <Text
           style={{
             fontWeight: 'bold',
-            fontSize: 15,
+            fontSize: normalize(15),
             color: '#2bae6a',
             marginBottom: '2%',
           }}>

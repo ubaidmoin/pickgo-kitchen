@@ -1,6 +1,26 @@
 import * as React from 'react';
-import {Text, Animated, TouchableOpacity, Easing} from 'react-native';
+import {
+  Text,
+  Animated,
+  TouchableOpacity,
+  Easing,
+  Dimensions,
+  Platform,
+  PixelRatio,
+} from 'react-native';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 class RadioButton extends React.Component {
   constructor(props) {
@@ -55,7 +75,7 @@ class RadioButton extends React.Component {
           style={{
             marginLeft: 5,
             paddingRight: 10,
-            fontSize: 16,
+            fontSize: normalize(16),
             textAlign: 'left',
             marginTop: -2,
           }}>

@@ -1,5 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Text, FlatList, ScrollView, RefreshControl, View} from 'react-native';
+import {
+  Text,
+  FlatList,
+  ScrollView,
+  RefreshControl,
+  View,
+  Dimensions,
+  PixelRatio,
+  Platform,
+} from 'react-native';
 import Ripple from '../Components/Ripple';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
@@ -8,6 +17,18 @@ import Dropdown from '../Components/Dropdown';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
 import Languages from '../Localization/translations';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const ManageMenu = ({navigation}) => {
   useEffect(() => {
@@ -180,7 +201,7 @@ const ManageMenu = ({navigation}) => {
                     style={{
                       color:
                         selectedMenuCourse.id === item.id ? '#fff' : '#000',
-                      fontSize: 18,
+                      fontSize: normalize(18),
                     }}>
                     {item.name}
                   </Text>
@@ -228,7 +249,7 @@ const ManageMenu = ({navigation}) => {
                       style={{
                         color: '#000',
                         textAlign: 'left',
-                        fontSize: 18,
+                        fontSize: normalize(18),
                         width: '70%',
                       }}>
                       {item.name}
@@ -238,7 +259,7 @@ const ManageMenu = ({navigation}) => {
                         color: '#000',
                         alignSelf: 'center',
                         textAlign: 'right',
-                        fontSize: 18,
+                        fontSize: normalize(18),
                         width: '30%',
                       }}>
                       {formatCurrency(item.price)}
@@ -279,7 +300,7 @@ const ManageMenu = ({navigation}) => {
                 <Text
                   style={{
                     color: selectedMenuCourse.id === item.id ? '#fff' : '#000',
-                    fontSize: 18,
+                    fontSize: normalize(18),
                   }}>
                   {item.name}
                 </Text>
@@ -322,7 +343,7 @@ const ManageMenu = ({navigation}) => {
                   style={{
                     color: '#000',
                     textAlign: 'left',
-                    fontSize: 18,
+                    fontSize: normalize(18),
                     width: '70%',
                   }}>
                   {item.name}
@@ -332,7 +353,7 @@ const ManageMenu = ({navigation}) => {
                     color: '#000',
                     alignSelf: 'center',
                     textAlign: 'right',
-                    fontSize: 18,
+                    fontSize: normalize(18),
                     width: '30%',
                   }}>
                   {formatCurrency(item.price)}

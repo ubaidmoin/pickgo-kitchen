@@ -521,7 +521,7 @@ const TableCart = ({navigation, ...props}) => {
                       }}>
                       <Text
                         style={{
-                          fontSize: normalize(18),
+                          fontSize: normalize(15),
                           color: item.clicked ? '#fff' : '#000',
                         }}>{`x ${item.qty}`}</Text>
                     </View>
@@ -532,7 +532,7 @@ const TableCart = ({navigation, ...props}) => {
                       }}>
                       <Text
                         style={{
-                          fontSize: normalize(18),
+                          fontSize: normalize(15),
                           fontWeight: 'bold',
                           color: item.clicked ? '#fff' : '#000',
                         }}>
@@ -561,8 +561,8 @@ const TableCart = ({navigation, ...props}) => {
                                 style={{
                                   marginLeft: '3%',
                                   fontSize: isWideScreen
-                                    ? normalize(16)
-                                    : normalize(15),
+                                    ? normalize(13)
+                                    : normalize(13),
                                   fontWeight: '600',
                                   color: item.clicked ? '#fff' : '#000',
                                 }}>
@@ -583,18 +583,18 @@ const TableCart = ({navigation, ...props}) => {
                         style={{
                           color: item.clicked ? '#fff' : '#000',
                           fontWeight: 'bold',
-                          fontSize: normalize(18),
+                          fontSize: normalize(15),
                         }}
                         numberOfLines={1}>
                         {formatCurrency(item.total_amount)}
                       </Text>
                     </View>
                     <Ripple
-                      style={{width: '10%', alignItems: 'center'}}
+                      style={{width: '13%', alignItems: 'flex-end'}}
                       onPress={() => onDeleteCartItem(item)}>
                       <MaterialIcon
                         name="delete-forever"
-                        size={25}
+                        size={normalize(25)}
                         color="red"
                       />
                     </Ripple>
@@ -686,12 +686,13 @@ const TableCart = ({navigation, ...props}) => {
                 <View style={styles.divider} />
                 {transactions &&
                   transactions.length > 0 &&
+                  transactions.length > 1 &&
                   transactions.map((transaction) => (
                     <View style={{...styles.row}} key={transaction.id}>
                       <Text style={styles.rowText}>
                         {transaction.status === 1
                           ? Languages[selectedLanguage].orderSummary.paid
-                          : 'Due'}
+                          : Languages[selectedLanguage].orderSummary.due}
                       </Text>
                       <Text style={styles.rowText}>
                         {formatCurrency(
@@ -762,14 +763,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#000',
     marginBottom: '3%',
-    fontSize: 18,
+    fontSize: normalize(18),
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   rowText: {
-    fontSize: 16,
+    fontSize: normalize(16),
     color: '#000',
   },
   divider: {

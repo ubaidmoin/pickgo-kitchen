@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Keyboard} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Keyboard,
+  Platform,
+  PixelRatio,
+  Dimensions,
+} from 'react-native';
 import Input from '../Components/Input';
 import Button from '../Components/Button';
 import Dropdown from '../Components/Dropdown';
@@ -12,6 +20,18 @@ import {
 } from '../Services/API/APIManager';
 import {getNotificationCount} from '../Services/DataManager';
 import Languages from '../Localization/translations';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const OrderSummary = ({navigation, ...props}) => {
   useEffect(() => {
@@ -417,18 +437,18 @@ const OrderSummary = ({navigation, ...props}) => {
               <View style={{width: '33.33%'}}>
                 <Text
                   style={{
-                    fontSize: 12,
+                    fontSize: normalize(12),
                     color: '#a6a5a5',
                   }}>{`${Languages[selectedLanguage].orderSummary.orderCapital} #`}</Text>
-                <Text style={{fontSize: 16}}>{c_oid}</Text>
+                <Text style={{fontSize: normalize(16)}}>{c_oid}</Text>
               </View>
               <View style={{width: '66.66%'}}>
-                <Text style={{fontSize: 12, color: '#a6a5a5'}}>
+                <Text style={{fontSize: normalize(12), color: '#a6a5a5'}}>
                   {Languages[selectedLanguage].orderSummary.customer}
                 </Text>
                 <Text
                   style={{
-                    fontSize: 16,
+                    fontSize: normalize(16),
                   }}>{`${customer_first_name ? customer_first_name : ''} ${
                   customer_last_name ? customer_last_name : ''
                 }`}</Text>
@@ -441,22 +461,22 @@ const OrderSummary = ({navigation, ...props}) => {
                 width: '100%',
               }}>
               <View style={{width: '33.33%'}}>
-                <Text style={{fontSize: 12, color: '#a6a5a5'}}>
+                <Text style={{fontSize: normalize(12), color: '#a6a5a5'}}>
                   {Languages[selectedLanguage].orderSummary.table}
                 </Text>
-                <Text style={{fontSize: 16}}>{table_name}</Text>
+                <Text style={{fontSize: normalize(16)}}>{table_name}</Text>
               </View>
               <View style={{width: '33.33%'}}>
-                <Text style={{fontSize: 12, color: '#a6a5a5'}}>
+                <Text style={{fontSize: normalize(12), color: '#a6a5a5'}}>
                   {Languages[selectedLanguage].orderSummary.guestsCapital}
                 </Text>
-                <Text style={{fontSize: 16}}>{guests_count}</Text>
+                <Text style={{fontSize: normalize(16)}}>{guests_count}</Text>
               </View>
               <View style={{width: '33.33%'}}>
-                <Text style={{fontSize: 12, color: '#a6a5a5'}}>
+                <Text style={{fontSize: normalize(12), color: '#a6a5a5'}}>
                   {Languages[selectedLanguage].orderSummary.status}
                 </Text>
-                <Text style={{fontSize: 16}}>
+                <Text style={{fontSize: normalize(16)}}>
                   {Languages[selectedLanguage].orderSummary.paid}
                 </Text>
               </View>
@@ -542,7 +562,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   rowText: {
-    fontSize: 16,
+    fontSize: normalize(16),
     color: '#000',
   },
   divider: {

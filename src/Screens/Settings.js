@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Dimensions, PixelRatio, Platform} from 'react-native';
 import Ripple from '../Components/Ripple';
 import {getNotificationCount, setLanguage} from '../Services/DataManager';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -9,6 +9,18 @@ import Dropdown from '../Components/Dropdown';
 import {actions} from '../Services/State/Reducer';
 import {useStateValue} from '../Services/State/State';
 import Languages from '../Localization/translations';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const Settings = ({navigation}) => {
   useEffect(() => {
@@ -107,7 +119,12 @@ const Settings = ({navigation}) => {
             }}
             onPress={item.onPress}>
             {item.icon}
-            <Text style={{fontSize: 18, color: '#757575', fontWeight: 'bold'}}>
+            <Text
+              style={{
+                fontSize: normalize(18),
+                color: '#757575',
+                fontWeight: 'bold',
+              }}>
               {item.title}
             </Text>
           </Ripple>

@@ -1,4 +1,12 @@
-import {Image, StatusBar, Text, View} from 'react-native';
+import {
+  Image,
+  StatusBar,
+  Text,
+  View,
+  Dimensions,
+  Platform,
+  PixelRatio,
+} from 'react-native';
 import React from 'react';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -10,6 +18,18 @@ import {setUserInfo} from '../Services/DataManager';
 import {actions} from '../Services/State/Reducer';
 import {settings as s} from '../Services/Settings';
 import Languages from '../Localization/translations';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const Drawer = ({navigation}) => {
   const [{userInfo, selectedLanguage}, dispatch] = useStateValue();
@@ -93,10 +113,17 @@ const Drawer = ({navigation}) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 18}}>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              color: '#fff',
+              fontSize: normalize(18),
+            }}>
             {`${first_name} ${last_name}`}
           </Text>
-          <Text style={{color: '#fff', fontSize: 12}}>{email_address}</Text>
+          <Text style={{color: '#fff', fontSize: normalize(12)}}>
+            {email_address}
+          </Text>
         </View>
       </View>
       <View style={{flex: 0.7}}>
@@ -126,7 +153,7 @@ const Drawer = ({navigation}) => {
                 style={{
                   fontWeight: 'bold',
                   color: '#fff',
-                  fontSize: 14,
+                  fontSize: normalize(14),
                   paddingVertical: 5,
                 }}>
                 {menuItem.title}

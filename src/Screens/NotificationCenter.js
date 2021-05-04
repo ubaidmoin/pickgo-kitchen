@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Dimensions,
+  Platform,
+  PixelRatio,
+} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import Ripple from '../Components/Ripple';
@@ -8,6 +15,18 @@ import {
   updateNotification,
   getNotificationCount,
 } from '../Services/DataManager';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const NotificationCenter = ({navigation}) => {
   useEffect(() => {
@@ -81,11 +100,17 @@ const NotificationCenter = ({navigation}) => {
             onPress={() => onPressNotification(item)}>
             <View style={{width: '85%', paddingHorizontal: '2%'}}>
               <Text
-                style={{fontSize: 18, color: '#757575', fontWeight: 'bold'}}>
+                style={{
+                  fontSize: normalize(18),
+                  color: '#757575',
+                  fontWeight: 'bold',
+                }}>
                 {item.title}
               </Text>
-              <Text style={{color: '#555', fontSize: 16}}>{item.body}</Text>
-              <Text style={{color: '#999', fontSize: 15}}>
+              <Text style={{color: '#555', fontSize: normalize(16)}}>
+                {item.body}
+              </Text>
+              <Text style={{color: '#999', fontSize: normalize(15)}}>
                 {moment(item.time).format('MM/DD/YYYY hh:mm:ss a')}
               </Text>
             </View>

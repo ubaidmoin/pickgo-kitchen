@@ -1,6 +1,25 @@
 import React from 'react';
-import {Text, ActivityIndicator, View} from 'react-native';
+import {
+  Text,
+  ActivityIndicator,
+  View,
+  Dimensions,
+  Platform,
+  PixelRatio,
+} from 'react-native';
 import Ripple from './Ripple';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const scale = SCREEN_WIDTH / 320;
+
+const normalize = (size) => {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+};
 
 const Button = (props) => {
   const {
@@ -54,7 +73,9 @@ const Button = (props) => {
             }}>
             {icon}
           </View>
-          <Text style={{color: textColor, fontSize: 18}}>{title}</Text>
+          <Text style={{color: textColor, fontSize: normalize(14)}}>
+            {title}
+          </Text>
         </View>
       )}
     </Ripple>
