@@ -58,7 +58,7 @@ const Header = (
   title: showTitle ? title : null,
   headerTitleStyle: {
     color: '#fff',
-    fontSize: normalize(16),
+    fontSize: normalize(12),
   },
   headerTransparent: isTransparent,
   headerStyle: {

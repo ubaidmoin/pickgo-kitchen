@@ -3,6 +3,7 @@ import {
   StatusBar,
   Text,
   View,
+  ScrollView,
   Dimensions,
   Platform,
   PixelRatio,
@@ -83,7 +84,7 @@ const Drawer = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#27ae61'}}>
+    <ScrollView style={{flex: 1, backgroundColor: '#27ae61'}}>
       <StatusBar backgroundColor="#27ae61" barStyle="light-content" />
       <View
         style={{
@@ -117,7 +118,7 @@ const Drawer = ({navigation}) => {
             style={{
               fontWeight: 'bold',
               color: '#fff',
-              fontSize: normalize(18),
+              fontSize: normalize(14),
             }}>
             {`${first_name} ${last_name}`}
           </Text>
@@ -153,7 +154,7 @@ const Drawer = ({navigation}) => {
                 style={{
                   fontWeight: 'bold',
                   color: '#fff',
-                  fontSize: normalize(14),
+                  fontSize: normalize(12),
                   paddingVertical: 5,
                 }}>
                 {menuItem.title}
@@ -181,7 +182,7 @@ const Drawer = ({navigation}) => {
           />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

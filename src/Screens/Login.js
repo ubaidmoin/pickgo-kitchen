@@ -196,7 +196,7 @@ const Login = () => {
         <Text
           style={{
             fontWeight: 'bold',
-            fontSize: normalize(15),
+            fontSize: normalize(12),
             color: '#2bae6a',
             marginBottom: '2%',
           }}>

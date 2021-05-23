@@ -278,12 +278,12 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     maxWidth: '90%',
     color: '#000',
-    fontSize: normalize(18),
+    fontSize: normalize(14),
   },
   message: {
     paddingTop: 5,
     color: '#000',
-    fontSize: normalize(16),
+    fontSize: normalize(12),
   },
   button: {
     paddingHorizontal: 25,
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: normalize(15),
+    fontSize: normalize(12),
   },
 });
 

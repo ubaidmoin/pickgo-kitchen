@@ -827,7 +827,7 @@ const Payment = ({navigation, ...props}) => {
               }}>
               <Text
                 style={{
-                  fontSize: normalize(18),
+                  fontSize: normalize(14),
                   textAlign: 'center',
                   fontWeight: 'bold',
                 }}>
@@ -873,7 +873,7 @@ const Payment = ({navigation, ...props}) => {
                         textAlign: 'center',
                         marginVertical: '1.5%',
                         marginHorizontal: '8%',
-                        fontSize: normalize(18),
+                        fontSize: normalize(14),
                       }}>
                       {confirmCashQuantity}
                     </Text>
@@ -897,7 +897,7 @@ const Payment = ({navigation, ...props}) => {
                       <EntypoIcon name="plus" size={25} color="#fff" />
                     </Ripple>
                   </View>
-                  <Text style={{fontSize: normalize(18)}}>
+                  <Text style={{fontSize: normalize(14)}}>
                     {formatCurrency(
                       confirmCashAmount * confirmCashQuantity,
                       true,
@@ -917,10 +917,10 @@ const Payment = ({navigation, ...props}) => {
                   justifyContent: 'space-between',
                   marginTop: '5%',
                 }}>
-                <Text style={{fontSize: normalize(18)}}>
+                <Text style={{fontSize: normalize(14)}}>
                   {Languages[selectedLanguage].payment.change}
                 </Text>
-                <Text style={{fontSize: normalize(18)}}>
+                <Text style={{fontSize: normalize(14)}}>
                   {dialogType === 'PayCashFixed'
                     ? getPayableAmount() -
                         confirmCashAmount * confirmCashQuantity <
@@ -952,7 +952,7 @@ const Payment = ({navigation, ...props}) => {
                     backgroundColor: '#ed3237',
                   }}
                   onPress={() => setDialogType('')}>
-                  <Text style={{color: '#fff', fontSize: normalize(15)}}>
+                  <Text style={{color: '#fff', fontSize: normalize(12)}}>
                     {Languages[selectedLanguage].payment.cancel}
                   </Text>
                 </Ripple>
@@ -975,7 +975,7 @@ const Payment = ({navigation, ...props}) => {
                       onMakeTransaction(paymentAmount);
                     }
                   }}>
-                  <Text style={{color: '#fff', fontSize: normalize(15)}}>
+                  <Text style={{color: '#fff', fontSize: normalize(12)}}>
                     {Languages[selectedLanguage].payment.confirm}
                   </Text>
                 </Ripple>
@@ -1001,7 +1001,7 @@ const Payment = ({navigation, ...props}) => {
               }}>
               <Text
                 style={{
-                  fontSize: normalize(18),
+                  fontSize: normalize(14),
                   textAlign: 'center',
                   fontWeight: 'bold',
                 }}>
@@ -1040,7 +1040,7 @@ const Payment = ({navigation, ...props}) => {
                     textAlign: 'center',
                     marginVertical: '1.5%',
                     marginHorizontal: '5%',
-                    fontSize: normalize(18),
+                    fontSize: normalize(14),
                   }}>
                   {customSplitQuantity}
                 </Text>
@@ -1078,7 +1078,7 @@ const Payment = ({navigation, ...props}) => {
                     backgroundColor: '#ed3237',
                   }}
                   onPress={() => setDialogType('')}>
-                  <Text style={{color: '#fff', fontSize: normalize(15)}}>
+                  <Text style={{color: '#fff', fontSize: normalize(12)}}>
                     {Languages[selectedLanguage].payment.cancel}
                   </Text>
                 </Ripple>
@@ -1094,7 +1094,7 @@ const Payment = ({navigation, ...props}) => {
                     setDialogType('');
                     onSplitEqual(customSplitQuantity);
                   }}>
-                  <Text style={{color: '#fff', fontSize: normalize(15)}}>
+                  <Text style={{color: '#fff', fontSize: normalize(12)}}>
                     {Languages[selectedLanguage].payment.confirm}
                   </Text>
                 </Ripple>
@@ -1112,13 +1112,13 @@ const Payment = ({navigation, ...props}) => {
             }}>
             <Text
               style={{
-                fontSize: normalize(25),
+                fontSize: normalize(16),
                 fontWeight: 'bold',
               }}
               numberOfLines={1}>
               {formatCurrency(getPayableAmount(), true)}
             </Text>
-            <Text numberOfLines={1} style={{fontSize: normalize(16)}}>
+            <Text numberOfLines={1} style={{fontSize: normalize(12)}}>
               {Languages[selectedLanguage].payment.outOfTotal
                 .replace('${amount}', formatCurrency(summary.subtotal, true))
                 .replace(
@@ -1146,7 +1146,7 @@ const Payment = ({navigation, ...props}) => {
             {selected === 0 ? (
               <View style={{width: '100%'}}>
                 <View style={{marginTop: '3%'}}>
-                  <Text style={{fontSize: normalize(18)}}>
+                  <Text style={{fontSize: normalize(14)}}>
                     {Languages[selectedLanguage].payment.card}
                   </Text>
                   <Button
@@ -1157,7 +1157,7 @@ const Payment = ({navigation, ...props}) => {
                   />
                 </View>
                 <View style={{marginTop: '3%'}}>
-                  <Text style={{fontSize: normalize(18)}}>
+                  <Text style={{fontSize: normalize(14)}}>
                     {Languages[selectedLanguage].payment.cash}
                   </Text>
                   <View
@@ -1189,7 +1189,7 @@ const Payment = ({navigation, ...props}) => {
                           marginRight: 5,
                         }}
                         onPress={() => onPayCash(item, index)}>
-                        <Text style={{color: '#fff', fontSize: normalize(18)}}>
+                        <Text style={{color: '#fff', fontSize: normalize(14)}}>
                           {isNaN(item) ? item : formatCurrency(item, true)}
                         </Text>
                       </Ripple>
@@ -1211,7 +1211,7 @@ const Payment = ({navigation, ...props}) => {
                     orderUserCard &&
                     orderUserCard.id ? (
                       <View style={{marginTop: '3%'}}>
-                        <Text style={{fontSize: normalize(18)}}>{`User: ${
+                        <Text style={{fontSize: normalize(14)}}>{`User: ${
                           orderUserInfo.first_name
                             ? orderUserInfo.first_name
                             : ''
@@ -1268,12 +1268,12 @@ const Payment = ({navigation, ...props}) => {
                   style={{
                     marginVertical: '3%',
                     textAlign: 'center',
-                    fontSize: normalize(18),
+                    fontSize: normalize(14),
                   }}>
                   {Languages[selectedLanguage].payment.or}
                 </Text>
                 <View>
-                  <Text style={{fontSize: normalize(16)}}>
+                  <Text style={{fontSize: normalize(12)}}>
                     {Languages[selectedLanguage].payment.splitIntoEqualPayments}
                   </Text>
                   <View
@@ -1305,7 +1305,7 @@ const Payment = ({navigation, ...props}) => {
                           marginRight: 5,
                         }}
                         onPress={() => onSplitPayment(item)}>
-                        <Text style={{color: '#fff', fontSize: normalize(18)}}>
+                        <Text style={{color: '#fff', fontSize: normalize(14)}}>
                           {item}
                         </Text>
                       </Ripple>

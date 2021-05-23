@@ -223,7 +223,7 @@ const SalesReport = ({navigation}) => {
               customStyles={{
                 placeholderText: {color: '#000'},
                 dateInput: {borderWidth: 0},
-                dateText: {fontSize: normalize(18)},
+                dateText: {fontSize: normalize(14)},
               }}
               onDateChange={onStartDateChange}
             />
@@ -253,7 +253,7 @@ const SalesReport = ({navigation}) => {
               customStyles={{
                 placeholderText: {color: '#000'},
                 dateInput: {borderWidth: 0},
-                dateText: {fontSize: normalize(18)},
+                dateText: {fontSize: normalize(14)},
               }}
               onDateChange={onEndDateChange}
             />
@@ -383,14 +383,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#000',
     marginBottom: '3%',
-    fontSize: normalize(18),
+    fontSize: normalize(14),
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   rowText: {
-    fontSize: normalize(16),
+    fontSize: normalize(12),
     color: '#000',
   },
   divider: {

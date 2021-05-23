@@ -587,7 +587,7 @@ const AddToCart = ({navigation, ...props}) => {
                     style={{
                       color:
                         selectedMenuCourse.id === item.id ? '#fff' : '#000',
-                      fontSize: normalize(18),
+                      fontSize: normalize(14),
                     }}>
                     {item.name}
                   </Text>
@@ -637,7 +637,7 @@ const AddToCart = ({navigation, ...props}) => {
                       style={{
                         color: '#000',
                         textAlign: 'left',
-                        fontSize: normalize(18),
+                        fontSize: normalize(14),
                         width: '70%',
                       }}>
                       {item.name}
@@ -647,7 +647,7 @@ const AddToCart = ({navigation, ...props}) => {
                         color: '#000',
                         alignSelf: 'center',
                         textAlign: 'right',
-                        fontSize: normalize(18),
+                        fontSize: normalize(14),
                         width: '30%',
                       }}>
                       {formatCurrency(item.price)}
@@ -665,7 +665,7 @@ const AddToCart = ({navigation, ...props}) => {
                       marginBottom: '3%',
                     }}>
                     <EntypoIcon name="chevron-right" size={18} />
-                    <Text style={{fontWeight: 'bold', fontSize: normalize(18)}}>
+                    <Text style={{fontWeight: 'bold', fontSize: normalize(14)}}>
                       {Languages[selectedLanguage].addToCart.orderDetails}:
                       {table && table.name ? table.name : ''}
                     </Text>
@@ -702,7 +702,7 @@ const AddToCart = ({navigation, ...props}) => {
                             }}>
                             <Text
                               style={{
-                                fontSize: normalize(18),
+                                fontSize: normalize(14),
                               }}>{`x ${item.qty}`}</Text>
                           </View>
                           <View
@@ -712,7 +712,7 @@ const AddToCart = ({navigation, ...props}) => {
                             }}>
                             <Text
                               style={{
-                                fontSize: normalize(18),
+                                fontSize: normalize(14),
                                 fontWeight: 'bold',
                                 color: '#767676',
                               }}>
@@ -738,7 +738,7 @@ const AddToCart = ({navigation, ...props}) => {
                                     <Text
                                       style={{
                                         marginLeft: '3%',
-                                        fontSize: normalize(16),
+                                        fontSize: normalize(12),
                                         fontWeight: 'bold',
                                         color: '#979797',
                                       }}>
@@ -774,7 +774,7 @@ const AddToCart = ({navigation, ...props}) => {
                         {item.notes ? (
                           <Text
                             style={{
-                              fontSize: normalize(15),
+                              fontSize: normalize(12),
                               color: '#979797',
                               marginTop: 5,
                               textAlign: 'justify',
@@ -939,7 +939,7 @@ const AddToCart = ({navigation, ...props}) => {
                 <Text
                   style={{
                     color: selectedMenuCourse.id === item.id ? '#fff' : '#000',
-                    fontSize: normalize(18),
+                    fontSize: normalize(14),
                   }}>
                   {item.name}
                 </Text>
@@ -983,7 +983,7 @@ const AddToCart = ({navigation, ...props}) => {
                   style={{
                     color: '#000',
                     textAlign: 'left',
-                    fontSize: normalize(18),
+                    fontSize: normalize(14),
                     width: '70%',
                     fontWeight: 'bold',
                   }}>
@@ -994,7 +994,7 @@ const AddToCart = ({navigation, ...props}) => {
                     color: '#000',
                     alignSelf: 'center',
                     textAlign: 'right',
-                    fontSize: normalize(18),
+                    fontSize: normalize(14),
                     width: '30%',
                   }}>
                   {formatCurrency(item.price)}
@@ -1048,7 +1048,7 @@ const AddToCart = ({navigation, ...props}) => {
                         }}>
                         <Text
                           style={{
-                            fontSize: normalize(18),
+                            fontSize: normalize(14),
                           }}>{`x ${item.qty}`}</Text>
                       </View>
                       <View
@@ -1058,7 +1058,7 @@ const AddToCart = ({navigation, ...props}) => {
                         }}>
                         <Text
                           style={{
-                            fontSize: normalize(18),
+                            fontSize: normalize(14),
                             fontWeight: 'bold',
                             color: '#767676',
                           }}>
@@ -1084,7 +1084,7 @@ const AddToCart = ({navigation, ...props}) => {
                                 <Text
                                   style={{
                                     marginLeft: '3%',
-                                    fontSize: normalize(15),
+                                    fontSize: normalize(12),
                                     color: '#979797',
                                   }}>
                                   {`${
@@ -1101,7 +1101,7 @@ const AddToCart = ({navigation, ...props}) => {
                       </View>
                       <View style={{width: '27%', alignItems: 'flex-end'}}>
                         <Text
-                          style={{color: '#767676', fontSize: normalize(18)}}
+                          style={{color: '#767676', fontSize: normalize(14)}}
                           numberOfLines={1}>
                           {formatCurrency(item.total_amount)}
                         </Text>
@@ -1119,7 +1119,7 @@ const AddToCart = ({navigation, ...props}) => {
                     {item.notes ? (
                       <Text
                         style={{
-                          fontSize: normalize(15),
+                          fontSize: normalize(12),
                           color: '#979797',
                           marginTop: 5,
                           textAlign: 'justify',
@@ -1260,14 +1260,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#000',
     marginBottom: '3%',
-    fontSize: normalize(18),
+    fontSize: normalize(14),
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   rowText: {
-    fontSize: normalize(16),
+    fontSize: normalize(12),
     color: '#000',
   },
   divider: {

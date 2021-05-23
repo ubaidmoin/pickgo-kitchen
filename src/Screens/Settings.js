@@ -121,7 +121,7 @@ const Settings = ({navigation}) => {
             {item.icon}
             <Text
               style={{
-                fontSize: normalize(18),
+                fontSize: normalize(14),
                 color: '#757575',
                 fontWeight: 'bold',
               }}>

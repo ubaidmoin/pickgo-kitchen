@@ -521,7 +521,7 @@ const TableCart = ({navigation, ...props}) => {
                       }}>
                       <Text
                         style={{
-                          fontSize: normalize(15),
+                          fontSize: normalize(12),
                           color: item.clicked ? '#fff' : '#000',
                         }}>{`x ${item.qty}`}</Text>
                     </View>
@@ -532,7 +532,7 @@ const TableCart = ({navigation, ...props}) => {
                       }}>
                       <Text
                         style={{
-                          fontSize: normalize(15),
+                          fontSize: normalize(12),
                           fontWeight: 'bold',
                           color: item.clicked ? '#fff' : '#000',
                         }}>
@@ -583,7 +583,7 @@ const TableCart = ({navigation, ...props}) => {
                         style={{
                           color: item.clicked ? '#fff' : '#000',
                           fontWeight: 'bold',
-                          fontSize: normalize(15),
+                          fontSize: normalize(12),
                         }}
                         numberOfLines={1}>
                         {formatCurrency(item.total_amount)}
@@ -594,7 +594,7 @@ const TableCart = ({navigation, ...props}) => {
                       onPress={() => onDeleteCartItem(item)}>
                       <MaterialIcon
                         name="delete-forever"
-                        size={normalize(25)}
+                        size={normalize(16)}
                         color="red"
                       />
                     </Ripple>
@@ -602,7 +602,7 @@ const TableCart = ({navigation, ...props}) => {
                   {item.notes ? (
                     <Text
                       style={{
-                        fontSize: normalize(15),
+                        fontSize: normalize(12),
                         marginTop: 5,
                         textAlign: 'justify',
                         fontWeight: '600',
@@ -763,14 +763,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#000',
     marginBottom: '3%',
-    fontSize: normalize(18),
+    fontSize: normalize(14),
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   rowText: {
-    fontSize: normalize(16),
+    fontSize: normalize(12),
     color: '#000',
   },
   divider: {

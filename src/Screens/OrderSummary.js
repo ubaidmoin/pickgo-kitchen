@@ -215,7 +215,7 @@ const OrderSummary = ({navigation, ...props}) => {
   };
 
   const formatCurrency = (value) => {
-    return `₭ ${parseFloat(value)
+    return `$ ${parseFloat(value)
       .toFixed(1)
       .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
   };
@@ -440,7 +440,7 @@ const OrderSummary = ({navigation, ...props}) => {
                     fontSize: normalize(12),
                     color: '#a6a5a5',
                   }}>{`${Languages[selectedLanguage].orderSummary.orderCapital} #`}</Text>
-                <Text style={{fontSize: normalize(16)}}>{c_oid}</Text>
+                <Text style={{fontSize: normalize(12)}}>{c_oid}</Text>
               </View>
               <View style={{width: '66.66%'}}>
                 <Text style={{fontSize: normalize(12), color: '#a6a5a5'}}>
@@ -448,7 +448,7 @@ const OrderSummary = ({navigation, ...props}) => {
                 </Text>
                 <Text
                   style={{
-                    fontSize: normalize(16),
+                    fontSize: normalize(12),
                   }}>{`${customer_first_name ? customer_first_name : ''} ${
                   customer_last_name ? customer_last_name : ''
                 }`}</Text>
@@ -464,19 +464,19 @@ const OrderSummary = ({navigation, ...props}) => {
                 <Text style={{fontSize: normalize(12), color: '#a6a5a5'}}>
                   {Languages[selectedLanguage].orderSummary.table}
                 </Text>
-                <Text style={{fontSize: normalize(16)}}>{table_name}</Text>
+                <Text style={{fontSize: normalize(12)}}>{table_name}</Text>
               </View>
               <View style={{width: '33.33%'}}>
                 <Text style={{fontSize: normalize(12), color: '#a6a5a5'}}>
                   {Languages[selectedLanguage].orderSummary.guestsCapital}
                 </Text>
-                <Text style={{fontSize: normalize(16)}}>{guests_count}</Text>
+                <Text style={{fontSize: normalize(12)}}>{guests_count}</Text>
               </View>
               <View style={{width: '33.33%'}}>
                 <Text style={{fontSize: normalize(12), color: '#a6a5a5'}}>
                   {Languages[selectedLanguage].orderSummary.status}
                 </Text>
-                <Text style={{fontSize: normalize(16)}}>
+                <Text style={{fontSize: normalize(12)}}>
                   {Languages[selectedLanguage].orderSummary.paid}
                 </Text>
               </View>
@@ -562,7 +562,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   rowText: {
-    fontSize: normalize(16),
+    fontSize: normalize(12),
     color: '#000',
   },
   divider: {

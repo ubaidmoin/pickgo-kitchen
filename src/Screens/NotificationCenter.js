@@ -101,16 +101,16 @@ const NotificationCenter = ({navigation}) => {
             <View style={{width: '85%', paddingHorizontal: '2%'}}>
               <Text
                 style={{
-                  fontSize: normalize(18),
+                  fontSize: normalize(14),
                   color: '#757575',
                   fontWeight: 'bold',
                 }}>
                 {item.title}
               </Text>
-              <Text style={{color: '#555', fontSize: normalize(16)}}>
+              <Text style={{color: '#555', fontSize: normalize(12)}}>
                 {item.body}
               </Text>
-              <Text style={{color: '#999', fontSize: normalize(15)}}>
+              <Text style={{color: '#999', fontSize: normalize(12)}}>
                 {moment(item.time).format('MM/DD/YYYY hh:mm:ss a')}
               </Text>
             </View>

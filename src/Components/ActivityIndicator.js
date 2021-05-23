@@ -34,7 +34,7 @@ const CustomActivityIndicator = ({visible}) => {
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <ActivityIndicator size="large" color="green" />
-          <Text style={{fontSize: normalize(15)}}>
+          <Text style={{fontSize: normalize(12)}}>
             {Languages[selectedLanguage].messages.pleaseWait}
           </Text>
         </View>

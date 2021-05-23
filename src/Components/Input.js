@@ -70,7 +70,7 @@ class Input extends Component {
           style={{
             paddingHorizontal: 0,
             height: 45,
-            fontSize: normalize(16),
+            fontSize: normalize(10),
             color: '#000',
             borderBottomWidth: this.state.isFocused ? 2 : 1,
             borderBottomColor: '#000',

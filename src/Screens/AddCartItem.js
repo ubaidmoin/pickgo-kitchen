@@ -258,7 +258,7 @@ const AddCartItem = ({navigation, ...props}) => {
                 style={{
                   color: '#000',
                   textAlign: 'left',
-                  fontSize: normalize(20),
+                  fontSize: normalize(14),
                   width: '70%',
                 }}>
                 {menu && menu.name ? menu.name : ''}
@@ -267,7 +267,7 @@ const AddCartItem = ({navigation, ...props}) => {
                 style={{
                   color: '#000',
                   textAlign: 'right',
-                  fontSize: normalize(20),
+                  fontSize: normalize(14),
                   width: '30%',
                 }}>
                 {formatCurrency(menu.price)}
@@ -279,7 +279,7 @@ const AddCartItem = ({navigation, ...props}) => {
                   color: '#000',
                   textAlign: 'justify',
                   marginVertical: '1.5%',
-                  fontSize: normalize(18),
+                  fontSize: normalize(14),
                 }}>
                 {menu.description}
               </Text>
@@ -289,7 +289,7 @@ const AddCartItem = ({navigation, ...props}) => {
                 style={{
                   color: '#ed3237',
                   textAlign: 'center',
-                  fontSize: normalize(15),
+                  fontSize: normalize(12),
                   marginVertical: '1.5%',
                 }}>
                 {Languages[selectedLanguage].addCartItem.soldOut}
@@ -327,7 +327,7 @@ const AddCartItem = ({navigation, ...props}) => {
                     textAlign: 'center',
                     marginVertical: '1.5%',
                     marginHorizontal: '1.5%',
-                    fontSize: normalize(18),
+                    fontSize: normalize(14),
                   }}>
                   {quantity}
                 </Text>
@@ -377,7 +377,7 @@ const AddCartItem = ({navigation, ...props}) => {
                     style={{
                       color: '#000',
                       textAlign: 'center',
-                      fontSize: normalize(18),
+                      fontSize: normalize(14),
                     }}>
                     {`${item.title} (${
                       item.is_required

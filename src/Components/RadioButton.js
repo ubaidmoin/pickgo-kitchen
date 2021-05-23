@@ -75,7 +75,7 @@ class RadioButton extends React.Component {
           style={{
             marginLeft: 5,
             paddingRight: 10,
-            fontSize: normalize(16),
+            fontSize: normalize(12),
             textAlign: 'left',
             marginTop: -2,
           }}>

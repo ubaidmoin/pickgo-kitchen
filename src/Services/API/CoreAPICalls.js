@@ -25,6 +25,7 @@ export const authService = async (data) => {
     data: JSON.stringify(data),
   };
   try {
+    console.log(config.url)
     const response = await axios(config)
       .then((res) => res)
       .catch((error) => error);

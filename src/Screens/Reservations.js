@@ -156,7 +156,7 @@ const Reservations = ({navigation}) => {
                 style={{
                   ...styles.itemTitle,
                   fontWeight: 'bold',
-                  fontSize: normalize(20),
+                  fontSize: normalize(14),
                   color: isPending ? '#fff' : '#000',
                 }}
                 numberOfLines={1}>
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   itemTitle: {
-    fontSize: normalize(18),
+    fontSize: normalize(14),
     color: '#fff',
   },
 });

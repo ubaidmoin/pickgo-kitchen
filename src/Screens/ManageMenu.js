@@ -201,7 +201,7 @@ const ManageMenu = ({navigation}) => {
                     style={{
                       color:
                         selectedMenuCourse.id === item.id ? '#fff' : '#000',
-                      fontSize: normalize(18),
+                      fontSize: normalize(14),
                     }}>
                     {item.name}
                   </Text>
@@ -249,7 +249,7 @@ const ManageMenu = ({navigation}) => {
                       style={{
                         color: '#000',
                         textAlign: 'left',
-                        fontSize: normalize(18),
+                        fontSize: normalize(14),
                         width: '70%',
                       }}>
                       {item.name}
@@ -259,7 +259,7 @@ const ManageMenu = ({navigation}) => {
                         color: '#000',
                         alignSelf: 'center',
                         textAlign: 'right',
-                        fontSize: normalize(18),
+                        fontSize: normalize(14),
                         width: '30%',
                       }}>
                       {formatCurrency(item.price)}
@@ -300,7 +300,7 @@ const ManageMenu = ({navigation}) => {
                 <Text
                   style={{
                     color: selectedMenuCourse.id === item.id ? '#fff' : '#000',
-                    fontSize: normalize(18),
+                    fontSize: normalize(14),
                   }}>
                   {item.name}
                 </Text>
@@ -343,7 +343,7 @@ const ManageMenu = ({navigation}) => {
                   style={{
                     color: '#000',
                     textAlign: 'left',
-                    fontSize: normalize(18),
+                    fontSize: normalize(14),
                     width: '70%',
                   }}>
                   {item.name}
@@ -353,7 +353,7 @@ const ManageMenu = ({navigation}) => {
                     color: '#000',
                     alignSelf: 'center',
                     textAlign: 'right',
-                    fontSize: normalize(18),
+                    fontSize: normalize(14),
                     width: '30%',
                   }}>
                   {formatCurrency(item.price)}

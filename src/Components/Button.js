@@ -73,8 +73,8 @@ const Button = (props) => {
             }}>
             {icon}
           </View>
-          <Text style={{color: textColor, fontSize: normalize(14)}}>
-            {title}
+          <Text style={{color: textColor, fontSize: normalize(10)}}>
+            {title.toUpperCase()}
           </Text>
         </View>
       )}

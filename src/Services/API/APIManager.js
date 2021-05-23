@@ -5,6 +5,7 @@ import {getAccessToken} from '../DataManager';
 export const getTables = async () => {
   try {
     const url = s.TABLES.LIST.replace('$[acces_token]', await getAccessToken());
+    console.log(url);
     const response = await getData(url);
     return response;
   } catch (err) {
@@ -18,6 +19,7 @@ export const getReservations = async () => {
       '$[acces_token]',
       await getAccessToken(),
     );
+    console.log(url);
     const response = await getData(url);
     return response;
   } catch (err) {
@@ -31,6 +33,7 @@ export const acceptOrder = async (data) => {
       '$[acces_token]',
       await getAccessToken(),
     );
+    console.log(url);
     const response = await postData(url, data);
     return response;
   } catch (err) {
@@ -44,6 +47,7 @@ export const getOrderSummary = async (data) => {
       '$[acces_token]',
       await getAccessToken(),
     );
+    console.log(url);
     const response = await postData(url, data);
     return response;
   } catch (err) {
@@ -57,6 +61,7 @@ export const sendOrderRequest = async (orderId) => {
       '$[order_id]',
       orderId,
     ).replace('$[acces_token]', await getAccessToken());
+    console.log(url);
     const response = await postData(url);
     return response;
   } catch (err) {
@@ -70,6 +75,7 @@ export const getTableDetails = async (tableId) => {
       '$[acces_token]',
       await getAccessToken(),
     );
+    console.log(url);
     const response = await getData(url);
     return response;
   } catch (err) {
@@ -80,6 +86,7 @@ export const getTableDetails = async (tableId) => {
 export const getMenu = async () => {
   try {
     const url = s.MENU.LIST.replace('$[acces_token]', await getAccessToken());
+    console.log(url);
     const response = await getData(url);
     return response;
   } catch (err) {
@@ -93,6 +100,7 @@ export const getMenuDetails = async (menuId) => {
       '$[acces_token]',
       await getAccessToken(),
     );
+    console.log(url);
     const response = await getData(url);
     return response;
   } catch (err) {
@@ -106,6 +114,7 @@ export const addToTableCart = async (data) => {
       '$[acces_token]',
       await getAccessToken(),
     );
+    console.log(url);
     const response = await postData(url, data);
     return response;
   } catch (err) {
@@ -119,6 +128,7 @@ export const deleteFromTableCart = async (cartItemId) => {
       '$[cart_item_id]',
       cartItemId,
     ).replace('$[acces_token]', await getAccessToken());
+    console.log(url);
     const response = await deleteData(url);
     return response;
   } catch (err) {
@@ -132,6 +142,7 @@ export const sendToKitchen = async (tableId) => {
       '$[table_id]',
       tableId,
     ).replace('$[acces_token]', await getAccessToken());
+    console.log(url);
     const response = await postData(url);
     return response;
   } catch (err) {
@@ -145,6 +156,7 @@ export const splitEqual = async (orderId, data) => {
       '$[order_id]',
       orderId,
     ).replace('$[acces_token]', await getAccessToken());
+    console.log(url);
     const response = await postData(url, data);
     return response;
   } catch (err) {
@@ -158,6 +170,7 @@ export const splitByAmount = async (orderId, data) => {
       '$[order_id]',
       orderId,
     ).replace('$[acces_token]', await getAccessToken());
+    console.log(url);
     const response = await postData(url, data);
     return response;
   } catch (err) {
@@ -171,6 +184,7 @@ export const makeTransaction = async (transactionId, data) => {
       '$[transaction_id]',
       transactionId,
     ).replace('$[acces_token]', await getAccessToken());
+    console.log(url);
     const response = await postData(url, data);
     return response;
   } catch (err) {
@@ -184,6 +198,7 @@ export const saveFcmToken = async (data) => {
       '$[acces_token]',
       await getAccessToken(),
     );
+    console.log(url);
     const response = await postData(url, data);
     return response;
   } catch (err) {
@@ -194,6 +209,7 @@ export const saveFcmToken = async (data) => {
 export const sendNotification = async (data) => {
   try {
     const url = s.USER.NOTIFY.replace('$[acces_token]', await getAccessToken());
+    console.log(url);
     const response = await postData(url, data);
     return response;
   } catch (err) {
@@ -204,6 +220,7 @@ export const sendNotification = async (data) => {
 export const addCustomOrderAmount = async (data) => {
   try {
     const url = s.DISCOUNT.CUSTOM_ORDER_AMOUNT;
+    console.log(url);
     const response = await postData(url, data, true);
     return response;
   } catch (err) {
@@ -214,6 +231,7 @@ export const addCustomOrderAmount = async (data) => {
 export const getCustomerDiscount = async (data) => {
   try {
     const url = s.DISCOUNT.CUSTOMER_DISCOUNT;
+    console.log(url);
     const response = await postData(url, data, true);
     return response;
   } catch (err) {
@@ -227,6 +245,7 @@ export const adminSendToCustomer = async (orderId) => {
       '$[order_id]',
       orderId,
     ).replace('$[acces_token]', await getAccessToken());
+    console.log(url);
     const response = await postData(url);
     return response;
   } catch (err) {
@@ -240,6 +259,7 @@ export const adminPay = async (orderId) => {
       '$[order_id]',
       orderId,
     ).replace('$[acces_token]', await getAccessToken());
+    console.log(url);
     const response = await postData(url);
     return response;
   } catch (err) {

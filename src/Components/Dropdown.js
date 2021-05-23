@@ -101,7 +101,7 @@ class Dropdown extends Component {
             }}
             styles={{
               titleText: {
-                fontSize: normalize(14),
+                fontSize: normalize(10),
                 color: 'black',
               },
               cancelButtonBox: {
@@ -119,7 +119,7 @@ class Dropdown extends Component {
               paddingHorizontal: 0,
               width: '100%',
               height: 45,
-              fontSize: normalize(20),
+              fontSize: normalize(10),
               color: '#000',
               paddingBottom: this.props.selected ? -20 : 0,
               marginBottom: -5,

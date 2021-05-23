@@ -53,7 +53,7 @@ const Switcher = (props) => {
             : null}
           <Text
             style={{
-              fontSize: normalize(16),
+              fontSize: normalize(12),
               marginLeft: option.icon ? '10%' : 0,
               color: index === selected ? '#fff' : '#000',
             }}>
