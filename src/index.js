@@ -14,6 +14,7 @@ import AddCartItem from './Screens/AddCartItem';
 import Payment from './Screens/Payment';
 import TerminalConnection from './Screens/TerminalConnection';
 import Reservations from './Screens/Reservations';
+import Orders from './Screens/Orders';
 import OrderSummary from './Screens/OrderSummary';
 import SalesReport from './Screens/SalesReport';
 import MenuOrders from './Screens/MenuOrders';
@@ -140,6 +141,25 @@ const SignedInStack = () => {
   const [{selectedLanguage}] = useStateValue();
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="Orders"
+        component={Orders}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: 'Orders',
+              showTitle: true,
+              showMenuButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
       <Stack.Screen
         name="Tables"
         component={Tables}
