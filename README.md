@@ -1,2 +1,2 @@
 # PickEat Admin
-adb uninstall com.pickgo.kitchen
+adb uninstall com.pickgo.kitchen# pickgo-kitchen

@@ -201,6 +201,8 @@ const Orders = (props) => {
           handleUpdateOrderStatus(4);
         } else if (command === 'updateReopen') {
           handleUpdateOrderStatus(2);
+        } else if (command === 'takeToCompletedOrders') {
+          navigation.navigate('CompletedOrders');
         }
       },
     );
