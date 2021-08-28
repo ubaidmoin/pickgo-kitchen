@@ -1,7 +1,7 @@
 export default {
   en: {
     login: {
-      appName: 'PickEat Admin',
+      appName: 'PickEat Kitchen',
       email: 'Email',
       password: 'Password',
       login: 'Login',

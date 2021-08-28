@@ -1,4 +1,5 @@
 {
-  "name": "PickGoKitchen",
+  "android_name": "PickEatAdmin",
+  "ios_name": "PickGoKitchen",
   "displayName": "PickGo Kitchen"
 }

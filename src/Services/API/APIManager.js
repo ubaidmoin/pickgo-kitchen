@@ -2,6 +2,46 @@ import {getData, postData, deleteData} from './CoreAPICalls';
 import {settings as s} from '../Settings';
 import {getAccessToken} from '../DataManager';
 
+export const getOrders = async () => {
+  try {
+    const url = s.ORDERS.GET_ORDERS.replace(
+      '$[access_token]',
+      await getAccessToken(),
+    );
+    const response = await getData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const updateOrderStatus = async (id, data) => {
+  try {
+    const url = s.ORDERS.UPDATE_ORDER_STATUS.replace('$[id]', id).replace(
+      '$[access_token]',
+      await getAccessToken(),
+    );
+    const response = await postData(url, data);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const updateItemStatus = async (id, data) => {
+  try {
+    const url = s.ORDERS.UPDATE_ITEM_STATUS.replace('$[id]', id).replace(
+      '$[access_token]',
+      await getAccessToken(),
+    );
+    console.log(url, data);
+    const response = await postData(url, data);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
 export const getTables = async () => {
   try {
     const url = s.TABLES.LIST.replace('$[acces_token]', await getAccessToken());
@@ -19,7 +59,6 @@ export const getReservations = async () => {
       '$[acces_token]',
       await getAccessToken(),
     );
-    console.log(url);
     const response = await getData(url);
     return response;
   } catch (err) {

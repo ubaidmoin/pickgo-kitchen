@@ -15,6 +15,7 @@ import Payment from './Screens/Payment';
 import TerminalConnection from './Screens/TerminalConnection';
 import Reservations from './Screens/Reservations';
 import Orders from './Screens/Orders';
+import CompletedOrders from './Screens/CompletedOrders';
 import OrderSummary from './Screens/OrderSummary';
 import SalesReport from './Screens/SalesReport';
 import MenuOrders from './Screens/MenuOrders';
@@ -56,20 +57,27 @@ const Header = (
   },
   navigation,
 ) => ({
-  title: showTitle ? title : null,
+  header: () => null,
+  title: '',
   headerTitleStyle: {
     color: '#fff',
     fontSize: normalize(12),
   },
   headerTransparent: isTransparent,
   headerStyle: {
-    backgroundColor: '#27ae61',
+    backgroundColor: '#fff',
+    shadowColor: 'transparent',
   },
   headerLeft:
     showBackButton || showMenuButton
       ? () => (
           <Ripple
-            style={{marginLeft: 10}}
+            style={{
+              marginLeft: 10,
+              backgroundColor: '#27ae61',
+              borderRadius: 80,
+              padding: 5,
+            }}
             onPress={() =>
               showBackButton ? navigation.pop() : navigation.toggleDrawer()
             }>
@@ -81,50 +89,50 @@ const Header = (
           </Ripple>
         )
       : null,
-  headerRight: showRightButtons
-    ? () => (
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginRight: 10,
-          }}>
-          <Ripple
-            style={{paddingHorizontal: 10}}
-            onPress={() => navigation.navigate('Tables')}>
-            <Entypo name="home" size={25} color={'#fff'} />
-          </Ripple>
-          <Ripple onPress={() => navigation.navigate('NotificationCenter')}>
-            <MaterialIcon name="notifications-on" size={25} color={'#fff'} />
-            {notificationCount ? (
-              <View
-                style={{
-                  position: 'absolute',
-                  top: '-30%',
-                  right: '-15%',
-                  width: 20,
-                  height: 20,
-                  borderRadius: 10,
-                  backgroundColor: '#cc0001',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderWidth: 1,
-                  borderColor: '#fff',
-                }}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: normalize(10),
-                    textAlign: 'center',
-                  }}>
-                  {notificationCount}
-                </Text>
-              </View>
-            ) : null}
-          </Ripple>
-        </View>
-      )
-    : null,
+  // headerRight: showRightButtons
+  //   ? () => (
+  //       <View
+  //         style={{
+  //           flexDirection: 'row',
+  //           alignItems: 'center',
+  //           marginRight: 10,
+  //         }}>
+  //         <Ripple
+  //           style={{paddingHorizontal: 10}}
+  //           onPress={() => navigation.navigate('Tables')}>
+  //           <Entypo name="home" size={25} color={'#fff'} />
+  //         </Ripple>
+  //         <Ripple onPress={() => navigation.navigate('NotificationCenter')}>
+  //           <MaterialIcon name="notifications-on" size={25} color={'#fff'} />
+  //           {notificationCount ? (
+  //             <View
+  //               style={{
+  //                 position: 'absolute',
+  //                 top: '-30%',
+  //                 right: '-15%',
+  //                 width: 20,
+  //                 height: 20,
+  //                 borderRadius: 10,
+  //                 backgroundColor: '#cc0001',
+  //                 justifyContent: 'center',
+  //                 alignItems: 'center',
+  //                 borderWidth: 1,
+  //                 borderColor: '#fff',
+  //               }}>
+  //               <Text
+  //                 style={{
+  //                   color: '#fff',
+  //                   fontSize: normalize(10),
+  //                   textAlign: 'center',
+  //                 }}>
+  //                 {notificationCount}
+  //               </Text>
+  //             </View>
+  //           ) : null}
+  //         </Ripple>
+  //       </View>
+  //     )
+  //   : null,
 });
 
 const LoggedOutStack = () => (
@@ -152,6 +160,25 @@ const SignedInStack = () => {
           return Header(
             {
               title: 'Orders',
+              showTitle: true,
+              showMenuButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="CompletedOrders"
+        component={CompletedOrders}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: 'Completed Orders',
               showTitle: true,
               showMenuButton: true,
               notificationCount,

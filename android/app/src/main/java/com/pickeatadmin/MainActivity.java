@@ -1,4 +1,4 @@
-package com.pickgo.eat.pickeatadmin;
+package com.pickgo.kitchen;
 
 import com.facebook.react.ReactActivity;
 

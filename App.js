@@ -17,18 +17,20 @@ import AppActivityIndicator from './src/Components/ActivityIndicator';
 import AppAlert from './src/Components/AppAlert';
 import VersionCheck from 'react-native-version-check';
 import {getLanguage, getUserInfo} from './src/Services/DataManager';
+// import {AlanView} from './AlanSDK';
+// import {NativeEventEmitter, NativeModules} from 'react-native';
+
+// const {AlanManager, AlanEventEmitter} = NativeModules;
+// const alanEventEmitter = new NativeEventEmitter(AlanEventEmitter);
 
 const RootNavigator = () => {
   useEffect(() => {
     checkAuth();
-    isUpdateAvailable();
   }, []);
 
   const [loading, setLoading] = useState(false);
-  const [
-    {userInfo, progressSettings, alertSettings},
-    dispatch,
-  ] = useStateValue();
+  const [{userInfo, progressSettings, alertSettings}, dispatch] =
+    useStateValue();
   const {show = false} = progressSettings || {};
   const {settings} = alertSettings || {};
 
@@ -69,34 +71,6 @@ const RootNavigator = () => {
       });
     } finally {
       setLoading(false);
-    }
-  };
-
-  const isUpdateAvailable = async () => {
-    let updateNeeded = await VersionCheck.needUpdate({
-      packageName: 'com.pickgo.eat.pickeatadmin',
-    });
-    if (updateNeeded.isNeeded) {
-      dispatch({
-        type: actions.SET_ALERT_SETTINGS,
-        alertSettings: {
-          show: true,
-          type: 'info',
-          title: 'An Update Available',
-          message:
-            'A new version of PickEat Admin app is available. Would you like to update?',
-          showConfirmButton: true,
-          confirmText: 'Update',
-          showCancelButton: true,
-          cancelText: 'Later',
-          onConfirmPressed: async () => {
-            try {
-              Linking.openURL(updateNeeded.storeUrl);
-              // eslint-disable-next-line no-empty
-            } catch (error) {}
-          },
-        },
-      });
     }
   };
 
@@ -168,8 +142,8 @@ const RootNavigator = () => {
     </View>
   ) : (
     <View style={{flex: 1}} onLayout={() => checkDevice()}>
-      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-      <SafeAreaView style={{flex: 0, backgroundColor: '#27ae61'}} />
+      <StatusBar barStyle="dark-content" />
+      <SafeAreaView style={{flex: 0, backgroundColor: '#fff'}} />
       <SafeAreaView style={{flex: 1}}>
         <AppAlert {...getAlertSettings()} />
         <AppActivityIndicator visible={show} />
@@ -189,6 +163,12 @@ const RootNavigator = () => {
 const App = () => {
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
+      {/* <AlanView
+        projectid={
+          'e7c97f0d534667f4e24c8515b4cd6afc2e956eca572e1d8b807a3e2338fdd0dc/stage'
+        }
+        authData={{data: 'your auth data if needed'}}
+      /> */}
       <RootNavigator />
     </StateProvider>
   );

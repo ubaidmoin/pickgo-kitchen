@@ -41,4 +41,9 @@ export const settings = {
     CUSTOM_ORDER_AMOUNT: `${BASE_URLS.APP_BASEURL}/api/discount/customorderamount`,
     CUSTOMER_DISCOUNT: `${BASE_URLS.APP_BASEURL}/api/discount/customerdiscount/`,
   },
+  ORDERS: {
+    GET_ORDERS: `${BASE_URLS.APP_BASEURL}/api/order/get-company-orders?access_token=$[access_token]`,
+    UPDATE_ORDER_STATUS: `${BASE_URLS.APP_BASEURL}/api/order/update-order-status/$[id]?access_token=$[access_token]`,
+    UPDATE_ITEM_STATUS: `${BASE_URLS.APP_BASEURL}/api/order/update-item-status/$[id]?access_token=$[access_token]`,
+  },
 };

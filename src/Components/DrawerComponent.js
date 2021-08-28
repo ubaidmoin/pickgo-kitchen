@@ -37,21 +37,26 @@ const Drawer = ({navigation}) => {
   const drawerMenu = [
     {
       icon: <MaterialIcon name="dinner-dining" color={'#fff'} size={20} />,
-      title: Languages[selectedLanguage].tables.drawerTitle,
-      onPress: () => navigation.navigate('Tables'),
+      title: 'Orders',
+      onPress: () => navigation.navigate('Orders'),
     },
     {
       icon: <MaterialIcon name="dinner-dining" color={'#fff'} size={20} />,
-      title: Languages[selectedLanguage].reservations.drawerTitle,
-      onPress: () => navigation.navigate('Reservations'),
+      title: 'Completed Orders',
+      onPress: () => navigation.navigate('CompletedOrders'),
     },
-    {
-      icon: (
-        <FontAwesome5Icon name="file-invoice-dollar" color={'#fff'} size={20} />
-      ),
-      title: Languages[selectedLanguage].salesReport.drawerTitle,
-      onPress: () => navigation.navigate('SalesReport'),
-    },
+    // {
+    //   icon: <MaterialIcon name="dinner-dining" color={'#fff'} size={20} />,
+    //   title: Languages[selectedLanguage].reservations.drawerTitle,
+    //   onPress: () => navigation.navigate('Reservations'),
+    // },
+    // {
+    //   icon: (
+    //     <FontAwesome5Icon name="file-invoice-dollar" color={'#fff'} size={20} />
+    //   ),
+    //   title: Languages[selectedLanguage].salesReport.drawerTitle,
+    //   onPress: () => navigation.navigate('SalesReport'),
+    // },
     // {
     //   icon: <MaterialIcon name="fastfood" color={'#fff'} size={20} />,
     //   title: Languages[selectedLanguage].menuOrders.drawerTitle,
@@ -63,11 +68,11 @@ const Drawer = ({navigation}) => {
     //   subTitle: Languages[selectedLanguage].search.drawerSubTitle,
     //   onPress: () => navigation.navigate('SearchUsers'),
     // },
-    {
-      icon: <IonIcon name="notifications" color={'#fff'} size={20} />,
-      title: Languages[selectedLanguage].notificationCenter.drawerTitle,
-      onPress: () => navigation.navigate('NotificationCenter'),
-    },
+    // {
+    //   icon: <IonIcon name="notifications" color={'#fff'} size={20} />,
+    //   title: Languages[selectedLanguage].notificationCenter.drawerTitle,
+    //   onPress: () => navigation.navigate('NotificationCenter'),
+    // },
     {
       icon: <IonIcon name="settings-sharp" color={'#fff'} size={20} />,
       title: Languages[selectedLanguage].settings.drawerTitle,
@@ -75,8 +80,12 @@ const Drawer = ({navigation}) => {
     },
   ];
 
-  const {first_name = '', last_name = '', email_address = '', picture = ''} =
-    (userInfo && userInfo.user) || {};
+  const {
+    first_name = '',
+    last_name = '',
+    email_address = '',
+    picture = '',
+  } = (userInfo && userInfo.user) || {};
 
   const logout = async () => {
     await setUserInfo('');
@@ -85,7 +94,7 @@ const Drawer = ({navigation}) => {
 
   return (
     <ScrollView style={{flex: 1, backgroundColor: '#27ae61'}}>
-      <StatusBar backgroundColor="#27ae61" barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <View
         style={{
           flex: 0.25,
