@@ -23,6 +23,8 @@ export const settings = {
     GET_DETAILS: `${BASE_URLS.APP_BASEURL}/api/menu/show/$[menu_id]?access_token=$[acces_token]`,
     ADD_TO_TABLE_CART: `${BASE_URLS.APP_BASEURL}/api/order-cart/add-to-table?access_token=$[acces_token]`,
     DELETE_FROM_TABLE_CART: `${BASE_URLS.APP_BASEURL}/api/cart/delete/$[cart_item_id]?access_token=$[acces_token]`,
+    UPDATE_MENU_STATUS: `${BASE_URLS.APP_BASEURL}/api/menu/update-menu?access_token=$[acces_token]`,
+    UPDATE_MENU_OPTION_ITEM: `${BASE_URLS.APP_BASEURL}/api/menu/update-menu-option-item?access_token==$[acces_token]`,
   },
   RESERVATIONS: {
     LIST: `${BASE_URLS.AUTH_BASEURL}/order/order_summary?access_token=$[acces_token]`,
@@ -43,6 +45,8 @@ export const settings = {
   },
   ORDERS: {
     GET_ORDERS: `${BASE_URLS.APP_BASEURL}/api/order/get-company-orders?access_token=$[access_token]`,
+    GET_NEW_COOKING_ORDERS: `${BASE_URLS.APP_BASEURL}/api/order/get-new-cooking-orders?access_token=$[access_token]`,
+    GET_COOKED_DELIVERED_ORDERS: `${BASE_URLS.APP_BASEURL}/api/order/get-cooked-delivered-orders?access_token=$[access_token]`,
     UPDATE_ORDER_STATUS: `${BASE_URLS.APP_BASEURL}/api/order/update-order-status/$[id]?access_token=$[access_token]`,
     UPDATE_ITEM_STATUS: `${BASE_URLS.APP_BASEURL}/api/order/update-item-status/$[id]?access_token=$[access_token]`,
   },

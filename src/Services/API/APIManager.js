@@ -15,12 +15,39 @@ export const getOrders = async () => {
   }
 };
 
+export const getOrdersNewCooking = async () => {
+  try {
+    const url = s.ORDERS.GET_NEW_COOKING_ORDERS.replace(
+      '$[access_token]',
+      await getAccessToken(),
+    );
+    const response = await getData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getOrdersCookedDelivered = async () => {
+  try {
+    const url = s.ORDERS.GET_COOKED_DELIVERED_ORDERS.replace(
+      '$[access_token]',
+      await getAccessToken(),
+    );
+    const response = await getData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
 export const updateOrderStatus = async (id, data) => {
   try {
     const url = s.ORDERS.UPDATE_ORDER_STATUS.replace('$[id]', id).replace(
       '$[access_token]',
       await getAccessToken(),
     );
+    console.log(url);
     const response = await postData(url, data);
     return response;
   } catch (err) {
@@ -139,8 +166,35 @@ export const getMenuDetails = async (menuId) => {
       '$[acces_token]',
       await getAccessToken(),
     );
-    console.log(url);
     const response = await getData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const updateMenuStatus = async (data) => {
+  try {
+    const url = s.MENU.UPDATE_MENU_STATUS.replace(
+      '$[acces_token]',
+      await getAccessToken(),
+    );
+    console.log(url);
+    const response = await postData(url, data);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const updateMenuOptionItemStatus = async (data) => {
+  try {
+    const url = s.MENU.UPDATE_MENU_OPTION_ITEM.replace(
+      '$[acces_token]',
+      await getAccessToken(),
+    );
+    console.log(url);
+    const response = await postData(url, data);
     return response;
   } catch (err) {
     return null;

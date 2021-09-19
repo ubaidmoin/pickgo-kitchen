@@ -5,6 +5,27 @@ const KEYS = {
   NOTIFICATIONS: 'NOTIFICATIONS',
   FCM_TOKEN: 'FCM_TOKEN',
   LANGUAGE: 'LANGUAGE',
+  USE_ALAN: 'USE_ALAN',
+};
+
+export const setUseAlan = async (data) => {
+  try {
+    await AsyncStorage.setItem(KEYS.USE_ALAN, JSON.stringify(data));
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getUseAlan = async () => {
+  try {
+    const response = await AsyncStorage.getItem(KEYS.USE_ALAN);
+    if (response) {
+      return JSON.parse(response);
+    }
+    return null;
+  } catch (err) {
+    return null;
+  }
 };
 
 export const setUserInfo = async (userDetails) => {

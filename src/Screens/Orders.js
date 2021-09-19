@@ -21,9 +21,10 @@ import {NativeEventEmitter, NativeModules} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import Dropdown from '../Components/StatusDropdown';
 import {
-  getOrders,
+  getOrdersNewCooking,
   updateOrderStatus,
   updateItemStatus,
+  getOrdersCookedDelivered,
   getTables,
   getReservations,
   saveFcmToken,
@@ -33,6 +34,7 @@ import {
   addNotification,
   isFcmTokenExists,
   getUserInfo,
+  getUseAlan,
 } from '../Services/DataManager';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
@@ -100,36 +102,50 @@ const Orders = (props) => {
   const [selectedLeft, setSelectedLeft] = useState(null);
   const [selectedRight, setSelectedRight] = useState(null);
   const [selectLeft, setSelectLeft] = useState(true);
+  const [useAlan, setUseAlan] = useState(false);
+  const loadingRef = useRef(false);
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (index = 0) => {
     setLoading(true);
-    const res = await getOrders();
+    const res = await getOrdersNewCooking();
     if (res && res.data && res.data.orders) {
-      setOrders(
-        res.data.orders.filter(
-          (o) => o.status < 3 && o.items && o.items.length > 0,
-        ),
-      );
-      indexRef.current = 0;
-      orderRef.current = res.data.orders.filter(
-        (o) => o.status < 3 && o.items && o.items.length > 0,
-      );
+      const res1 = await getOrdersCookedDelivered();
+      if (res1 && res1.data && res1.data.orders) {
+        const data = [
+          ...res.data.orders,
+          ...res1.data.orders.filter((d) => d.status < 3),
+        ];
+        setOrders(data);
+        indexRef.current = index;
+        orderRef.current = data;
+      } else {
+        setOrders(res.data.orders);
+        indexRef.current = index;
+        orderRef.current = res.data.orders;
+      }
     }
     setLoading(false);
   };
 
   const handleUpdateOrderStatus = async (status, orderId = 0) => {
     console.log(indexRef);
-    if (orderRef.current) {
+    if (orderRef.current && !loadingRef.current) {
+      loadingRef.current = true;
       setLoading(true);
       const data = {
         status: status,
       };
-      await updateOrderStatus(
+      console.log(
         orderId ? orderId : orderRef.current[indexRef.current].id,
         data,
       );
-      fetchOrders();
+      const res = await updateOrderStatus(
+        orderId ? orderId : orderRef.current[indexRef.current].id,
+        data,
+      );
+      loadingRef.current = false;
+      console.log(res.data);
+      fetchOrders(indexRef.current);
     }
   };
 
@@ -143,6 +159,12 @@ const Orders = (props) => {
     console.log(res.data);
     await fetchOrders();
     setLoading(false);
+  };
+
+  const fetchUseAlan = async () => {
+    const res = await getUseAlan();
+    console.log(res);
+    setUseAlan(res);
   };
 
   useEffect(() => {
@@ -189,10 +211,10 @@ const Orders = (props) => {
     // });
     // fetchTables();
     // return navigation.addListener('focus', () => fetchTables());
-
     const alanListener = alanEventEmitter.addListener(
       'command',
       ({command}) => {
+        console.log(command);
         if (command === 'updateStatusToCooking') {
           handleUpdateOrderStatus(2);
         } else if (command === 'updateStatusToCooked') {
@@ -203,15 +225,34 @@ const Orders = (props) => {
           handleUpdateOrderStatus(2);
         } else if (command === 'takeToCompletedOrders') {
           navigation.navigate('CompletedOrders');
+        } else if (command === 'skipToNext') {
+          if (flatlist) {
+            if (currentIndex < orders.length - 1) {
+              flatlist.scrollToIndex({index: currentIndex + 1});
+              bottomflatlist.scrollToIndex({index: currentIndex + 1});
+              indexRef.current = currentIndex + 1;
+              setCurrentIndex(currentIndex + 1);
+            }
+          }
+        } else if (command === 'skipToBack') {
+          if (flatlist) {
+            if (currentIndex > 0) {
+              flatlist.scrollToIndex({index: currentIndex - 1});
+              bottomflatlist.scrollToIndex({index: currentIndex - 1});
+              indexRef.current = currentIndex - 1;
+              setCurrentIndex(currentIndex - 1);
+            }
+          }
         }
       },
     );
 
     return alanEventEmitter.removeAllListeners(alanListener);
-  }, [orders]);
+  }, [orders, currentIndex, orderRef, indexRef, flatlist, bottomflatlist]);
 
   useEffect(() => {
     fetchOrders();
+    // fetchUseAlan();
   }, [props, isFocused]);
 
   const options = [
@@ -293,7 +334,7 @@ const Orders = (props) => {
   // };
 
   useEffect(() => {
-    if (currentIndex > 0 && trigger) {
+    if (currentIndex > -1 && trigger) {
       setTrigger(false);
       flatlist.scrollToIndex({index: currentIndex});
     }
@@ -313,14 +354,14 @@ const Orders = (props) => {
     setCurrentIndex(pageNumber - 1);
     bottomflatlist.scrollToIndex({index: pageNumber - 1});
   };
-
+  console.log(useAlan !== false);
   return (
     <>
       <AlanView
         projectid={
           'e7c97f0d534667f4e24c8515b4cd6afc2e956eca572e1d8b807a3e2338fdd0dc/stage'
         }
-        authData={{data: 'your auth data if needed'}}
+        // authData={{data: 'your auth data if needed'}}
       />
       {loading && <CustomActivityIndicator visible={loading} />}
       {orders.length === 0 && (
@@ -389,7 +430,14 @@ const Orders = (props) => {
                 <View style={{flexDirection: 'row'}}>
                   <TouchableOpacity
                     style={{
-                      backgroundColor: '#27ae61',
+                      backgroundColor:
+                        order.status === 1
+                          ? '#fe0000' //Red
+                          : order.status === 4
+                          ? '#FF5733' //Blue
+                          : order.status === 2
+                          ? '#2b78e4'
+                          : '#27ae61', //Green,
                       borderRadius: 80,
                       padding: 5,
                       height: 40,
@@ -409,7 +457,7 @@ const Orders = (props) => {
                         order.order_status === 1
                           ? '#fe0000' //Red
                           : order.order_status === 4
-                          ? '#2b78e4' //Blue
+                          ? '#FF5733' //Blue
                           : order.order_status === 2
                           ? '#FF5733'
                           : '#27ae61', //Green
@@ -478,15 +526,15 @@ const Orders = (props) => {
                           <IoniconsIcon
                             color={
                               item.order_status === 1
-                                ? '#fe0000' //Red
+                                ? '#6F0000' //Red
                                 : item.order_status === 4
-                                ? '#2b78e4' //Blue
+                                ? '#FF5733' //Blue
                                 : item.order_status === 2
-                                ? '#FF5733'
+                                ? '#2b78e4'
                                 : '#27ae61' //Green
                             }
                             size={25}
-                            name="checkmark-done"
+                            name="checkmark"
                           />
                         </View>
                       </TouchableOpacity>
@@ -542,6 +590,7 @@ const Orders = (props) => {
                   fontWeight: 'bold',
                 }}>{`${order.customer_name}`}</Text>
               <TouchableOpacity
+                // disabled={moment(order.date_created) < moment(new Date())}
                 onPress={() =>
                   order.status === 1
                     ? handleUpdateOrderStatus(2, order.id)
@@ -559,11 +608,14 @@ const Orders = (props) => {
                       order.status === 1
                         ? '#fe0000' //Red
                         : order.status === 4
-                        ? '#2b78e4' //Blue
+                        ? '#FF5733' //Blue
                         : order.status === 2
-                        ? '#FF5733'
+                        ? '#2b78e4'
                         : '#27ae61', //Green
                   }}>{`Status: ${
+                  // moment(order.date_created) < moment(new Date())
+                  //   ? 'Closed Shift'
+                  //   :
                   order.status === 1
                     ? 'New' //Red
                     : order.status === 2
@@ -585,7 +637,7 @@ const Orders = (props) => {
           alignItems: 'center',
           justifyContent: 'space-between',
           position: 'absolute',
-          bottom: 15,
+          bottom: 30,
           left: 0,
           right: 0,
           // paddingHorizontal: 25,
@@ -618,6 +670,7 @@ const Orders = (props) => {
             renderItem={({item, index}) => (
               <Ripple
                 onPress={() => {
+                  console.log(index)
                   indexRef.current = index;
                   setCurrentIndex(index);
                   setTrigger(true);
@@ -630,17 +683,17 @@ const Orders = (props) => {
                     item.status === 1
                       ? '#760000' //Red
                       : item.status === 4
-                      ? '#003783' //Blue
+                      ? '#701D00' //Blue
                       : item.status === 2
-                      ? '#A41D00'
+                      ? '#003783'
                       : '#007030', //Green,
                   backgroundColor:
                     item.status === 1
                       ? '#E43030' //Red
                       : item.status === 4
-                      ? '#2b78e4' //Blue
+                      ? '#FF5733' //Blue
                       : item.status === 2
-                      ? '#FF5733'
+                      ? '#2b78e4'
                       : '#27ae61', //Green
                 }}>
                 <Text style={styles.itemTitle}>{`#${item.id}`}</Text>

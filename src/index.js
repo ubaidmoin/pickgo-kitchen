@@ -16,6 +16,7 @@ import TerminalConnection from './Screens/TerminalConnection';
 import Reservations from './Screens/Reservations';
 import Orders from './Screens/Orders';
 import CompletedOrders from './Screens/CompletedOrders';
+import TodayOrders from './Screens/TodayOrders';
 import OrderSummary from './Screens/OrderSummary';
 import SalesReport from './Screens/SalesReport';
 import MenuOrders from './Screens/MenuOrders';
@@ -140,7 +141,7 @@ const LoggedOutStack = () => (
     <Stack.Screen
       name="Login"
       component={Login}
-      options={{headerShown: false}}
+      // options={{headerShown: false}}
     />
   </Stack.Navigator>
 );
@@ -169,6 +170,25 @@ const SignedInStack = () => {
         }}
       />
       <Stack.Screen
+        name="TodayOrders"
+        component={TodayOrders}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: 'Today Orders',
+              showTitle: true,
+              showMenuButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
         name="CompletedOrders"
         component={CompletedOrders}
         options={({navigation, route}) => {
@@ -187,7 +207,7 @@ const SignedInStack = () => {
           );
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Tables"
         component={Tables}
         options={({navigation, route}) => {
@@ -411,7 +431,7 @@ const SignedInStack = () => {
             navigation,
           );
         }}
-      />
+      /> */}
       <Stack.Screen
         name="NotificationCenter"
         component={NotificationCenter}

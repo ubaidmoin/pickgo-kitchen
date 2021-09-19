@@ -12,7 +12,11 @@ import Button from '../Components/Button';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import CheckBox from '../Components/CheckBox';
-import {getMenuDetails} from '../Services/API/APIManager';
+import {
+  getMenuDetails,
+  updateMenuStatus,
+  updateMenuOptionItemStatus,
+} from '../Services/API/APIManager';
 import {formatCurrency} from '../Services/Common';
 import {getNotificationCount} from '../Services/DataManager';
 import Languages from '../Localization/translations';
@@ -56,14 +60,11 @@ const EditMenu = ({navigation, ...props}) => {
       });
       setLoading(true);
       const result = await getMenuDetails(menuId);
+      console.log(result.data)
       if (result.data) {
         const {menu = {}, menuOptions = []} = result.data || {};
         if (menu && menu.id) {
-          setIsMenuItemSoldOut(
-            menu.is_sold &&
-              (menu.is_sold.toLowerCase() === 'true' ||
-                menu.is_sold.toLowerCase() === true),
-          );
+          setIsMenuItemSoldOut(menu.is_sold && menu.is_sold === 1);
           setMenuItem(result.data);
           if (menuOptions && menuOptions.length > 0) {
             const selectedMenuOptions = {};
@@ -115,6 +116,28 @@ const EditMenu = ({navigation, ...props}) => {
     }
   };
 
+  const handleUpdateMenuOptionStatus = async (
+    status,
+    id,
+    option_id,
+    option_item_id,
+  ) => {
+    const data = {
+      is_sold: status ? 1 : 0,
+      menu_id: id,
+      menu_option_id: option_id,
+      menu_option_item_id: option_item_id,
+    };
+    console.log(data);
+    const res = await updateMenuOptionItemStatus(data);
+    const {menuItem} = props.route.params || {};
+    console.log(menuItem.id);
+    fetchMenuDetails(menuItem.id);
+    if (res && res.menu) {
+      setIsMenuItemSoldOut(res.menu.is_sold && res.menu.is_sold === 1);
+    }
+  };
+
   const onUpdateMenu = async () => {
     try {
       dispatch({
@@ -163,6 +186,19 @@ const EditMenu = ({navigation, ...props}) => {
     setSelectedMenuOptions(allSelectedMenuOptions);
   };
 
+  const handleUpdateMenuItemStatus = async (id, status) => {
+    const data = {
+      is_sold: status ? 1 : 0,
+      menu_id: id,
+    };
+    console.log(data);
+    const res = await updateMenuStatus(data);
+    console.log(res);
+    if (res && res.menu) {
+      setIsMenuItemSoldOut(res.menu.is_sold && res.menu.is_sold === 1);
+    }
+  };
+
   const {menu = {}, menuOptions = []} = menuItem || {};
 
   return (
@@ -192,7 +228,7 @@ const EditMenu = ({navigation, ...props}) => {
                 style={{
                   color: '#000',
                   textAlign: 'left',
-                  fontSize: normalize(14),
+                  fontSize: normalize(20),
                   width: '70%',
                 }}>
                 {menu && menu.name ? menu.name : ''}
@@ -201,7 +237,7 @@ const EditMenu = ({navigation, ...props}) => {
                 style={{
                   color: '#000',
                   textAlign: 'right',
-                  fontSize: normalize(14),
+                  fontSize: normalize(20),
                   width: '30%',
                 }}>
                 {formatCurrency(menu.price)}
@@ -213,7 +249,7 @@ const EditMenu = ({navigation, ...props}) => {
                   color: '#000',
                   textAlign: 'justify',
                   marginVertical: '1.5%',
-                  fontSize: normalize(14),
+                  fontSize: normalize(18),
                 }}>
                 {menu.description}
               </Text>
@@ -233,7 +269,7 @@ const EditMenu = ({navigation, ...props}) => {
                     : `${Languages[selectedLanguage].editMenu.soldOut}?`
                 }
                 isChecked={isMenuItemSoldOut}
-                onChange={(val) => setIsMenuItemSoldOut(val)}
+                onChange={(val) => handleUpdateMenuItemStatus(menu.id, val)}
                 checkedColor="#ed3237"
                 titleStyles={{
                   textDecorationLine: isMenuItemSoldOut
@@ -248,7 +284,6 @@ const EditMenu = ({navigation, ...props}) => {
             showsVerticalScrollIndicator={false}
             data={menuOptions}
             renderItem={({item, index}) => {
-              const menuOptionIndex = index;
               return (
                 <View
                   key={item.id}
@@ -269,7 +304,7 @@ const EditMenu = ({navigation, ...props}) => {
                     style={{
                       color: '#000',
                       textAlign: 'center',
-                      fontSize: normalize(14),
+                      fontSize: normalize(18),
                     }}>
                     {`${item.title} (${
                       item.is_required
@@ -279,21 +314,13 @@ const EditMenu = ({navigation, ...props}) => {
                   </Text>
                   <View style={{marginHorizontal: '2%', marginTop: '2%'}}>
                     {item.option_items && item.option_items.length > 0
-                      ? item.option_items.map((item, index) => {
-                          const optionItemIndex = index;
-                          const isSoldOut =
-                            selectedMenuOptions &&
-                            (selectedMenuOptions[
-                              `${menuOptionIndex}${optionItemIndex}`
-                            ].toLowerCase() === 'true' ||
-                              selectedMenuOptions[
-                                `${menuOptionIndex}${optionItemIndex}`
-                              ] === true);
+                      ? item.option_items.map((innerItem, index) => {
+                          const isSoldOut = innerItem.is_sold === 1;
                           return (
                             <CheckBox
-                              key={item.id}
-                              title={`${item.name} (${formatCurrency(
-                                item.price,
+                              key={innerItem.id}
+                              title={`${innerItem.name} (${formatCurrency(
+                                innerItem.price,
                               )}) ${
                                 isSoldOut
                                   ? `(${Languages[selectedLanguage].editMenu.soldOut})`
@@ -302,7 +329,12 @@ const EditMenu = ({navigation, ...props}) => {
                               size={20}
                               isChecked={isSoldOut}
                               onChange={(val) =>
-                                onSelectOptionItem(val, menuOptionIndex, index)
+                                handleUpdateMenuOptionStatus(
+                                  val,
+                                  menu.id,
+                                  item.id,
+                                  innerItem.id,
+                                )
                               }
                               checkedColor="#ed3237"
                               titleStyles={{

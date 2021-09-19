@@ -12,15 +12,18 @@ import {
 } from 'react-native';
 import Ripple from '../Components/Ripple';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
 import CustomActivityIndicator from '../Components/ActivityIndicator';
+import {AlanView} from '../../AlanSDK';
 import {NativeEventEmitter, NativeModules} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
+import Dropdown from '../Components/StatusDropdown';
 import {
-  getOrdersCookedDelivered,
   getOrdersNewCooking,
   updateOrderStatus,
+  updateItemStatus,
   getTables,
   getReservations,
   saveFcmToken,
@@ -82,10 +85,11 @@ const normalize = (size) => {
 //   requestPermissions: true,
 // });
 
-const Orders = (props) => {
+const TodayOrders = (props) => {
   const {navigation} = props;
   let flatlist = useRef();
   let bottomflatlist = useRef();
+  const [showActionSheet, setShowActionSheet] = useState(false);
   const isFocused = useIsFocused();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -93,47 +97,57 @@ const Orders = (props) => {
   const [trigger, setTrigger] = useState(false);
   const indexRef = useRef(currentIndex);
   const orderRef = useRef(orders);
-  const loadingRef = useRef(false);
   const [selectedLeft, setSelectedLeft] = useState(null);
   const [selectedRight, setSelectedRight] = useState(null);
   const [selectLeft, setSelectLeft] = useState(true);
 
-  const fetchOrders = async (index = 0) => {
+  const fetchOrders = async () => {
     setLoading(true);
-    const res = await getOrdersCookedDelivered();
-    console.log(res.data);
+    const res = await getOrdersNewCooking();
     if (res && res.data && res.data.orders) {
-      const res1 = await getOrdersNewCooking();
-      if (res1 && res1.data && res1.data.orders) {
-        const data = [...res.data.orders, ...res1.data.orders];
-        setOrders(data);
-        indexRef.current = index;
-        orderRef.current = data;
-      } else {
-        setOrders(res.data.orders);
-        indexRef.current = index;
-        orderRef.current = res.data.orders;
-      }
+      setOrders(
+        res.data.orders.filter(
+          (o) => moment(o.date_created) === moment(new Date()),
+        ),
+      );
+      indexRef.current = 0;
+      orderRef.current = res.data.orders.filter(
+        (o) => moment(o.date_created) === moment(new Date()),
+      );
     }
     setLoading(false);
   };
 
   const handleUpdateOrderStatus = async (status, orderId = 0) => {
-    if (orderRef.current && !loadingRef.current) {
-      loadingRef.current = true;
+    console.log(indexRef);
+    if (orderRef.current) {
       setLoading(true);
       const data = {
         status: status,
       };
-      // console.log('completed orders', currentIndex, orders[currentIndex], orders);
       await updateOrderStatus(
         orderId ? orderId : orderRef.current[indexRef.current].id,
         data,
       );
-      loadingRef.current = false;
-      fetchOrders(indexRef.current);
+      fetchOrders();
     }
   };
+
+  const handleUpdateItemStatus = async (status, id, orderId) => {
+    setLoading(true);
+    const data = {
+      status: status,
+      item_id: id,
+    };
+    const res = await updateItemStatus(orderId, data);
+    console.log(res.data);
+    await fetchOrders();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
   useEffect(() => {
     // PushNotification.configure({
@@ -176,10 +190,10 @@ const Orders = (props) => {
     // fetchTables();
     // return navigation.addListener('focus', () => fetchTables());
 
-    const subscription = alanEventEmitter.addListener(
+    const alanListener = alanEventEmitter.addListener(
       'command',
       ({command}) => {
-        console.log(`got command event 123 ${command}`);
+        console.log(command);
         if (command === 'updateStatusToCooking') {
           handleUpdateOrderStatus(2);
         } else if (command === 'updateStatusToCooked') {
@@ -188,41 +202,38 @@ const Orders = (props) => {
           handleUpdateOrderStatus(4);
         } else if (command === 'updateReopen') {
           handleUpdateOrderStatus(2);
-        } else if (command === 'takeToOrders') {
-          navigation.navigate('Orders');
+        } else if (command === 'takeToCompletedOrders') {
+          navigation.navigate('CompletedOrders');
         } else if (command === 'skipToNext') {
-          console.log('here')
           if (flatlist) {
-            if (currentIndex < orders.length - 1) {
-              flatlist.scrollToIndex({index: currentIndex + 1});
-              bottomflatlist.scrollToIndex({index: currentIndex + 1});
-              indexRef.current = currentIndex + 1;
-              setCurrentIndex(currentIndex + 1);
-            }
+            flatlist.scrollToIndex({index: currentIndex + 1});
+            bottomflatlist.scrollToIndex({index: currentIndex + 1});
+            indexRef.current = currentIndex + 1;
+            setCurrentIndex(currentIndex + 1);
           }
         } else if (command === 'skipToBack') {
           if (flatlist) {
-            if (currentIndex > 0) {
-              flatlist.scrollToIndex({index: currentIndex - 1});
-              bottomflatlist.scrollToIndex({index: currentIndex - 1});
-              indexRef.current = currentIndex - 1;
-              setCurrentIndex(currentIndex - 1);
-            }
+            flatlist.scrollToIndex({index: currentIndex - 1});
+            bottomflatlist.scrollToIndex({index: currentIndex - 1});
+            indexRef.current = currentIndex - 1;
+            setCurrentIndex(currentIndex - 1);
           }
         }
       },
     );
 
-    return alanEventEmitter.removeAllListeners(subscription);
-  }, [orders, currentIndex, orderRef, indexRef]);
-
-  useEffect(() => {
-    fetchOrders();
-  }, []);
+    return alanEventEmitter.removeAllListeners(alanListener);
+  }, [orders]);
 
   useEffect(() => {
     fetchOrders();
   }, [props, isFocused]);
+
+  const options = [
+    {label: 'Cooking', value: 2},
+    {label: 'Cooked', value: 3},
+    {label: 'Delivering', value: 4},
+  ];
 
   // const [{selectedLanguage}, dispatch] = useStateValue();
   // const [selectedOrder, setSelectedOrder] = useState(null);
@@ -297,7 +308,7 @@ const Orders = (props) => {
   // };
 
   useEffect(() => {
-    if (currentIndex > -1 && trigger) {
+    if (currentIndex > 0 && trigger) {
       setTrigger(false);
       flatlist.scrollToIndex({index: currentIndex});
     }
@@ -320,15 +331,21 @@ const Orders = (props) => {
 
   return (
     <>
-      {/* <AlanView
+      <AlanView
         projectid={
           'e7c97f0d534667f4e24c8515b4cd6afc2e956eca572e1d8b807a3e2338fdd0dc/stage'
         }
         authData={{data: 'your auth data if needed'}}
-      /> */}
+      />
       {loading && <CustomActivityIndicator visible={loading} />}
       {orders.length === 0 && (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#fff',
+          }}>
           <TouchableOpacity
             style={{
               backgroundColor: '#27ae61',
@@ -411,12 +428,12 @@ const Orders = (props) => {
                       fontWeight: 'bold',
                       marginLeft: 15,
                       color:
-                        order.status === 1
+                        order.order_status === 1
                           ? '#fe0000' //Red
-                          : order.status === 4
+                          : order.order_status === 4
                           ? '#FF5733' //Blue
-                          : order.status === 2
-                          ? '#2b78e4'
+                          : order.order_status === 2
+                          ? '#FF5733'
                           : '#27ae61', //Green
                     }}>{`Order: #${order.id}`}</Text>
                 </View>
@@ -446,7 +463,22 @@ const Orders = (props) => {
                 order.items.map((item) => (
                   <View key={item.id}>
                     <View style={styles.menuLineView}>
-                      <View>
+                      <TouchableOpacity
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          width: '100%',
+                        }}
+                        onPress={() =>
+                          item.order_status === 1
+                            ? handleUpdateItemStatus(2, item.id, order.id)
+                            : item.order_status === 2
+                            ? handleUpdateItemStatus(3, item.id, order.id)
+                            : item.order_status === 3
+                            ? handleUpdateItemStatus(4, item.id, order.id)
+                            : handleUpdateItemStatus(1, item.id, order.id)
+                        }>
                         <Text
                           style={{
                             fontSize: normalize(16),
@@ -454,16 +486,32 @@ const Orders = (props) => {
                           }}>
                           X{item.qty} {item.menu_name}
                         </Text>
-                      </View>
-                      <View>
-                        <Text
-                          style={{
-                            fontSize: normalize(16),
-                            fontWeight: 'bold',
-                          }}>
-                          {item.amount}
-                        </Text>
-                      </View>
+                        <View
+                          style={{flexDirection: 'row', alignItems: 'center'}}>
+                          <View>
+                            <Text
+                              style={{
+                                fontSize: normalize(16),
+                                fontWeight: 'bold',
+                              }}>
+                              {item.amount}
+                            </Text>
+                          </View>
+                          <IoniconsIcon
+                            color={
+                              item.order_status === 1
+                                ? '#6F0000' //Red
+                                : item.order_status === 4
+                                ? '#FF5733' //Blue
+                                : item.order_status === 2
+                                ? '#2b78e4'
+                                : '#27ae61' //Green
+                            }
+                            size={25}
+                            name="checkmark"
+                          />
+                        </View>
+                      </TouchableOpacity>
                     </View>
                     {item.options &&
                       item.options.map((option) => (
@@ -487,6 +535,17 @@ const Orders = (props) => {
                         {item.notes}
                       </Text>
                     )}
+                    {/* <View>
+                      <Dropdown
+                        label="Change status"
+                        options={options}
+                        onSelect={(val) =>
+                          handleUpdateItemStatus(val.value, item.id, order.id)
+                        }
+                        show={showActionSheet}
+                        selected={item.order_status}
+                      />
+                    </View> */}
                   </View>
                 ))}
             </View>
@@ -505,7 +564,6 @@ const Orders = (props) => {
                   fontWeight: 'bold',
                 }}>{`${order.customer_name}`}</Text>
               <TouchableOpacity
-                // disabled={moment(order.date_created) < moment(new Date())}
                 onPress={() =>
                   order.status === 1
                     ? handleUpdateOrderStatus(2, order.id)
@@ -528,9 +586,6 @@ const Orders = (props) => {
                         ? '#2b78e4'
                         : '#27ae61', //Green
                   }}>{`Status: ${
-                  // moment(order.date_created) < moment(new Date())
-                  //   ? 'Closed Shift'
-                  //   :
                   order.status === 1
                     ? 'New' //Red
                     : order.status === 2
@@ -1062,7 +1117,7 @@ const Orders = (props) => {
   );
 };
 
-export default Orders;
+export default TodayOrders;
 
 const styles = StyleSheet.create({
   flatlist: {
@@ -1208,6 +1263,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   bottomButton: {
     height: 40,
