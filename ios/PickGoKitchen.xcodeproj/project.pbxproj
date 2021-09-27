@@ -8,12 +8,39 @@
 
 /* Begin PBXBuildFile section */
 		041DB27126F663D200AEC963 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 041DB27026F663D200AEC963 /* GoogleService-Info.plist */; };
+		04B8CFBA26FE4392008C71A1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8CFB926FE4392008C71A1 /* NotificationService.swift */; };
+		04B8CFBE26FE4392008C71A1 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 04B8CFB726FE4392008C71A1 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		1417E1999D45561719D13CBD /* libPods-PickGoKitchen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D35E3C95BCD7B0F32D5D3762 /* libPods-PickGoKitchen.a */; };
+		60E8C2D6ED9A4C38BE5396EF /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D4F15FB0C5F274384464117 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		04B8CFBC26FE4392008C71A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 04B8CFB626FE4392008C71A1;
+			remoteInfo = OneSignalNotificationServiceExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		04B8CF9426FE4212008C71A1 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				04B8CFBE26FE4392008C71A1 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -36,6 +63,10 @@
 		046318CC25961E1E00AC430B /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		046318CD25961E1E00AC430B /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		046318CE25961E1E00AC430B /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		04B8CFB726FE4392008C71A1 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		04B8CFB926FE4392008C71A1 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		04B8CFBB26FE4392008C71A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		04B8CFC326FE470E008C71A1 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* PickGoKitchen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PickGoKitchen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = PickGoKitchen/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = PickGoKitchen/AppDelegate.m; sourceTree = "<group>"; };
@@ -43,8 +74,11 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = PickGoKitchen/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = PickGoKitchen/main.m; sourceTree = "<group>"; };
 		1EB603154B06226A21AAC6F5 /* Pods-PickGoKitchen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PickGoKitchen.debug.xcconfig"; path = "Target Support Files/Pods-PickGoKitchen/Pods-PickGoKitchen.debug.xcconfig"; sourceTree = "<group>"; };
+		24A419825E81D8020FBDC055 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		332A647AF41D373C7C4C26DE /* Pods-PickGoKitchen-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PickGoKitchen-tvOS.release.xcconfig"; path = "Target Support Files/Pods-PickGoKitchen-tvOS/Pods-PickGoKitchen-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		4D4F15FB0C5F274384464117 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		710D7522AA84C4604E2DA787 /* Pods-PickGoKitchen-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PickGoKitchen-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-PickGoKitchen-tvOS/Pods-PickGoKitchen-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		7A7457471AA41B4298E2A926 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		8199B2A76AE94C3B9234F2F5 /* libPods-PickGoKitchen-PickGoKitchenTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PickGoKitchen-PickGoKitchenTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = PickGoKitchen/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9FD6BC80ABCE4CF2A94D1738 /* Pods-PickGoKitchen-PickGoKitchenTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PickGoKitchen-PickGoKitchenTests.debug.xcconfig"; path = "Target Support Files/Pods-PickGoKitchen-PickGoKitchenTests/Pods-PickGoKitchen-PickGoKitchenTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -60,6 +94,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		04B8CFB426FE4392008C71A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60E8C2D6ED9A4C38BE5396EF /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -112,6 +154,16 @@
 			path = "../node_modules/react-native-vector-icons/Fonts";
 			sourceTree = "<group>";
 		};
+		04B8CFB826FE4392008C71A1 /* OneSignalNotificationServiceExtension */ = {
+			isa = PBXGroup;
+			children = (
+				04B8CFC326FE470E008C71A1 /* OneSignalNotificationServiceExtension.entitlements */,
+				04B8CFB926FE4392008C71A1 /* NotificationService.swift */,
+				04B8CFBB26FE4392008C71A1 /* Info.plist */,
+			);
+			path = OneSignalNotificationServiceExtension;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* PickGoKitchen */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +191,8 @@
 				332A647AF41D373C7C4C26DE /* Pods-PickGoKitchen-tvOS.release.xcconfig */,
 				E27CC9BF98FBBC7D46A36CFF /* Pods-PickGoKitchen-tvOSTests.debug.xcconfig */,
 				BE49FC9C1FBB9A138B5E0212 /* Pods-PickGoKitchen-tvOSTests.release.xcconfig */,
+				24A419825E81D8020FBDC055 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
+				7A7457471AA41B4298E2A926 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -152,6 +206,7 @@
 				8199B2A76AE94C3B9234F2F5 /* libPods-PickGoKitchen-PickGoKitchenTests.a */,
 				A29926B0247AB499E10EB7EE /* libPods-PickGoKitchen-tvOS.a */,
 				C1DD8A83F31B5781E70383C3 /* libPods-PickGoKitchen-tvOSTests.a */,
+				4D4F15FB0C5F274384464117 /* libPods-OneSignalNotificationServiceExtension.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -169,6 +224,7 @@
 				13B07FAE1A68108700A75B9A /* PickGoKitchen */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* PickGoKitchenTests */,
+				04B8CFB826FE4392008C71A1 /* OneSignalNotificationServiceExtension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				168C71C0C5C3C27C970CE39A /* Pods */,
@@ -182,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* PickGoKitchen.app */,
+				04B8CFB726FE4392008C71A1 /* OneSignalNotificationServiceExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -189,6 +246,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		04B8CFB626FE4392008C71A1 /* OneSignalNotificationServiceExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 04B8CFBF26FE4392008C71A1 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
+			buildPhases = (
+				FFD056BC91064314E92A5EAA /* [CP] Check Pods Manifest.lock */,
+				04B8CFB326FE4392008C71A1 /* Sources */,
+				04B8CFB426FE4392008C71A1 /* Frameworks */,
+				04B8CFB526FE4392008C71A1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OneSignalNotificationServiceExtension;
+			productName = OneSignalNotificationServiceExtension;
+			productReference = 04B8CFB726FE4392008C71A1 /* OneSignalNotificationServiceExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		13B07F861A680F5B00A75B9A /* PickGoKitchen */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PickGoKitchen" */;
@@ -201,10 +276,12 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				B83269FF3D833ED0ED86843F /* [CP] Copy Pods Resources */,
 				88202314D8A4CBF5EB4C979F /* [CP] Embed Pods Frameworks */,
+				04B8CF9426FE4212008C71A1 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				04B8CFBD26FE4392008C71A1 /* PBXTargetDependency */,
 			);
 			name = PickGoKitchen;
 			productName = PickGoKitchen;
@@ -217,8 +294,14 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
+					04B8CFB626FE4392008C71A1 = {
+						CreatedOnToolsVersion = 12.5;
+						DevelopmentTeam = HK596WP67W;
+						ProvisioningStyle = Automatic;
+					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = HK596WP67W;
 						LastSwiftMigration = 1120;
@@ -239,11 +322,19 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* PickGoKitchen */,
+				04B8CFB626FE4392008C71A1 /* OneSignalNotificationServiceExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		04B8CFB526FE4392008C71A1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -380,9 +471,39 @@
 			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		FFD056BC91064314E92A5EAA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OneSignalNotificationServiceExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		04B8CFB326FE4392008C71A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04B8CFBA26FE4392008C71A1 /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		13B07F871A680F5B00A75B9A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -394,15 +515,87 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		04B8CFBD26FE4392008C71A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 04B8CFB626FE4392008C71A1 /* OneSignalNotificationServiceExtension */;
+			targetProxy = 04B8CFBC26FE4392008C71A1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		04B8CFC026FE4392008C71A1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 24A419825E81D8020FBDC055 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 22;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = HK596WP67W;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pickgo.kitchen.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		04B8CFC126FE4392008C71A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7A7457471AA41B4298E2A926 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 22;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = HK596WP67W;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pickgo.kitchen.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1EB603154B06226A21AAC6F5 /* Pods-PickGoKitchen.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = PickGoKitchen/PickGoKitchen.entitlements;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = HK596WP67W;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = PickGoKitchen/Info.plist;
@@ -427,10 +620,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DA017EB3D3377425B4CD22F6 /* Pods-PickGoKitchen.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = PickGoKitchen/PickGoKitchen.entitlements;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = HK596WP67W;
 				INFOPLIST_FILE = PickGoKitchen/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -602,6 +796,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		04B8CFBF26FE4392008C71A1 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				04B8CFC026FE4392008C71A1 /* Debug */,
+				04B8CFC126FE4392008C71A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PickGoKitchen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

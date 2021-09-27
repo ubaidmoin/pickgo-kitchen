@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Text, FlatList, StyleSheet, View, RefreshControl} from 'react-native';
+import {
+  Text,
+  FlatList,
+  StyleSheet,
+  View,
+  RefreshControl,
+  Platform,
+} from 'react-native';
 import Ripple from '../Components/Ripple';
 import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
@@ -14,76 +21,80 @@ import PushNotification from 'react-native-push-notification';
 import moment from 'moment';
 import Languages from '../Localization/translations';
 
-PushNotification.configure({
-  onRegister: async (info) => {
-    const userInfo = await getUserInfo();
-    if (
-      userInfo &&
-      userInfo.access_token &&
-      userInfo.user &&
-      userInfo.user.uid
-    ) {
-      if (info) {
-        const {token} = info || {};
-        if (token) {
-          if (!(await isFcmTokenExists(token))) {
-            const response = await saveFcmToken({token});
-            if (!(response && response && response.id)) {
-              isFcmTokenExists('');
+if (Platform.OS === 'android') {
+  PushNotification.configure({
+    onRegister: async (info) => {
+      const userInfo = await getUserInfo();
+      if (
+        userInfo &&
+        userInfo.access_token &&
+        userInfo.user &&
+        userInfo.user.uid
+      ) {
+        if (info) {
+          const {token} = info || {};
+          if (token) {
+            if (!(await isFcmTokenExists(token))) {
+              const response = await saveFcmToken({token});
+              if (!(response && response && response.id)) {
+                isFcmTokenExists('');
+              }
             }
           }
         }
       }
-    }
-  },
-  permissions: {
-    alert: true,
-    badge: true,
-    sound: true,
-  },
-  popInitialNotification: true,
-  requestPermissions: true,
-});
+    },
+    permissions: {
+      alert: true,
+      badge: true,
+      sound: true,
+    },
+    popInitialNotification: true,
+    requestPermissions: true,
+  });
+}
 
 const Tables = ({navigation}) => {
   useEffect(() => {
-    PushNotification.configure({
-      onNotification: (notification) => {
-        if (notification.foreground && !notification.message) {
-          PushNotification.localNotification({
-            ...notification,
-            message:
-              notification.data && notification.data.body
-                ? notification.data.body
-                : '',
-          });
-        }
-        addNotification({
-          ...notification.data,
-          time: moment().valueOf(),
-          isSeen: false,
-        });
-        if (
-          notification &&
-          notification.userInteraction &&
-          notification.data &&
-          notification.data.type
-        ) {
-          switch (notification.data.type) {
-            case 'pay-by-cash':
-              if (notification.data.table_id) {
-                navigation.navigate('Payment', {
-                  tableId: notification.data.table_id,
-                });
-              }
-              break;
-            case 'reservation':
-              navigation.navigate('Reservations');
-              break;
+    if (Platform.OS === 'android') {
+      PushNotification.configure({
+        onNotification: (notification) => {
+          if (notification.foreground && !notification.message) {
+            PushNotification.localNotification({
+              ...notification,
+              message:
+                notification.data && notification.data.body
+                  ? notification.data.body
+                  : '',
+            });
           }
-        }
-      },
-    });
+          addNotification({
+            ...notification.data,
+            time: moment().valueOf(),
+            isSeen: false,
+          });
+          if (
+            notification &&
+            notification.userInteraction &&
+            notification.data &&
+            notification.data.type
+          ) {
+            switch (notification.data.type) {
+              case 'pay-by-cash':
+                if (notification.data.table_id) {
+                  navigation.navigate('Payment', {
+                    tableId: notification.data.table_id,
+                  });
+                }
+                break;
+              case 'reservation':
+                navigation.navigate('Reservations');
+                break;
+            }
+          }
+        },
+      });
+    }
     fetchTables();
     return navigation.addListener('focus', () => fetchTables());
   }, []);

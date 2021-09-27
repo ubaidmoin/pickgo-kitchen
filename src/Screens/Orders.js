@@ -9,14 +9,16 @@ import {
   Dimensions,
   PixelRatio,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import Ripple from '../Components/Ripple';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import CustomActivityIndicator from '../Components/ActivityIndicator';
-import {AlanView} from '../../AlanSDK';
+// import {AlanView} from '../../AlanSDK';
 import {NativeEventEmitter, NativeModules} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import Dropdown from '../Components/StatusDropdown';
@@ -25,9 +27,12 @@ import {
   updateOrderStatus,
   updateItemStatus,
   getOrdersCookedDelivered,
+  updatePlayerID,
+  getOrderDetails,
   getTables,
   getReservations,
   saveFcmToken,
+  getOtherOrders,
 } from '../Services/API/APIManager';
 import {
   getNotificationCount,
@@ -40,6 +45,7 @@ import {useStateValue} from '../Services/State/State';
 import {actions} from '../Services/State/Reducer';
 import PushNotification from 'react-native-push-notification';
 import Languages from '../Localization/translations';
+import OneSignal from 'react-native-onesignal';
 
 const {AlanManager, AlanEventEmitter} = NativeModules;
 const alanEventEmitter = new NativeEventEmitter(AlanEventEmitter);
@@ -103,48 +109,36 @@ const Orders = (props) => {
   const [selectedRight, setSelectedRight] = useState(null);
   const [selectLeft, setSelectLeft] = useState(true);
   const [useAlan, setUseAlan] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
   const loadingRef = useRef(false);
 
   const fetchOrders = async (index = 0) => {
+    getNotificationCount().then((notificationCount) => {
+      setNotificationCount(notificationCount);
+    });
     setLoading(true);
-    const res = await getOrdersNewCooking();
+    const res = await getOtherOrders();
+    // console.log(res.data);
     if (res && res.data && res.data.orders) {
-      const res1 = await getOrdersCookedDelivered();
-      if (res1 && res1.data && res1.data.orders) {
-        const data = [
-          ...res.data.orders,
-          ...res1.data.orders.filter((d) => d.status < 3),
-        ];
-        setOrders(data);
-        indexRef.current = index;
-        orderRef.current = data;
-      } else {
-        setOrders(res.data.orders);
-        indexRef.current = index;
-        orderRef.current = res.data.orders;
-      }
+      setOrders(res.data.orders);
+      indexRef.current = index;
+      orderRef.current = res.data.orders;
     }
     setLoading(false);
   };
 
   const handleUpdateOrderStatus = async (status, orderId = 0) => {
-    console.log(indexRef);
     if (orderRef.current && !loadingRef.current) {
       loadingRef.current = true;
       setLoading(true);
       const data = {
         status: status,
       };
-      console.log(
-        orderId ? orderId : orderRef.current[indexRef.current].id,
-        data,
-      );
       const res = await updateOrderStatus(
         orderId ? orderId : orderRef.current[indexRef.current].id,
         data,
       );
       loadingRef.current = false;
-      console.log(res.data);
       fetchOrders(indexRef.current);
     }
   };
@@ -156,7 +150,7 @@ const Orders = (props) => {
       item_id: id,
     };
     const res = await updateItemStatus(orderId, data);
-    console.log(res.data);
+    // console.log(res.data);
     await fetchOrders();
     setLoading(false);
   };
@@ -167,87 +161,124 @@ const Orders = (props) => {
     setUseAlan(res);
   };
 
+  const getDeviceStatus = async () => {
+    console.log('here');
+    OneSignal.getPermissionSubscriptionState(async (status) => {
+      const data = {
+        player_id: status.userId,
+      };
+      const res = await updatePlayerID(data);
+      console.log(res);
+    });
+    // const state = await OneSignal.getDeviceState();
+    // console.log(state.userId);
+    // if (state && state.userId) {
+    //   const data = {
+    //     player_id: state.userId,
+    //   };
+    //   const res = await updatePlayerID(data);
+    //   console.log(res);
+    // }
+  };
+
+  const _onOpened = async (response) => {
+    if (
+      response &&
+      response.notification &&
+      response.notification.payload &&
+      response.notification.payload.additionalData
+    ) {
+      console.log(response.notification.payload.additionalData);
+      const order = JSON.parse(
+        response.notification.payload.additionalData.order,
+      );
+      const order_id = response.notification.payload.additionalData.order_id;
+      console.log(order, order_id);
+      const data = [...orders];
+      const isExist = data.find((o) => o.id == order_id);
+      console.log(!!isExist);
+      addNotification({
+        ...order,
+        time: moment().valueOf(),
+        isSeen: false,
+      });
+      if (order && order_id && !!isExist) {
+        const index = data.findIndex((o) => o.id === order_id);
+        data[index].items = [...data[index].items, order];
+        setOrders(data);
+      } else if (order) {
+        fetchOrders();
+      }
+    }
+  };
+
   useEffect(() => {
+    OneSignal.init('6e9e20ad-56a3-4303-b588-022a6e527f2c');
+    OneSignal.addEventListener('opened', _onOpened);
+    OneSignal.addEventListener('received', _onOpened);
+    // OneSignal.setAppId('6e9e20ad-56a3-4303-b588-022a6e527f2c');
+    // OneSignal.setLogLevel(6, 0);
+    // OneSignal.setRequiresUserPrivacyConsent(true);
+    // OneSignal.setNotificationOpenedHandler((res) => console.log(res));
+    // OneSignal.setNotificationOpenedHandler((notificationResponse) => {
+    //   const {notification} = notificationResponse;
+    //   console.log(notification, notificationResponse);
+    // });
+    // OneSignal.setNotificationWillShowInForegroundHandler(
+    //   (notificationReceivedEvent) => {
+    //     console.log(
+    //       'OneSignal: notification will show in foreground:',
+    //       notificationReceivedEvent,
+    //     );
+    //     let notification = notificationReceivedEvent.getNotification();
+    //     console.log('notification: ', notification);
+    //     const data = notification.additionalData;
+    //     console.log('additionalData: ', data);
+    //     //Silence notification by calling complete() with no argument
+    //     notificationReceivedEvent.complete(notification);
+    //   },
+    // );
+    getDeviceStatus();
     fetchOrders();
   }, []);
 
   useEffect(() => {
-    // PushNotification.configure({
-    //   onNotification: (notification) => {
-    //     if (notification.foreground && !notification.message) {
-    //       PushNotification.localNotification({
-    //         ...notification,
-    //         message:
-    //           notification.data && notification.data.body
-    //             ? notification.data.body
-    //             : '',
-    //       });
-    //     }
-    //     addNotification({
-    //       ...notification.data,
-    //       time: moment().valueOf(),
-    //       isSeen: false,
-    //     });
-    //     if (
-    //       notification &&
-    //       notification.userInteraction &&
-    //       notification.data &&
-    //       notification.data.type
-    //     ) {
-    //       switch (notification.data.type) {
-    //         case 'pay-by-cash':
-    //           if (notification.data.table_id) {
-    //             navigation.navigate('Payment', {
-    //               tableId: notification.data.table_id,
-    //             });
-    //           }
-    //           break;
-    //         case 'reservation':
-    //           navigation.navigate('Reservations');
-    //           break;
+    // const alanListener = alanEventEmitter.addListener(
+    //   'command',
+    //   ({command}) => {
+    //     console.log(command);
+    //     if (command === 'updateStatusToCooking') {
+    //       handleUpdateOrderStatus(2);
+    //     } else if (command === 'updateStatusToCooked') {
+    //       handleUpdateOrderStatus(3);
+    //     } else if (command === 'updateStatusToDelivering') {
+    //       handleUpdateOrderStatus(4);
+    //     } else if (command === 'updateReopen') {
+    //       handleUpdateOrderStatus(2);
+    //     } else if (command === 'takeToCompletedOrders') {
+    //       navigation.navigate('CompletedOrders');
+    //     } else if (command === 'skipToNext') {
+    //       if (flatlist) {
+    //         if (currentIndex < orders.length - 1) {
+    //           flatlist.current?.scrollToIndex({index: currentIndex + 1});
+    //           bottomflatlist.current?.scrollToIndex({index: currentIndex + 1});
+    //           indexRef.current = currentIndex + 1;
+    //           setCurrentIndex(currentIndex + 1);
+    //         }
+    //       }
+    //     } else if (command === 'skipToBack') {
+    //       if (flatlist) {
+    //         if (currentIndex > 0) {
+    //           flatlist.current?.scrollToIndex({index: currentIndex - 1});
+    //           bottomflatlist.current?.scrollToIndex({index: currentIndex - 1});
+    //           indexRef.current = currentIndex - 1;
+    //           setCurrentIndex(currentIndex - 1);
+    //         }
     //       }
     //     }
     //   },
-    // });
-    // fetchTables();
-    // return navigation.addListener('focus', () => fetchTables());
-    const alanListener = alanEventEmitter.addListener(
-      'command',
-      ({command}) => {
-        console.log(command);
-        if (command === 'updateStatusToCooking') {
-          handleUpdateOrderStatus(2);
-        } else if (command === 'updateStatusToCooked') {
-          handleUpdateOrderStatus(3);
-        } else if (command === 'updateStatusToDelivering') {
-          handleUpdateOrderStatus(4);
-        } else if (command === 'updateReopen') {
-          handleUpdateOrderStatus(2);
-        } else if (command === 'takeToCompletedOrders') {
-          navigation.navigate('CompletedOrders');
-        } else if (command === 'skipToNext') {
-          if (flatlist) {
-            if (currentIndex < orders.length - 1) {
-              flatlist.scrollToIndex({index: currentIndex + 1});
-              bottomflatlist.scrollToIndex({index: currentIndex + 1});
-              indexRef.current = currentIndex + 1;
-              setCurrentIndex(currentIndex + 1);
-            }
-          }
-        } else if (command === 'skipToBack') {
-          if (flatlist) {
-            if (currentIndex > 0) {
-              flatlist.scrollToIndex({index: currentIndex - 1});
-              bottomflatlist.scrollToIndex({index: currentIndex - 1});
-              indexRef.current = currentIndex - 1;
-              setCurrentIndex(currentIndex - 1);
-            }
-          }
-        }
-      },
-    );
-
-    return alanEventEmitter.removeAllListeners(alanListener);
+    // );
+    // return alanEventEmitter.removeAllListeners(alanListener);
   }, [orders, currentIndex, orderRef, indexRef, flatlist, bottomflatlist]);
 
   useEffect(() => {
@@ -255,88 +286,10 @@ const Orders = (props) => {
     // fetchUseAlan();
   }, [props, isFocused]);
 
-  const options = [
-    {label: 'Cooking', value: 2},
-    {label: 'Cooked', value: 3},
-    {label: 'Delivering', value: 4},
-  ];
-
-  // const [{selectedLanguage}, dispatch] = useStateValue();
-  // const [selectedOrder, setSelectedOrder] = useState(null);
-
-  // const selectTableItem = (item) => {
-  //   if (selectLeft) {
-  //     setSelectLeft(false);
-  //     setSelectedLeft(item);
-  //   } else {
-  //     setSelectLeft(true);
-  //     setSelectedRight(item);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (Platform.OS === 'windows' && orders && orders.length > 1) {
-  //     setSelectedLeft(orders[0]);
-  //     setSelectedRight(orders[1]);
-  //   } else if (Platform.OS === 'windows' && orders && orders.length === 1) {
-  //     setSelectedLeft(orders[0]);
-  //   } else if (orders && orders.length > 0) {
-  //     setSelectedOrder(orders[0]);
-  //   }
-  // }, [orders]);
-
-  // const fetchTables = async () => {
-  //   getNotificationCount().then((notificationCount) =>
-  //     navigation.setParams({notificationCount}),
-  //   );
-  //   try {
-  //     if (!(tables && tables.length > 0)) {
-  //       dispatch({
-  //         type: actions.SET_PROGRESS_SETTINGS,
-  //         show: true,
-  //       });
-  //       setLoading(true);
-  //     }
-  //     const result = await getTables();
-  //     if (result.data) {
-  //       const {models = []} = result.data || {};
-  //       if (models && models.length > 0) {
-  //         dispatch({
-  //           type: actions.SET_TABLES,
-  //           tables: models,
-  //         });
-  //       } else {
-  //         dispatch({
-  //           type: actions.SET_TABLES,
-  //           tables: [],
-  //         });
-  //       }
-  //     }
-  //   } catch (error) {
-  //     dispatch({
-  //       type: actions.SET_ALERT_SETTINGS,
-  //       alertSettings: {
-  //         show: true,
-  //         type: 'error',
-  //         title: Languages[selectedLanguage].messages.errorOccured,
-  //         message: Languages[selectedLanguage].messages.tryAgainLater,
-  //         showConfirmButton: true,
-  //         confirmText: Languages[selectedLanguage].messages.ok,
-  //       },
-  //     });
-  //   } finally {
-  //     dispatch({
-  //       type: actions.SET_PROGRESS_SETTINGS,
-  //       show: false,
-  //     });
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
     if (currentIndex > -1 && trigger) {
       setTrigger(false);
-      flatlist.scrollToIndex({index: currentIndex});
+      flatlist.current?.scrollToIndex({index: currentIndex});
     }
   }, [currentIndex, trigger]);
 
@@ -352,17 +305,17 @@ const Orders = (props) => {
     );
     indexRef.current = pageNumber - 1;
     setCurrentIndex(pageNumber - 1);
-    bottomflatlist.scrollToIndex({index: pageNumber - 1});
+    bottomflatlist.current?.scrollToIndex({index: pageNumber - 1});
   };
-  console.log(useAlan !== false);
+
   return (
-    <>
-      <AlanView
+    <SafeAreaView style={{flex: 1}}>
+      {/* <AlanView
         projectid={
           'e7c97f0d534667f4e24c8515b4cd6afc2e956eca572e1d8b807a3e2338fdd0dc/stage'
         }
         // authData={{data: 'your auth data if needed'}}
-      />
+      /> */}
       {loading && <CustomActivityIndicator visible={loading} />}
       {orders.length === 0 && (
         <View
@@ -397,7 +350,8 @@ const Orders = (props) => {
           backgroundColor: '#fff',
         }}
         horizontal
-        ref={(ref) => (flatlist = ref)}
+        initialNumToRender={100}
+        ref={flatlist}
         onMomentumScrollEnd={onScrollEnd}
         snapToAlignment={'top'}
         viewabilityConfig={{itemVisiblePercentThreshold: 90}}
@@ -405,19 +359,25 @@ const Orders = (props) => {
         decelerationRate={'fast'}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
+        onScrollToIndexFailed={(info) => {
+          const wait = new Promise((resolve) => setTimeout(resolve, 700));
+          wait.then(() => {
+            // flatlist.current?.scrollToIndex({index: info.index});
+            flatlist.current?.scrollToIndex({
+              index: info.index,
+              animated: true,
+            });
+          });
+        }}
         keyExtractor={(item) => `${item + Math.random()}`}
-        data={orders}
-        // refreshControl={
-        //   <RefreshControl refreshing={loading} onRefresh={fetchTables} />
-        // }
+        data={orders && orders.filter((o) => o.items && o.items.length > 0)}
         renderItem={({item: order, index}) => (
           <ScrollView
             key={`${order + Math.random()}`}
             style={{
-              flex: 1,
               paddingHorizontal: 10,
               width: Dimensions.get('screen').width,
-              height: '100%',
+              height: '85%',
             }}>
             <View style={{padding: 10}}>
               <View
@@ -507,8 +467,9 @@ const Orders = (props) => {
                         }>
                         <Text
                           style={{
-                            fontSize: normalize(16),
+                            fontSize: normalize(15),
                             fontWeight: 'bold',
+                            width: '75%',
                           }}>
                           X{item.qty} {item.menu_name}
                         </Text>
@@ -548,7 +509,7 @@ const Orders = (props) => {
                             marginLeft: 30,
                             color: '#888888',
                           }}>
-                          {option.menu_option_name} - {option.price}
+                          {option.menu_option_item_name} - {option.price}
                         </Text>
                       ))}
                     {item.notes !== null && (
@@ -630,6 +591,42 @@ const Orders = (props) => {
         )}
         // numColumns={2}
       />
+      <Ripple
+        style={{
+          backgroundColor: '#fff',
+          position: 'absolute',
+          bottom: 80,
+          left: 20,
+          right: 0,
+        }}
+        onPress={() => fetchOrders()}>
+        <MaterialIcon name="notifications-on" size={25} color={'green'} />
+        {notificationCount ? (
+          <View
+            style={{
+              position: 'absolute',
+              top: -10,
+              left: 15,
+              width: 20,
+              height: 20,
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#cc0001',
+              borderWidth: 1,
+              borderColor: '#fff',
+            }}>
+            <Text
+              style={{
+                color: '#fff',
+                fontSize: normalize(10),
+                textAlign: 'center',
+              }}>
+              {notificationCount}
+            </Text>
+          </View>
+        ) : null}
+      </Ripple>
       <View
         style={{
           width: '100%',
@@ -637,7 +634,7 @@ const Orders = (props) => {
           alignItems: 'center',
           justifyContent: 'space-between',
           position: 'absolute',
-          bottom: 30,
+          bottom: 0,
           left: 0,
           right: 0,
           // paddingHorizontal: 25,
@@ -646,8 +643,8 @@ const Orders = (props) => {
           style={styles.bottomButton}
           disabled={currentIndex === 0}
           onPress={() => {
-            flatlist.scrollToIndex({index: currentIndex - 1});
-            bottomflatlist.scrollToIndex({index: currentIndex - 1});
+            flatlist.current?.scrollToIndex({index: currentIndex - 1});
+            bottomflatlist.current?.scrollToIndex({index: currentIndex - 1});
             indexRef.current = currentIndex - 1;
             setCurrentIndex(currentIndex - 1);
           }}>
@@ -662,15 +659,11 @@ const Orders = (props) => {
             horizontal
             ref={(ref) => (bottomflatlist = ref)}
             showsVerticalScrollIndicator={false}
-            data={orders}
-            // refreshControl={
-            //   <RefreshControl refreshing={loading} onRefresh={fetchTables} />
-            // }
+            data={orders && orders.filter((o) => o.items && o.items.length > 0)}
             keyExtractor={(item) => `${item.id}`}
             renderItem={({item, index}) => (
               <Ripple
                 onPress={() => {
-                  console.log(index)
                   indexRef.current = index;
                   setCurrentIndex(index);
                   setTrigger(true);
@@ -704,10 +697,10 @@ const Orders = (props) => {
         )}
         <TouchableOpacity
           style={styles.bottomButton}
-          disabled={!(currentIndex < orders.length)}
+          disabled={!(currentIndex < orders.length - 1)}
           onPress={() => {
-            flatlist.scrollToIndex({index: currentIndex + 1});
-            bottomflatlist.scrollToIndex({index: currentIndex + 1});
+            flatlist.current?.scrollToIndex({index: currentIndex + 1});
+            bottomflatlist.current?.scrollToIndex({index: currentIndex + 1});
             indexRef.current = currentIndex + 1;
             setCurrentIndex(currentIndex + 1);
           }}>
@@ -1144,7 +1137,7 @@ const Orders = (props) => {
           </View>
         )}
       </View> */}
-    </>
+    </SafeAreaView>
   );
 };
 
@@ -1156,7 +1149,7 @@ const styles = StyleSheet.create({
     // bottom: 0,
     // left: 0,
     // right: 0,
-    height: 100,
+    // height: 100,
     padding: 10,
     width: '100%',
   },

@@ -21,6 +21,65 @@ export const getOrdersNewCooking = async () => {
       '$[access_token]',
       await getAccessToken(),
     );
+    console.log(url);
+    const response = await getData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getTodayOrders = async () => {
+  try {
+    const url = s.ORDERS.GET_TODAY_ORDERS.replace(
+      '$[access_token]',
+      await getAccessToken(),
+    );
+    console.log(url);
+    const response = await getData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getOtherOrders = async () => {
+  try {
+    const url = s.ORDERS.GET_OTHER_ORDERS.replace(
+      '$[access_token]',
+      await getAccessToken(),
+    );
+    console.log(url);
+    const response = await getData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getOtherOrdersByTime = async (start_time, end_time) => {
+  try {
+    const url = s.ORDERS.GET_OTHER_ORDERS_BY_TIME.replace(
+      '$[access_token]',
+      await getAccessToken(),
+    )
+      .replace('$[start_time]', start_time)
+      .replace('$[end_time]', end_time);
+    console.log(url);
+    const response = await getData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getOrderDetails = async (id) => {
+  try {
+    const url = s.ORDERS.GET_ORDER_DETAILS.replace('$[id]', id).replace(
+      '$[access_token]',
+      await getAccessToken(),
+    );
+    console.log(url);
     const response = await getData(url);
     return response;
   } catch (err) {
@@ -35,6 +94,19 @@ export const getOrdersCookedDelivered = async () => {
       await getAccessToken(),
     );
     const response = await getData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const updatePlayerID = async (data) => {
+  try {
+    const url = s.ONE_SIGNAL.UPDATE_PLAYER_ID.replace(
+      '$[access_token]',
+      await getAccessToken(),
+    );
+    const response = await postData(url, data);
     return response;
   } catch (err) {
     return null;

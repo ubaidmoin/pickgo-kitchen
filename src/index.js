@@ -151,25 +151,6 @@ const SignedInStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Orders"
-        component={Orders}
-        options={({navigation, route}) => {
-          const notificationCount =
-            route.params && route.params.notificationCount
-              ? route.params.notificationCount
-              : null;
-          return Header(
-            {
-              title: 'Orders',
-              showTitle: true,
-              showMenuButton: true,
-              notificationCount,
-            },
-            navigation,
-          );
-        }}
-      />
-      <Stack.Screen
         name="TodayOrders"
         component={TodayOrders}
         options={({navigation, route}) => {
@@ -180,6 +161,25 @@ const SignedInStack = () => {
           return Header(
             {
               title: 'Today Orders',
+              showTitle: true,
+              showMenuButton: true,
+              notificationCount,
+            },
+            navigation,
+          );
+        }}
+      />
+      <Stack.Screen
+        name="Orders"
+        component={Orders}
+        options={({navigation, route}) => {
+          const notificationCount =
+            route.params && route.params.notificationCount
+              ? route.params.notificationCount
+              : null;
+          return Header(
+            {
+              title: 'Orders',
               showTitle: true,
               showMenuButton: true,
               notificationCount,

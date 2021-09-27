@@ -47,3 +47,7 @@ target 'PickGoKitchen' do
   #   flipper_post_install(installer)
   # end
 end
+
+target 'OneSignalNotificationServiceExtension' do
+  pod 'OneSignal', '>= 2.6', '< 4.0'
+end

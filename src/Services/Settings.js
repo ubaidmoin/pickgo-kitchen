@@ -49,5 +49,12 @@ export const settings = {
     GET_COOKED_DELIVERED_ORDERS: `${BASE_URLS.APP_BASEURL}/api/order/get-cooked-delivered-orders?access_token=$[access_token]`,
     UPDATE_ORDER_STATUS: `${BASE_URLS.APP_BASEURL}/api/order/update-order-status/$[id]?access_token=$[access_token]`,
     UPDATE_ITEM_STATUS: `${BASE_URLS.APP_BASEURL}/api/order/update-item-status/$[id]?access_token=$[access_token]`,
+    GET_ORDER_DETAILS: `${BASE_URLS.APP_BASEURL}/api/order/customer-summary/$[id]?access_token=$[access_token]`,
+    GET_TODAY_ORDERS: `${BASE_URLS.APP_BASEURL}/api/order/get-company-orders?access_token=$[access_token]&is_today=1`,
+    GET_OTHER_ORDERS: `${BASE_URLS.APP_BASEURL}/api/order/get-company-orders?access_token=$[access_token]&is_today=0`,
+    GET_OTHER_ORDERS_BY_TIME: `${BASE_URLS.APP_BASEURL}/api/order/get-cooked-delivered-orders?access_token=$[access_token]&start_time=$[start_time]&end_time=$[end_time]`,
+  },
+  ONE_SIGNAL: {
+    UPDATE_PLAYER_ID: `${BASE_URLS.APP_BASEURL}/api/user/onesignal-notifications-token?access_token=$[access_token]`,
   },
 };

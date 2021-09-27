@@ -35,11 +35,11 @@ const normalize = (size) => {
 const Drawer = ({navigation}) => {
   const [{userInfo, selectedLanguage}, dispatch] = useStateValue();
   const drawerMenu = [
-    // {
-    //   icon: <MaterialIcon name="dinner-dining" color={'#fff'} size={20} />,
-    //   title: 'Today Orders',
-    //   onPress: () => navigation.navigate('TodayOrders'),
-    // },
+    {
+      icon: <MaterialIcon name="dinner-dining" color={'#fff'} size={20} />,
+      title: 'Today Orders',
+      onPress: () => navigation.navigate('TodayOrders'),
+    },
     {
       icon: <MaterialIcon name="dinner-dining" color={'#fff'} size={20} />,
       title: 'Orders',

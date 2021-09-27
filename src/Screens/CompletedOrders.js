@@ -9,6 +9,7 @@ import {
   Dimensions,
   PixelRatio,
   TouchableOpacity,
+  SafeAreaView
 } from 'react-native';
 import Ripple from '../Components/Ripple';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -50,37 +51,6 @@ const normalize = (size) => {
     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
   }
 };
-
-// PushNotification.configure({
-//   onRegister: async (info) => {
-//     const userInfo = await getUserInfo();
-//     if (
-//       userInfo &&
-//       userInfo.access_token &&
-//       userInfo.user &&
-//       userInfo.user.uid
-//     ) {
-//       if (info) {
-//         const {token} = info || {};
-//         if (token) {
-//           if (!(await isFcmTokenExists(token))) {
-//             const response = await saveFcmToken({token});
-//             if (!(response && response && response.id)) {
-//               isFcmTokenExists('');
-//             }
-//           }
-//         }
-//       }
-//     }
-//   },
-//   permissions: {
-//     alert: true,
-//     badge: true,
-//     sound: true,
-//   },
-//   popInitialNotification: true,
-//   requestPermissions: true,
-// });
 
 const Orders = (props) => {
   const {navigation} = props;
@@ -136,84 +106,43 @@ const Orders = (props) => {
   };
 
   useEffect(() => {
-    // PushNotification.configure({
-    //   onNotification: (notification) => {
-    //     if (notification.foreground && !notification.message) {
-    //       PushNotification.localNotification({
-    //         ...notification,
-    //         message:
-    //           notification.data && notification.data.body
-    //             ? notification.data.body
-    //             : '',
-    //       });
-    //     }
-    //     addNotification({
-    //       ...notification.data,
-    //       time: moment().valueOf(),
-    //       isSeen: false,
-    //     });
-    //     if (
-    //       notification &&
-    //       notification.userInteraction &&
-    //       notification.data &&
-    //       notification.data.type
-    //     ) {
-    //       switch (notification.data.type) {
-    //         case 'pay-by-cash':
-    //           if (notification.data.table_id) {
-    //             navigation.navigate('Payment', {
-    //               tableId: notification.data.table_id,
-    //             });
-    //           }
-    //           break;
-    //         case 'reservation':
-    //           navigation.navigate('Reservations');
-    //           break;
+    // const subscription = alanEventEmitter.addListener(
+    //   'command',
+    //   ({command}) => {
+    //     console.log(`got command event 123 ${command}`);
+    //     if (command === 'updateStatusToCooking') {
+    //       handleUpdateOrderStatus(2);
+    //     } else if (command === 'updateStatusToCooked') {
+    //       handleUpdateOrderStatus(3);
+    //     } else if (command === 'updateStatusToDelivering') {
+    //       handleUpdateOrderStatus(4);
+    //     } else if (command === 'updateReopen') {
+    //       handleUpdateOrderStatus(2);
+    //     } else if (command === 'takeToOrders') {
+    //       navigation.navigate('Orders');
+    //     } else if (command === 'skipToNext') {
+    //       console.log('here')
+    //       if (flatlist) {
+    //         if (currentIndex < orders.length - 1) {
+    //           flatlist.current?.scrollToIndex({index: currentIndex + 1});
+    //           bottomflatlist.current?.scrollToIndex({index: currentIndex + 1});
+    //           indexRef.current = currentIndex + 1;
+    //           setCurrentIndex(currentIndex + 1);
+    //         }
+    //       }
+    //     } else if (command === 'skipToBack') {
+    //       if (flatlist) {
+    //         if (currentIndex > 0) {
+    //           flatlist.current?.scrollToIndex({index: currentIndex - 1});
+    //           bottomflatlist.current?.scrollToIndex({index: currentIndex - 1});
+    //           indexRef.current = currentIndex - 1;
+    //           setCurrentIndex(currentIndex - 1);
+    //         }
     //       }
     //     }
     //   },
-    // });
-    // fetchTables();
-    // return navigation.addListener('focus', () => fetchTables());
-
-    const subscription = alanEventEmitter.addListener(
-      'command',
-      ({command}) => {
-        console.log(`got command event 123 ${command}`);
-        if (command === 'updateStatusToCooking') {
-          handleUpdateOrderStatus(2);
-        } else if (command === 'updateStatusToCooked') {
-          handleUpdateOrderStatus(3);
-        } else if (command === 'updateStatusToDelivering') {
-          handleUpdateOrderStatus(4);
-        } else if (command === 'updateReopen') {
-          handleUpdateOrderStatus(2);
-        } else if (command === 'takeToOrders') {
-          navigation.navigate('Orders');
-        } else if (command === 'skipToNext') {
-          console.log('here')
-          if (flatlist) {
-            if (currentIndex < orders.length - 1) {
-              flatlist.scrollToIndex({index: currentIndex + 1});
-              bottomflatlist.scrollToIndex({index: currentIndex + 1});
-              indexRef.current = currentIndex + 1;
-              setCurrentIndex(currentIndex + 1);
-            }
-          }
-        } else if (command === 'skipToBack') {
-          if (flatlist) {
-            if (currentIndex > 0) {
-              flatlist.scrollToIndex({index: currentIndex - 1});
-              bottomflatlist.scrollToIndex({index: currentIndex - 1});
-              indexRef.current = currentIndex - 1;
-              setCurrentIndex(currentIndex - 1);
-            }
-          }
-        }
-      },
-    );
-
-    return alanEventEmitter.removeAllListeners(subscription);
+    // );
+    // return alanEventEmitter.removeAllListeners(subscription);
   }, [orders, currentIndex, orderRef, indexRef]);
 
   useEffect(() => {
@@ -224,82 +153,10 @@ const Orders = (props) => {
     fetchOrders();
   }, [props, isFocused]);
 
-  // const [{selectedLanguage}, dispatch] = useStateValue();
-  // const [selectedOrder, setSelectedOrder] = useState(null);
-
-  // const selectTableItem = (item) => {
-  //   if (selectLeft) {
-  //     setSelectLeft(false);
-  //     setSelectedLeft(item);
-  //   } else {
-  //     setSelectLeft(true);
-  //     setSelectedRight(item);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (Platform.OS === 'windows' && orders && orders.length > 1) {
-  //     setSelectedLeft(orders[0]);
-  //     setSelectedRight(orders[1]);
-  //   } else if (Platform.OS === 'windows' && orders && orders.length === 1) {
-  //     setSelectedLeft(orders[0]);
-  //   } else if (orders && orders.length > 0) {
-  //     setSelectedOrder(orders[0]);
-  //   }
-  // }, [orders]);
-
-  // const fetchTables = async () => {
-  //   getNotificationCount().then((notificationCount) =>
-  //     navigation.setParams({notificationCount}),
-  //   );
-  //   try {
-  //     if (!(tables && tables.length > 0)) {
-  //       dispatch({
-  //         type: actions.SET_PROGRESS_SETTINGS,
-  //         show: true,
-  //       });
-  //       setLoading(true);
-  //     }
-  //     const result = await getTables();
-  //     if (result.data) {
-  //       const {models = []} = result.data || {};
-  //       if (models && models.length > 0) {
-  //         dispatch({
-  //           type: actions.SET_TABLES,
-  //           tables: models,
-  //         });
-  //       } else {
-  //         dispatch({
-  //           type: actions.SET_TABLES,
-  //           tables: [],
-  //         });
-  //       }
-  //     }
-  //   } catch (error) {
-  //     dispatch({
-  //       type: actions.SET_ALERT_SETTINGS,
-  //       alertSettings: {
-  //         show: true,
-  //         type: 'error',
-  //         title: Languages[selectedLanguage].messages.errorOccured,
-  //         message: Languages[selectedLanguage].messages.tryAgainLater,
-  //         showConfirmButton: true,
-  //         confirmText: Languages[selectedLanguage].messages.ok,
-  //       },
-  //     });
-  //   } finally {
-  //     dispatch({
-  //       type: actions.SET_PROGRESS_SETTINGS,
-  //       show: false,
-  //     });
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
     if (currentIndex > -1 && trigger) {
       setTrigger(false);
-      flatlist.scrollToIndex({index: currentIndex});
+      flatlist.current?.scrollToIndex({index: currentIndex});
     }
   }, [currentIndex, trigger]);
 
@@ -315,11 +172,11 @@ const Orders = (props) => {
     );
     indexRef.current = pageNumber - 1;
     setCurrentIndex(pageNumber - 1);
-    bottomflatlist.scrollToIndex({index: pageNumber - 1});
+    bottomflatlist.current?.scrollToIndex({index: pageNumber - 1});
   };
 
   return (
-    <>
+    <SafeAreaView style={{flex: 1}}>
       {/* <AlanView
         projectid={
           'e7c97f0d534667f4e24c8515b4cd6afc2e956eca572e1d8b807a3e2338fdd0dc/stage'
@@ -354,7 +211,8 @@ const Orders = (props) => {
           backgroundColor: '#fff',
         }}
         horizontal
-        ref={(ref) => (flatlist = ref)}
+        initialNumToRender={100}
+        ref={flatlist}
         onMomentumScrollEnd={onScrollEnd}
         snapToAlignment={'top'}
         viewabilityConfig={{itemVisiblePercentThreshold: 90}}
@@ -363,10 +221,17 @@ const Orders = (props) => {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => `${item + Math.random()}`}
-        data={orders}
-        // refreshControl={
-        //   <RefreshControl refreshing={loading} onRefresh={fetchTables} />
-        // }
+        data={orders && orders.filter((o) => o.items && o.items.length > 0)}
+        onScrollToIndexFailed={(info) => {
+          const wait = new Promise((resolve) => setTimeout(resolve, 700));
+          wait.then(() => {
+            // flatlist.current?.scrollToIndex({index: info.index});
+            flatlist.current?.scrollToIndex({
+              index: info.index,
+              animated: true,
+            });
+          });
+        }}
         renderItem={({item: order, index}) => (
           <ScrollView
             key={`${order + Math.random()}`}
@@ -374,7 +239,7 @@ const Orders = (props) => {
               flex: 1,
               paddingHorizontal: 10,
               width: Dimensions.get('screen').width,
-              height: '100%',
+              height: '85%',
             }}>
             <View style={{padding: 10}}>
               <View
@@ -449,8 +314,9 @@ const Orders = (props) => {
                       <View>
                         <Text
                           style={{
-                            fontSize: normalize(16),
+                            fontSize: normalize(15),
                             fontWeight: 'bold',
+                            width: '75%',
                           }}>
                           X{item.qty} {item.menu_name}
                         </Text>
@@ -474,7 +340,7 @@ const Orders = (props) => {
                             marginLeft: 30,
                             color: '#888888',
                           }}>
-                          {option.menu_option_name} - {option.price}
+                          {option.menu_option_item_name} - {option.price}
                         </Text>
                       ))}
                     {item.notes !== null && (
@@ -552,7 +418,7 @@ const Orders = (props) => {
           alignItems: 'center',
           justifyContent: 'space-between',
           position: 'absolute',
-          bottom: 15,
+          bottom: 0,
           left: 0,
           right: 0,
           // paddingHorizontal: 25,
@@ -561,8 +427,8 @@ const Orders = (props) => {
           style={styles.bottomButton}
           disabled={currentIndex === 0}
           onPress={() => {
-            flatlist.scrollToIndex({index: currentIndex - 1});
-            bottomflatlist.scrollToIndex({index: currentIndex - 1});
+            flatlist.current?.scrollToIndex({index: currentIndex - 1});
+            bottomflatlist.current?.scrollToIndex({index: currentIndex - 1});
             indexRef.current = currentIndex - 1;
             setCurrentIndex(currentIndex - 1);
           }}>
@@ -577,10 +443,7 @@ const Orders = (props) => {
             horizontal
             ref={(ref) => (bottomflatlist = ref)}
             showsVerticalScrollIndicator={false}
-            data={orders}
-            // refreshControl={
-            //   <RefreshControl refreshing={loading} onRefresh={fetchTables} />
-            // }
+            data={orders && orders.filter((o) => o.items && o.items.length > 0)}
             keyExtractor={(item) => `${item.id}`}
             renderItem={({item, index}) => (
               <Ripple
@@ -618,10 +481,10 @@ const Orders = (props) => {
         )}
         <TouchableOpacity
           style={styles.bottomButton}
-          disabled={!(currentIndex < orders.length)}
+          disabled={!(currentIndex < orders.length - 1)}
           onPress={() => {
-            flatlist.scrollToIndex({index: currentIndex + 1});
-            bottomflatlist.scrollToIndex({index: currentIndex + 1});
+            flatlist.current?.scrollToIndex({index: currentIndex + 1});
+            bottomflatlist.current?.scrollToIndex({index: currentIndex + 1});
             indexRef.current = currentIndex + 1;
             setCurrentIndex(currentIndex + 1);
           }}>
@@ -1058,7 +921,7 @@ const Orders = (props) => {
           </View>
         )}
       </View> */}
-    </>
+    </SafeAreaView>
   );
 };
 
@@ -1070,7 +933,7 @@ const styles = StyleSheet.create({
     // bottom: 0,
     // left: 0,
     // right: 0,
-    height: 100,
+    // height: 100,
     padding: 10,
     width: '100%',
   },
