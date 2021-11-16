@@ -25,6 +25,7 @@
     "react-native": "0.63.4",
     "react-native-actionsheet": "^2.4.2",
     "react-native-datepicker": "^1.7.2",
+    "react-native-device-info": "^8.4.5",
     "react-native-firebase": "^5.6.0",
     "react-native-gesture-handler": "^1.9.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.3",

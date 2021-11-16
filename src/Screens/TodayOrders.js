@@ -9,6 +9,7 @@ import {
   Dimensions,
   PixelRatio,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import Ripple from '../Components/Ripple';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -18,37 +19,18 @@ import moment from 'moment';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import CustomActivityIndicator from '../Components/ActivityIndicator';
 // import {AlanView} from '../../AlanSDK';
-import {NativeEventEmitter, NativeModules} from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import {useIsFocused} from '@react-navigation/native';
-import Dropdown from '../Components/StatusDropdown';
 import {
-  getOrdersNewCooking,
   updateOrderStatus,
   updateItemStatus,
-  getOrdersCookedDelivered,
   updatePlayerID,
-  getOrderDetails,
-  getTables,
-  getReservations,
-  saveFcmToken,
   getTodayOrders,
+  getTodayOrdersPagination,
 } from '../Services/API/APIManager';
-import {
-  getNotificationCount,
-  addNotification,
-  isFcmTokenExists,
-  getUserInfo,
-  getUseAlan,
-} from '../Services/DataManager';
-import {useStateValue} from '../Services/State/State';
-import {actions} from '../Services/State/Reducer';
-import PushNotification from 'react-native-push-notification';
-import Languages from '../Localization/translations';
+import {getNotificationCount, addNotification} from '../Services/DataManager';
 import OneSignal from 'react-native-onesignal';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
-const {AlanManager, AlanEventEmitter} = NativeModules;
-const alanEventEmitter = new NativeEventEmitter(AlanEventEmitter);
 
 const {width: SCREEN_WIDTH} = Dimensions.get('window');
 const scale = SCREEN_WIDTH / 320;
@@ -97,7 +79,6 @@ const Orders = (props) => {
   const {navigation} = props;
   let flatlist = useRef();
   let bottomflatlist = useRef();
-  const [showActionSheet, setShowActionSheet] = useState(false);
   const isFocused = useIsFocused();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -105,26 +86,49 @@ const Orders = (props) => {
   const [trigger, setTrigger] = useState(false);
   const indexRef = useRef(currentIndex);
   const orderRef = useRef(orders);
-  const [selectedLeft, setSelectedLeft] = useState(null);
-  const [selectedRight, setSelectedRight] = useState(null);
-  const [selectLeft, setSelectLeft] = useState(true);
-  const [useAlan, setUseAlan] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
   const loadingRef = useRef(false);
+  const [page, setPage] = useState(1);
+  const [footerLoader, setFooterLoader] = useState(false);
+  const isTablet = DeviceInfo.isTablet();
 
   const fetchOrders = async (index = 0) => {
     getNotificationCount().then((notificationCount) => {
       setNotificationCount(notificationCount);
     });
     setLoading(true);
-    const res = await getTodayOrders();
-    // console.log(res.data);
+    const res = await getTodayOrdersPagination(0, 10);
+    console.log('orders', res.data.orders);
     if (res && res.data && res.data.orders) {
-      setOrders(res.data.orders);
-      indexRef.current = index;
-      orderRef.current = res.data.orders;
+      if (res.data.orders && res.data.orders.length > 0) {
+        setOrders(res.data.orders);
+        orderRef.current = res.data.orders;
+        indexRef.current = index;
+      }
     }
     setLoading(false);
+  };
+
+  const renderSearchResultsFooter = () => {
+    return (
+      <View style={{marginTop: 15, alignItems: 'center'}}>
+        {footerLoader ? <ActivityIndicator size="large" color="#000" /> : null}
+      </View>
+    );
+  };
+
+  const getMoreOrders = async () => {
+    console.log('hererere');
+    setFooterLoader(true);
+    const res = await getTodayOrdersPagination(page + 1, 10);
+    if (res && res.data) {
+      setPage(page + 1);
+      const itemsData = res.data.orders;
+      const newData = [...orders, ...itemsData];
+      setOrders(newData);
+      orderRef.current = newData;
+    }
+    setFooterLoader(false);
   };
 
   const handleUpdateOrderStatus = async (status, orderId = 0) => {
@@ -153,12 +157,6 @@ const Orders = (props) => {
     // console.log(res.data);
     await fetchOrders();
     setLoading(false);
-  };
-
-  const fetchUseAlan = async () => {
-    const res = await getUseAlan();
-    console.log(res);
-    setUseAlan(res);
   };
 
   const getDeviceStatus = async () => {
@@ -370,7 +368,11 @@ const Orders = (props) => {
           });
         }}
         keyExtractor={(item) => `${item + Math.random()}`}
-        data={orders && orders.filter((o) => o.items && o.items.length > 0)}
+        data={
+          orders &&
+          orders.length > 0 &&
+          orders.filter((o) => o.items && o.items.length > 0)
+        }
         renderItem={({item: order, index}) => (
           <ScrollView
             key={`${order + Math.random()}`}
@@ -600,7 +602,12 @@ const Orders = (props) => {
           right: 0,
         }}
         onPress={() => fetchOrders()}>
-        <MaterialIcon name="notifications-on" size={25} color={'green'} />
+        <MaterialIcon
+          name="notifications-on"
+          style={{marginBottom: isTablet ? 100 : 0}}
+          size={25}
+          color={'green'}
+        />
         {notificationCount ? (
           <View
             style={{
@@ -659,7 +666,14 @@ const Orders = (props) => {
             horizontal
             ref={(ref) => (bottomflatlist = ref)}
             showsVerticalScrollIndicator={false}
-            data={orders && orders.filter((o) => o.items && o.items.length > 0)}
+            onEndReachedThreshold={0.1}
+            onEndReached={getMoreOrders}
+            ListFooterComponent={renderSearchResultsFooter}
+            data={
+              orders &&
+              orders.length > 0 &&
+              orders.filter((o) => o.items && o.items.length > 0)
+            }
             keyExtractor={(item) => `${item.id}`}
             renderItem={({item, index}) => (
               <Ripple

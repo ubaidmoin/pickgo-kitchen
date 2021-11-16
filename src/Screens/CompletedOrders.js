@@ -9,7 +9,8 @@ import {
   Dimensions,
   PixelRatio,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import Ripple from '../Components/Ripple';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -20,22 +21,10 @@ import {NativeEventEmitter, NativeModules} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {
   getOrdersCookedDelivered,
+  getOrdersCookedDeliveredPagination,
   getOrdersNewCooking,
   updateOrderStatus,
-  getTables,
-  getReservations,
-  saveFcmToken,
 } from '../Services/API/APIManager';
-import {
-  getNotificationCount,
-  addNotification,
-  isFcmTokenExists,
-  getUserInfo,
-} from '../Services/DataManager';
-import {useStateValue} from '../Services/State/State';
-import {actions} from '../Services/State/Reducer';
-import PushNotification from 'react-native-push-notification';
-import Languages from '../Localization/translations';
 
 const {AlanManager, AlanEventEmitter} = NativeModules;
 const alanEventEmitter = new NativeEventEmitter(AlanEventEmitter);
@@ -64,28 +53,41 @@ const Orders = (props) => {
   const indexRef = useRef(currentIndex);
   const orderRef = useRef(orders);
   const loadingRef = useRef(false);
-  const [selectedLeft, setSelectedLeft] = useState(null);
-  const [selectedRight, setSelectedRight] = useState(null);
-  const [selectLeft, setSelectLeft] = useState(true);
+  const [page, setPage] = useState(1);
+  const [footerLoader, setFooterLoader] = useState(false);
 
   const fetchOrders = async (index = 0) => {
     setLoading(true);
-    const res = await getOrdersCookedDelivered();
-    console.log(res.data);
+    const res = await getOrdersCookedDeliveredPagination(0, 10);
+    console.log('getOrdersCookedDelivered', res.data);
     if (res && res.data && res.data.orders) {
-      const res1 = await getOrdersNewCooking();
-      if (res1 && res1.data && res1.data.orders) {
-        const data = [...res.data.orders, ...res1.data.orders];
-        setOrders(data);
-        indexRef.current = index;
-        orderRef.current = data;
-      } else {
-        setOrders(res.data.orders);
-        indexRef.current = index;
-        orderRef.current = res.data.orders;
-      }
+      setOrders(res.data.orders);
+      indexRef.current = index;
+      orderRef.current = res.data.orders;
     }
     setLoading(false);
+  };
+
+  const renderSearchResultsFooter = () => {
+    return (
+      <View style={{marginTop: 15, alignItems: 'center'}}>
+        {footerLoader ? <ActivityIndicator size="large" color="#000" /> : null}
+      </View>
+    );
+  };
+
+  const getMoreOrders = async () => {
+    console.log('hererere');
+    setFooterLoader(true);
+    const res = await getOrdersCookedDeliveredPagination(page + 1, 10);
+    if (res && res.data) {
+      setPage(page + 1);
+      const itemsData = res.data.orders;
+      const newData = [...orders, ...itemsData];
+      setOrders(newData);
+      orderRef.current = newData;
+    }
+    setFooterLoader(false);
   };
 
   const handleUpdateOrderStatus = async (status, orderId = 0) => {
@@ -221,7 +223,11 @@ const Orders = (props) => {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => `${item + Math.random()}`}
-        data={orders && orders.filter((o) => o.items && o.items.length > 0)}
+        data={
+          orders &&
+          orders.length > 0 &&
+          orders.filter((o) => o.items && o.items.length > 0)
+        }
         onScrollToIndexFailed={(info) => {
           const wait = new Promise((resolve) => setTimeout(resolve, 700));
           wait.then(() => {
@@ -443,8 +449,15 @@ const Orders = (props) => {
             horizontal
             ref={(ref) => (bottomflatlist = ref)}
             showsVerticalScrollIndicator={false}
-            data={orders && orders.filter((o) => o.items && o.items.length > 0)}
+            data={
+              orders &&
+              orders.length > 0 &&
+              orders.filter((o) => o.items && o.items.length > 0)
+            }
             keyExtractor={(item) => `${item.id}`}
+            onEndReachedThreshold={0.1}
+            onEndReached={getMoreOrders}
+            ListFooterComponent={renderSearchResultsFooter}
             renderItem={({item, index}) => (
               <Ripple
                 onPress={() => {

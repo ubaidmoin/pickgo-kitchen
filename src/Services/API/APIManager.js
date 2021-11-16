@@ -57,6 +57,38 @@ export const getOtherOrders = async () => {
   }
 };
 
+export const getTodayOrdersPagination = async (page, limit) => {
+  try {
+    const url = s.ORDERS.GET_TODAY_ORDERS_PAGINATION.replace(
+      '$[access_token]',
+      await getAccessToken(),
+    )
+      .replace('$[page]', page)
+      .replace('$[limit]', limit);
+    console.log(url);
+    const response = await getData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getOtherOrdersPagination = async (page, limit) => {
+  try {
+    const url = s.ORDERS.GET_OTHER_ORDERS_PAGINATION.replace(
+      '$[access_token]',
+      await getAccessToken(),
+    )
+      .replace('$[page]', page)
+      .replace('$[limit]', limit);
+    console.log(url);
+    const response = await getData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
 export const getOtherOrdersByTime = async (start_time, end_time) => {
   try {
     const url = s.ORDERS.GET_OTHER_ORDERS_BY_TIME.replace(
@@ -93,6 +125,21 @@ export const getOrdersCookedDelivered = async () => {
       '$[access_token]',
       await getAccessToken(),
     );
+    const response = await getData(url);
+    return response;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getOrdersCookedDeliveredPagination = async (page, limit) => {
+  try {
+    const url = s.ORDERS.GET_COOKED_DELIVERED_ORDERS_PAGINATION.replace(
+      '$[access_token]',
+      await getAccessToken(),
+    )
+      .replace('$[page]', page)
+      .replace('$[limit]', limit);
     const response = await getData(url);
     return response;
   } catch (err) {
